@@ -28,6 +28,10 @@ End
 
 Public Sub WebForm_Open()
 
+  If MMain.$WebEntry = True Then
+    modDataRepo.$RepositoryMode = MMain.$AppLogCategory
+    modBasic.$HospCode = MMain.$AppLogString
+  Endif
   modHelpVariable.SetApplicationGUI()
   MMain.GetApplVersionType()
 
@@ -37,6 +41,12 @@ Public Sub WebForm_Open()
     mnuhosplist.Visible = False
   Endif
   modBasic.ChartSettingsAll()
+
+  SetFormAccess()
+
+End
+
+Private Sub SetFormAccess()
 
 End
 

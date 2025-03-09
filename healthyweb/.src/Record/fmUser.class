@@ -10,7 +10,7 @@ Public Sub _new()
     cmbcategory.List = modDataRepo.GetRepoValueListType("Hospital")
   Endif
   Select MMain.$SISHAppMode
-    Case "REP", "AMIS", "HMIS", "Dashboard"
+    Case "REP", "HMIS", "Dashboard", "Registry"
       btnhospcode.Visible = True
       btnAccess.Visible = False
       btnlocat.Visible = False
@@ -45,6 +45,8 @@ Private Sub MakeAllTextBlank()
   txtfullname.Text = ""
   txtpassword.Text = ""
   txtroot.Text = ""
+  txtmobile.Text = ""
+  txtemail.Text = ""
   cmbstatus.Text = ""
   txtcode.Value = 0
   dtfrom.Value = Date()
@@ -152,7 +154,7 @@ Private Sub ShowUserDetail(sUser As String)
   Dim res As Result
   Dim sql As String
 
-  sql = "select fldusername,fldpass,fldroot,fldfromdate,fldtodate,fldstatus,fldusercode,fldcategory,fldcode,fldfaculty,fldpayable,fldreferral,fldopconsult,fldipconsult,fldsigna,fldreport,fldonline from tbluser where flduserid=&1"                        ''
+  sql = "select fldusername,fldpass,fldroot,fldfromdate,fldtodate,fldstatus,fldusercode,fldcategory,fldcode,fldfaculty,fldpayable,fldreferral,fldopconsult,fldipconsult,fldsigna,fldreport,fldonline,fldcontact,fldemail from tbluser where flduserid=&1"                        ''
   res = modDatabase.$myConn.Exec(sql, sUser)
   If res.Available Then
     txtuserid.Text = sUser
@@ -164,6 +166,8 @@ Private Sub ShowUserDetail(sUser As String)
     dtfrom.Value = res["fldfromdate"]
     dtto.Value = res["fldtodate"]
     txtusercode.Text = res["fldusercode"]
+    txtmobile.Text = res["fldcontact"]
+    txtemail.Text = res["fldemail"]
     cmbstatus.Text = res["fldstatus"]
 
     If res["fldfaculty"] Then
@@ -258,6 +262,8 @@ Public Sub btnOK_Click()
       res["fldfromdate"] = dtfrom.Value
       res["fldtodate"] = dtto.Value
       res["fldusercode"] = Trim(txtusercode.Text)
+      res["fldcontact"] = Trim(txtmobile.Text)
+      res["fldemail"] = Trim(txtemail.Text)
       res["fldstatus"] = cmbstatus.Text
 
       res["fldfaculty"] = chkfaculty.Value
@@ -304,6 +310,8 @@ Public Sub btnChange_Click()
       res["fldtodate"] = dtto.Value
       res["fldcategory"] = cmbcategory.Text
       res["fldusercode"] = Trim(txtusercode.Text)
+      res["fldcontact"] = Trim(txtmobile.Text)
+      res["fldemail"] = Trim(txtemail.Text)
       res["fldstatus"] = cmbstatus.Text
 
       res["fldcode"] = txtcode.Value

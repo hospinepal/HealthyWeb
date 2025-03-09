@@ -1,10 +1,18 @@
 ' Gambas class file
 
-Private $xPath As String
-
 Public Sub _new()
 
   cmbvariable.List = ["--status-db", "--report-db", "--extended-status-db", "--ping-db", "--processlist-db", "--variables-db", "--version-db", "--tuner-db"]
+
+End
+
+Public Sub cmbvariable_Click()
+
+  If cmbvariable.Text = "--tuner-db" Then
+    pnltuner.Visible = True
+  Else
+    pnltuner.Visible = False
+  Endif
 
 End
 
@@ -39,21 +47,8 @@ End
 
 Public Sub btndbtemplate_Click()
 
-  Dim aPath As String
-
-  aPath = Temp()
   Message.Info(("Executing Request ...."), ("OK"))
-  File.Save(aPath, modDatabase.$myConn.GetTemplate())
-  $xPath = modPrint.GetFileWebURL(aPath)
-  mnuopen_Click()
-
-End
-
-Public Sub mnuopen_Click()
-
-  If $xPath Then
-    Me.Exec("window.open('" & $xPath & "'); ")
-  Endif
+  WebTextArea1.Text = modDatabase.$myConn.GetTemplate()
 
 End
 

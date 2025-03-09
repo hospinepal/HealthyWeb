@@ -45,9 +45,10 @@
       Text = ("Close")
     }
   }
-  { WebContainer3 WebContainer
+  { pnltuner WebContainer
     #MoveScaled(1,6,76,5)
     Class = "less-container-margin"
+    Visible = False
     Arrangement = Arrange.Horizontal
     { WebLabel1 WebLabel
       #MoveScaled(1,1,9,3)
