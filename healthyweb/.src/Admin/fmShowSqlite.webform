@@ -1,15 +1,16 @@
 # Gambas Form File 3.0
 
 { WebForm WebForm
-  #MoveScaled(0,0,150,133)
+  #MoveScaled(0,0,163,91)
+  Expand = True
   Arrangement = Arrange.Vertical
   Margin = True
-  { WebContainer75 WebScrollView
-    #MoveScaled(1,1,148,128)
-    Height = "70vh"
+  { WebContainer1 WebContainer
+    #MoveScaled(1,1,161,83)
+    Class = "height-tablet-prefull"
     Arrangement = Arrange.Vertical
     { WebContainer4 WebContainer
-      #MoveScaled(1,1,146,4)
+      #MoveScaled(1,1,159,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       Spacing = True
@@ -45,7 +46,7 @@
       }
     }
     { WebContainer3 WebContainer
-      #MoveScaled(1,5,146,9)
+      #MoveScaled(1,5,159,9)
       Class = "less-container-margin"
       Height = "5em"
       Arrangement = Arrange.Horizontal
@@ -62,7 +63,7 @@
       }
     }
     { WebContainer2 WebContainer
-      #MoveScaled(1,14,146,4)
+      #MoveScaled(1,14,159,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       Spacing = True
@@ -95,8 +96,8 @@
         Expand = True
       }
     }
-    { WebContainer1 WebContainer
-      #MoveScaled(1,18,146,4)
+    { WebContainer6 WebContainer
+      #MoveScaled(1,18,159,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       Spacing = True
@@ -111,7 +112,7 @@
         Width = "8em"
         Height = "2em"
       }
-      { WebContainer6 WebContainer
+      { WebContainer7 WebContainer
         #MoveScaled(36,1,9,2)
         Expand = True
       }
@@ -129,8 +130,8 @@
         ReadOnly = False
       }
     }
-    { WebContainer7 WebContainer
-      #MoveScaled(1,22,146,39)
+    { WebContainer8 WebContainer
+      #MoveScaled(1,22,159,39)
       Arrangement = Arrange.Row
       { WebContainer9 WebContainer
         #MoveScaled(1,1,62,37)
@@ -576,7 +577,7 @@
           Index = 0
         }
       }
-      { WebContainer8 WebContainer
+      { WebContainer32 WebContainer
         #MoveScaled(63,1,70,37)
         Class = "size-tablet"
         Arrangement = Arrange.Vertical
@@ -603,430 +604,85 @@
             Text = ("Use SSL")
           }
         }
-        { TabPanel1 WebTabPanel
-          #MoveScaled(1,6,68,28)
-          Arrangement = Arrange.Vertical
-          Count = 3
-          Index = 0
-          Text = ("Create")
-          { WebContainer41 WebContainer
-            #MoveScaled(1,1,65.75,5)
-            Class = "less-container-margin"
-            Arrangement = Arrange.Horizontal
-            { WebLabel28 WebLabel
-              #MoveScaled(1,1,9,3)
-              Width = "6em"
-              Height = "2em"
-              Text = ("Database")
-            }
-            { txtdbcreate WebTextBox
-              #MoveScaled(10,1,32,3)
-              Width = "10em"
-              Height = "2em"
-              Expand = True
-            }
-          }
-          { WebContainer40 WebContainer
-            #MoveScaled(1,6,65.75,5)
-            Class = "less-container-margin"
-            Arrangement = Arrange.Horizontal
-            { WebLabel27 WebLabel
-              #MoveScaled(1,1,9,3)
-              Width = "6em"
-              Height = "2em"
-              Text = ("Collation")
-            }
-            { cmbcollation WebComboBox
-              #MoveScaled(10,1,32,3)
-              Width = "10em"
-              Height = "2em"
-              Expand = True
-              ReadOnly = False
-            }
-          }
-          { WebContainer32 WebContainer
-            #MoveScaled(1,11,65.75,5)
-            Class = "less-container-margin"
-            Arrangement = Arrange.Horizontal
-            { WebLabel41 WebLabel
-              #MoveScaled(1,1,9,3)
-              Width = "6em"
-              Height = "2em"
-              Text = ("Engine")
-            }
-            { cmbengine WebComboBox
-              #MoveScaled(10,1,32,3)
-              Width = "10em"
-              Height = "2em"
-              Expand = True
-              ReadOnly = False
-            }
-          }
-          { WebContainer39 WebContainer
-            #MoveScaled(1,16,65.75,5)
-            Class = "less-container-margin"
-            Arrangement = Arrange.Horizontal
-            { btnhospudate WebButton
-              #MoveScaled(1,1,11,3)
-              Width = "6em"
-              Height = "2em"
-              Text = ("Update")
-            }
-            { WebContainer42 WebContainer
-              #MoveScaled(12,1,7,3)
-              Expand = True
-            }
-            { btnsave WebButton
-              #MoveScaled(19,1,11,3)
-              Width = "6em"
-              Height = "2em"
-              Text = ("Save")
-            }
-            { WebContainer43 WebContainer
-              #MoveScaled(30,1,9,3)
-              Expand = True
-            }
-            { btndbcreate WebButton
-              #MoveScaled(39,1,11,3)
-              Width = "6em"
-              Height = "2em"
-              Text = ("Create")
-            }
-            { btntables WebButton
-              #MoveScaled(50,1,4,3)
-              Width = "2em"
-              Height = "2em"
-              Image = "icon:/small/database"
-            }
-          }
-          Index = 1
-          Text = ("Restore")
-          Index = 2
-          Text = ("Client")
-          Index = 0
-        }
-      }
-    }
-    { pnlexec1 WebContainer
-      #MoveScaled(1,61,146,13)
-      Enabled = False
-      Arrangement = Arrange.Horizontal
-      { WebContainer61 WebContainer
-        #MoveScaled(1,1,33,11)
-        Width = "50%"
-        Arrangement = Arrange.Vertical
-        Margin = True
-        { WebContainer63 WebContainer
-          #MoveScaled(1,1,31,4)
+        { WebContainer41 WebContainer
+          #MoveScaled(1,6,68,5)
           Class = "less-container-margin"
           Arrangement = Arrange.Horizontal
-          { WebLabel38 WebLabel
-            #MoveScaled(1,1,9,2)
-            Width = "7em"
-            Height = "2em"
-            Text = ("Patient No")
-          }
-          { txtpatno WebValueBox
-            #MoveScaled(10,1,12,2)
-            Width = "6em"
-          }
-        }
-        { WebContainer62 WebContainer
-          #MoveScaled(1,5,31,4)
-          Class = "less-container-margin"
-          Arrangement = Arrange.Horizontal
-          { WebLabel39 WebLabel
-            #MoveScaled(1,1,9,2)
-            Width = "7em"
-            Height = "2em"
-            Text = ("Encounter")
-          }
-          { txtencid WebValueBox
-            #MoveScaled(10,1,14,2)
-            Width = "6em"
-          }
-        }
-      }
-      { WebContainer60 WebContainer
-        #MoveScaled(34,1,33,11)
-        Width = "50%"
-        Arrangement = Arrange.Vertical
-        Margin = True
-        { WebContainer64 WebContainer
-          #MoveScaled(1,1,31,4)
-          Class = "less-container-margin"
-          Arrangement = Arrange.Horizontal
-          { WebLabel40 WebLabel
-            #MoveScaled(1,1,9,2)
-            Width = "5em"
-            Height = "2em"
-            Text = ("Hosp ID")
-          }
-          { txthospcode WebTextBox
-            #MoveScaled(10,1,13,2)
-            Width = "6em"
-          }
-        }
-        { WebContainer65 WebContainer
-          #MoveScaled(1,5,31,4)
-          Class = "less-container-margin"
-          Arrangement = Arrange.Horizontal
-          { btnpat WebButton
-            #MoveScaled(1,1,11,2)
-            Width = "8em"
-            Height = "2em"
-            Text = ("Insert ")
-          }
-          { WebContainer66 WebContainer
-            #MoveScaled(12,1,16,2)
-            Expand = True
-          }
-        }
-      }
-    }
-    { pnlexecute WebContainer
-      #MoveScaled(1,74,146,35)
-      Enabled = False
-      Arrangement = Arrange.Row
-      { WebContainer46 WebContainer
-        #MoveScaled(1,1,62,33)
-        Class = "size-tablet"
-        Arrangement = Arrange.Vertical
-        Margin = True
-        { WebLabel26 WebLabel
-          #MoveScaled(1,1,60,4)
-          Height = "2em"
-          Text = ("Admin User")
-        }
-        { WebContainer47 WebContainer
-          #MoveScaled(1,5,60,5)
-          Class = "less-container-margin"
-          Arrangement = Arrange.Horizontal
-          { WebLabel29 WebLabel
+          { WebLabel28 WebLabel
             #MoveScaled(1,1,9,3)
             Width = "6em"
             Height = "2em"
-            Text = ("Comp ID")
+            Text = ("Database")
           }
-          { txtcomp WebTextBox
+          { txtdbcreate WebTextBox
             #MoveScaled(10,1,32,3)
             Width = "10em"
             Height = "2em"
             Expand = True
+          }
+        }
+        { WebContainer40 WebContainer
+          #MoveScaled(1,11,68,5)
+          Class = "less-container-margin"
+          Arrangement = Arrange.Horizontal
+          { WebLabel27 WebLabel
+            #MoveScaled(1,1,9,3)
+            Width = "6em"
+            Height = "2em"
+            Text = ("Collation")
+          }
+          { cmbcollation WebComboBox
+            #MoveScaled(10,1,32,3)
+            Width = "10em"
+            Height = "2em"
+            Expand = True
+            ReadOnly = False
+          }
+        }
+        { WebContainer39 WebContainer
+          #MoveScaled(1,16,68,5)
+          Class = "less-container-margin"
+          Arrangement = Arrange.Horizontal
+          { WebLabel41 WebLabel
+            #MoveScaled(1,1,9,3)
+            Width = "6em"
+            Height = "2em"
+            Text = ("Engine")
+          }
+          { cmbengine WebComboBox
+            #MoveScaled(10,1,32,3)
+            Width = "10em"
+            Height = "2em"
+            Expand = True
+            ReadOnly = False
+          }
+        }
+        { WebContainer42 WebContainer
+          #MoveScaled(1,21,68,5)
+          Class = "less-container-margin"
+          Arrangement = Arrange.Horizontal
+          { btnhospudate WebButton
+            #MoveScaled(1,1,11,3)
+            Width = "6em"
+            Height = "2em"
+            Text = ("Update")
+          }
+          { WebContainer43 WebContainer
+            #MoveScaled(12,1,7,3)
+            Expand = True
+          }
+          { btnsave WebButton
+            #MoveScaled(19,1,11,3)
+            Width = "6em"
+            Height = "2em"
+            Text = ("Save")
           }
           { WebContainer44 WebContainer
-            #MoveScaled(42,1,9,3)
-            Width = "4em"
-          }
-        }
-        { WebContainer48 WebContainer
-          #MoveScaled(1,10,60,5)
-          Class = "less-container-margin"
-          Arrangement = Arrange.Horizontal
-          { WebLabel30 WebLabel
-            #MoveScaled(1,1,9,3)
-            Width = "6em"
-            Height = "2em"
-            Text = ("User Name")
-          }
-          { txtaduser WebTextBox
-            #MoveScaled(10,1,32,3)
-            Width = "10em"
-            Height = "2em"
+            #MoveScaled(30,1,9,3)
             Expand = True
-          }
-          { WebContainer59 WebContainer
-            #MoveScaled(42,1,9,3)
-            Width = "4em"
-          }
-        }
-        { WebContainer49 WebContainer
-          #MoveScaled(1,15,60,5)
-          Class = "less-container-margin"
-          Arrangement = Arrange.Horizontal
-          { WebLabel31 WebLabel
-            #MoveScaled(1,1,9,3)
-            Width = "6em"
-            Height = "2em"
-            Text = ("Password")
-          }
-          { txtadpass WebTextBox
-            #MoveScaled(10,1,32,3)
-            Width = "10em"
-            Height = "2em"
-            Expand = True
-          }
-          { WebContainer67 WebContainer
-            #MoveScaled(42,1,9,3)
-            Width = "4em"
-          }
-        }
-        { WebContainer50 WebContainer
-          #MoveScaled(1,20,60,5)
-          Class = "less-container-margin"
-          Arrangement = Arrange.Horizontal
-          { WebLabel32 WebLabel
-            #MoveScaled(1,1,9,3)
-            Width = "6em"
-            Height = "2em"
-            Text = ("Root Pass")
-          }
-          { txtadroot WebTextBox
-            #MoveScaled(10,1,32,3)
-            Width = "10em"
-            Height = "2em"
-            Expand = True
-          }
-          { WebContainer68 WebContainer
-            #MoveScaled(42,1,9,3)
-            Width = "4em"
-          }
-        }
-        { WebContainer51 WebContainer
-          #MoveScaled(1,25,60,5)
-          Class = "less-container-margin"
-          Arrangement = Arrange.Horizontal
-          { chkadmin WebCheckBox
-            #MoveScaled(1,1,11,3)
-            Height = "2em"
-            Enabled = False
-            Text = ("Record")
-          }
-          { WebContainer52 WebContainer
-            #MoveScaled(12,1,16,3)
-            Expand = True
-          }
-          { btnadmin WebButton
-            #MoveScaled(28,1,11,3)
-            Width = "8em"
-            Height = "2em"
-            Text = ("Insert ")
-          }
-          { WebContainer69 WebContainer
-            #MoveScaled(39,1,9,3)
-            Width = "4em"
           }
         }
       }
-      { WebContainer45 WebContainer
-        #MoveScaled(63,1,62,33)
-        Class = "size-tablet"
-        Arrangement = Arrange.Vertical
-        Margin = True
-        { WebLabel33 WebLabel
-          #MoveScaled(1,1,60,4)
-          Height = "2em"
-          Text = ("Computer Access")
-        }
-        { WebContainer53 WebContainer
-          #MoveScaled(1,5,60,5)
-          Class = "less-container-margin"
-          Arrangement = Arrange.Horizontal
-          { WebLabel34 WebLabel
-            #MoveScaled(1,1,9,3)
-            Width = "7em"
-            Height = "2em"
-            Text = ("Host Name")
-          }
-          { txthost WebTextBox
-            #MoveScaled(10,1,32,3)
-            Width = "10em"
-            Height = "2em"
-            Expand = True
-          }
-          { WebContainer70 WebContainer
-            #MoveScaled(42,1,9,3)
-            Width = "4em"
-          }
-        }
-        { WebContainer54 WebContainer
-          #MoveScaled(1,10,60,5)
-          Class = "less-container-margin"
-          Arrangement = Arrange.Horizontal
-          { WebLabel35 WebLabel
-            #MoveScaled(1,1,9,3)
-            Width = "7em"
-            Height = "2em"
-            Text = ("IP Address")
-          }
-          { txtip WebTextBox
-            #MoveScaled(10,1,32,3)
-            Width = "10em"
-            Height = "2em"
-            Expand = True
-          }
-          { WebContainer71 WebContainer
-            #MoveScaled(42,1,9,3)
-            Width = "4em"
-          }
-        }
-        { WebContainer55 WebContainer
-          #MoveScaled(1,15,60,5)
-          Class = "less-container-margin"
-          Arrangement = Arrange.Horizontal
-          { WebLabel36 WebLabel
-            #MoveScaled(1,1,9,3)
-            Width = "7em"
-            Height = "2em"
-            Text = ("MAC Address")
-          }
-          { txtmac WebTextBox
-            #MoveScaled(10,1,32,3)
-            Width = "10em"
-            Height = "2em"
-            Expand = True
-          }
-          { WebContainer72 WebContainer
-            #MoveScaled(42,1,9,3)
-            Width = "4em"
-          }
-        }
-        { WebContainer56 WebContainer
-          #MoveScaled(1,20,60,5)
-          Class = "less-container-margin"
-          Arrangement = Arrange.Horizontal
-          { WebLabel37 WebLabel
-            #MoveScaled(1,1,9,3)
-            Width = "7em"
-            Height = "2em"
-            Text = ("User Name")
-          }
-          { txtcompname WebTextBox
-            #MoveScaled(10,1,32,3)
-            Width = "10em"
-            Height = "2em"
-            Expand = True
-          }
-          { WebContainer73 WebContainer
-            #MoveScaled(42,1,9,3)
-            Width = "4em"
-          }
-        }
-        { WebContainer57 WebContainer
-          #MoveScaled(1,25,60,5)
-          Class = "less-container-margin"
-          Arrangement = Arrange.Horizontal
-          { WebContainer58 WebContainer
-            #MoveScaled(1,1,16,3)
-            Expand = True
-          }
-          { cmdaccess WebButton
-            #MoveScaled(17,1,11,3)
-            Width = "8em"
-            Height = "2em"
-            Text = ("Allow")
-          }
-          { WebContainer74 WebContainer
-            #MoveScaled(28,1,9,3)
-            Width = "4em"
-          }
-        }
-      }
-    }
-    { WebContainer76 WebContainer
-      #MoveScaled(1,109,146,7)
-      Width = "6em"
-      Expand = True
     }
   }
 }

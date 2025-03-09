@@ -156,9 +156,12 @@
           Text = ("Change")
         }
       }
-      { WebHtml1 WebHtml
+      { btnlink WebButton
         #MoveScaled(1,46.875,34,3)
         Height = "2em"
+        Background = Color.Transparent
+        Foreground = Color.Blue
+        Border = False
       }
       { wbgeolocat WebTextBox
         #MoveScaled(1,50.875,34,4)

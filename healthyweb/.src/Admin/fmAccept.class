@@ -28,26 +28,6 @@ End
 
 Public Sub btnaccept_Click()
 
-  modSettings.SaveSettingsToFile("TermsOfUse/Accept", "Yes")
-  If Not Exist(modHelpVariable.$SysConfigPath) Then
-    modHelpVariable.$FIrstTimeSetting = True
-    fmSetSqlite.Show
-  Else
-    If MMain.$SISHAppMode = "HIS" Or If MMain.$SISHAppMode = "REP" Then
-      WebForm.Current = fmLogIn
-      ' ' fmLogIn.Show
-    Else If MMain.$SISHAppMode = "PHM" Then
-      ' WebForm.Current = fmLogInRE
-      ' ' fmLogInRE.Show
-    Else If MMain.$SISHAppMode = "LAB" Then
-      ' WebForm.Current = fmLabLogIn
-      ' ' fmLabLogIn.Show
-    Else If MMain.$SISHAppMode = "POL" Then
-      ' WebForm.Current = fmPolyLogIn
-      ' ' fmPolyLogIn.Show
-    Endif
-  Endif
-
 End
 
 Public Sub rbhis_Click()

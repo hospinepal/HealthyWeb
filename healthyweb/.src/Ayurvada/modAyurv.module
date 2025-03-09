@@ -1,5 +1,7 @@
 ' Gambas module file
 
+Public $AyurvedicDiagnosis As String
+
 Public Function GetAyurDiseaseName(sPath As String, sCode As String) As String
 
   Dim hFile As File

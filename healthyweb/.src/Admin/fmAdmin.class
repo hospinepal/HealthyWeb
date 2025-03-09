@@ -32,6 +32,10 @@ End
 
 Public Sub WebForm_Open()
 
+  If MMain.$WebEntry = True Then
+    modDataRepo.$RepositoryMode = MMain.$AppLogCategory
+    modBasic.$HospCode = MMain.$AppLogString
+  Endif
   modHelpVariable.SetApplicationGUI()
   MMain.GetApplVersionType()
 
@@ -137,41 +141,7 @@ End
 
 Public Sub mnualter_Click()
 
-  Dim hFile As File
-  Dim sLine As String
-  Dim xx As String
-  Dim newPath As String
-  Dim sType As String
-  Dim sQuery As String
-
-  sQuery = ""
-  xx = GetTextArea("SQL Query", sQuery)
-  If xx Then
-    newPath = Temp()
-    File.Save(newPath, xx)
-    If Message.Question(("Do you really want to update Database structure at your own risk?"), ("No"), ("Yes")) = 2 Then
-      sType = modDatabase.$myConn.Type
-      If sType = "mysql" Or If sType = "postgresql" Then
-        Message.Info(("Executing Request ...."), ("OK"))
-        hFile = Open newPath
-        For Each sLine In hFile.Lines
-          sLine = Trim(sLine)
-          If sLine Then
-            If Left(sLine, 1) = "#" Then
-            Else
-              Try modDatabase.$myConn.Exec(sLine)
-            Endif
-          Endif
-        Next
-        hFile.Close()
-      Endif
-      Me.Exec("Toastify({text: 'Tables Alteration completed', duration: 3000}).showToast()")
-    Endif
-  Endif
-
-  ' Else
-  '   Message.Warning(("File doesn't exist"), ("OK"))
-  ' Endif
+  modDatabase.AlterDBTablesAdmin()
 
 End
 
@@ -189,6 +159,12 @@ Public Sub mnufiscal_Click()
     Next
   Next
   Message.Info(("Update complete"), ("OK"))
+
+End
+
+Public Sub mnualterfields_Click()
+
+  fmAlterTable.ShowModal
 
 End
 
@@ -297,15 +273,6 @@ Public Sub mnuautoindex_Click()
     modDatabase.SetNewIndexRepository(modDatabase.$myConn, sTable)
   Next
   Me.Exec("Toastify({text: 'Process completed', duration: 3000}).showToast()")
-
-End
-
-Public Sub mnumaternal_Click()
-
-  If Message.Question(("Do you really want to update Database structure at your own risk?"), ("No"), ("Yes")) = 2 Then
-    modDatabase.AlterTableMaternalRegister(modDatabase.$myConn)
-    Me.Exec("Toastify({text: 'Process completed', duration: 3000}).showToast()")
-  Endif
 
 End
 
@@ -575,8 +542,7 @@ Public Sub mnuwarm_Click()
 
   Message.Info(("Executing Request ...."), ("OK"))
   modDBApp.WarmUpDatabase(modDatabase.$myConn)
-  Message.Info(("Executing Request ...."), ("OK"))
-  Message.Info(("Warm Up complete"), ("OK"))
+  Me.Exec("Toastify({text: 'Process completed', duration: 3000}).showToast()")
 
 End
 
@@ -624,6 +590,12 @@ Public Sub mnucgiall_Click()
 
 End
 
+Public Sub mnudbvalues_Click()
+
+  fmDBValues.ShowModal
+
+End
+
 Public Sub mnufiledata_Click()
 
   fmFileValues.ShowModal
@@ -644,5 +616,16 @@ Public Sub mnualterdrugtable_Click()
     modDatabase.UpdateTableDrugInformation(modDatabase.$myConn, xtable)
   Next
   Message.Info("Complete", "OK")
+
+End
+
+Public Sub mnusetup_Click()
+
+  Dim hForm As FmShowSqlite
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmShowSqlite(Workspace1)
 
 End

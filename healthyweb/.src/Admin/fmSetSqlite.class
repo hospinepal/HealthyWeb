@@ -8,6 +8,7 @@ Public Sub _new()
 
   WebForm.Debug = True
   modHelpVariable.MakeWorkingDir()
+
   cmbformat.List = ["HIS", "REP", "Dashboard"]
   cmbtype.List = ["sqlite3", "mysql", "postgresql", "odbc"]
   cmbtype2.List = ["sqlite3", "mysql", "postgresql", "odbc"]
@@ -69,175 +70,6 @@ Public Sub txtdepartment_LostFocus()
   Endif
 
 End
-
-''======================== Show values ======================
-' ' Public Sub btncomponent_Click()
-' '
-' '   modApplSub.InstallSelectedApplication(modApplSub.EssentialAppText())
-' '
-' ' End
-' '
-' ' Public Sub btncomponent2_Click()
-' '
-' '   modApplSub.InstallSelectedApplication(modApplSub.OptionalAppText())
-' '
-' ' End
-' '
-' ' Private Function ShowSysSettingFromFIleNew(strSetting As String) As String
-' '
-' '   Dim strVal As String
-' '
-' '   strVal = modControlSub.ShowSettingValue(modHelpVariable.AppDirectory &/ modHelpVariable.AppName & ".conf", strSetting)
-' '   Return strVal
-' '
-' ' End
-' '
-' ' Public Sub btnshow_Click()
-' '
-' '   Dim xfile As String
-' '   Dim xssl As String
-' '   Dim xird As String
-' '   Dim xvat As String
-' '
-' '   If modHelpVariable.$FIrstTimeSetting = True Then
-' '     txtdbcreate.Text = ShowSysSettingFromFIleNew("System/Database")
-' '     txtdbrestore.Text = ShowSysSettingFromFIleNew("System/Database")
-' '     cmbcollation.Text = ShowSysSettingFromFIleNew("System/DBCollation")
-' '     cmbinterface.Text = ShowSysSettingFromFIleNew("System/NetInterface")
-' '     xssl = ShowSysSettingFromFIleNew("System/UseOpenSSL")
-' '     If xssl = "Yes" Then
-' '       chkssl.Value = True
-' '     Else
-' '       chkssl.Value = False
-' '     Endif
-' '
-' '     cmbtype.Text = ShowSysSettingFromFIleNew("System/Service")
-' '     txtserver.Text = ShowSysSettingFromFIleNew("System/Host")
-' '     txtuser.Text = ShowSysSettingFromFIleNew("System/User")
-' '     txtpass.Text = modPassword.DecryptDBPass(ShowSysSettingFromFIleNew("System/Password"), chkssl.Value)
-' '     txtport.Text = ShowSysSettingFromFIleNew("System/Port")
-' '
-' '     cmbtype2.Text = ShowSysSettingFromFIleNew("SystemExtra/Service")
-' '     txtserver2.Text = ShowSysSettingFromFIleNew("SystemExtra/Host")
-' '     txtuser2.Text = ShowSysSettingFromFIleNew("SystemExtra/User")
-' '     txtpass2.Text = modPassword.DecryptDBPass(ShowSysSettingFromFIleNew("SystemExtra/Password"), chkssl.Value)
-' '     txtport2.Text = ShowSysSettingFromFIleNew("SystemExtra/Port")
-' '
-' '     cmbtype3.Text = ShowSysSettingFromFIleNew("SystemFallback/Service")
-' '     txtserver3.Text = ShowSysSettingFromFIleNew("SystemFallback/Host")
-' '     txtuser3.Text = ShowSysSettingFromFIleNew("SystemFallback/User")
-' '     txtpass3.Text = modPassword.DecryptDBPass(ShowSysSettingFromFIleNew("SystemFallback/Password"), chkssl.Value)
-' '     txtport3.Text = ShowSysSettingFromFIleNew("SystemFallback/Port")
-' '
-' '     txthospitalname.Text = ShowSysSettingFromFIleNew("Hospital/Hospital")
-' '     txtaddress.Text = ShowSysSettingFromFIleNew("Hospital/Address")
-' '     txtdepartment.Text = ShowSysSettingFromFIleNew("Hospital/Department")
-' '     cmbcomp.Text = ShowSysSettingFromFIleNew("Hospital/ComputerID")
-' '     txtimagpath.Text = ShowSysSettingFromFIleNew("Hospital/Logo")
-' '     xird = ShowSysSettingFromFIleNew("Hospital/IRDCompliance")
-' '     If xird = "Yes" Then
-' '       chkird.Value = True
-' '     Else
-' '       chkird.Value = False
-' '     Endif
-' '     xvat = ShowSysSettingFromFIleNew("Hospital/VATRegistration")
-' '     If xvat = "Yes" Then
-' '       chkvat.Value = True
-' '     Else
-' '       chkvat.Value = False
-' '     Endif
-' '
-' '     txtlocalhost.Text = ShowSysSettingFromFIleNew("LocalFTP/Host")
-' '     txtlocalfolder.Text = ShowSysSettingFromFIleNew("LocalFTP/Folder")
-' '     txtlocaluser.Text = ShowSysSettingFromFIleNew("LocalFTP/User")
-' '     txtlocalpass.Text = modPassword.DecryptDBPass(ShowSysSettingFromFIleNew("LocalFTP/Password"), chkssl.Value)
-' '
-' '   Else If modHelpVariable.$FIrstTimeSetting = False Then
-' '     xfile = modHelpVariable.GetConfigSettingFIle()
-' '     txtdbcreate.Text = modControlSub.ShowSettingValue(xfile, "System/Database")
-' '     txtdbrestore.Text = modControlSub.ShowSettingValue(xfile, "System/Database")
-' '     cmbcollation.Text = modControlSub.ShowSettingValue(xfile, "System/DBCollation")
-' '     cmbinterface.Text = modControlSub.ShowSettingValue(xfile, "System/NetInterface")
-' '     xssl = modControlSub.ShowSettingValue(xfile, "System/UseOpenSSL")
-' '     If xssl = "Yes" Then
-' '       chkssl.Value = True
-' '     Else
-' '       chkssl.Value = False
-' '     Endif
-' '
-' '     cmbtype.Text = modControlSub.ShowSettingValue(xfile, "System/Service")
-' '     txtserver.Text = modControlSub.ShowSettingValue(xfile, "System/Host")
-' '     txtuser.Text = modControlSub.ShowSettingValue(xfile, "System/User")
-' '     txtpass.Text = modPassword.DecryptDBPass(modControlSub.ShowSettingValue(xfile, "System/Password"), chkssl.Value)
-' '     txtport.Text = modControlSub.ShowSettingValue(xfile, "System/Port")
-' '
-' '     cmbtype2.Text = modControlSub.ShowSettingValue(xfile, "SystemExtra/Service")
-' '     txtserver2.Text = modControlSub.ShowSettingValue(xfile, "SystemExtra/Host")
-' '     txtuser2.Text = modControlSub.ShowSettingValue(xfile, "SystemExtra/User")
-' '     txtpass2.Text = modPassword.DecryptDBPass(modControlSub.ShowSettingValue(xfile, "SystemExtra/Password"), chkssl.Value)
-' '     txtport2.Text = modControlSub.ShowSettingValue(xfile, "SystemExtra/Port")
-' '
-' '     cmbtype3.Text = modControlSub.ShowSettingValue(xfile, "SystemFallback/Service")
-' '     txtserver3.Text = modControlSub.ShowSettingValue(xfile, "SystemFallback/Host")
-' '     txtuser3.Text = modControlSub.ShowSettingValue(xfile, "SystemFallback/User")
-' '     txtpass3.Text = modPassword.DecryptDBPass(modControlSub.ShowSettingValue(xfile, "SystemFallback/Password"), chkssl.Value)
-' '     txtport3.Text = modControlSub.ShowSettingValue(xfile, "SystemFallback/Port")
-' '
-' '     txthospitalname.Text = modControlSub.ShowSettingValue(xfile, "Hospital/Hospital")
-' '     txtaddress.Text = modControlSub.ShowSettingValue(xfile, "Hospital/Address")
-' '     txtdepartment.Text = modControlSub.ShowSettingValue(xfile, "Hospital/Department")
-' '     cmbcomp.Text = modControlSub.ShowSettingValue(xfile, "Hospital/ComputerID")
-' '     txtimagpath.Text = modControlSub.ShowSettingValue(xfile, "Hospital/Logo")
-' '     xird = modControlSub.ShowSettingValue(xfile, "Hospital/IRDCompliance")
-' '     If xird = "Yes" Then
-' '       chkird.Value = True
-' '     Else
-' '       chkird.Value = False
-' '     Endif
-' '     xvat = modControlSub.ShowSettingValue(xfile, "Hospital/VATRegistration")
-' '     If xvat = "Yes" Then
-' '       chkvat.Value = True
-' '     Else
-' '       chkvat.Value = False
-' '     Endif
-' '
-' '     txtlocalhost.Text = modControlSub.ShowSettingValue(xfile, "LocalFTP/Host")
-' '     txtlocalfolder.Text = modControlSub.ShowSettingValue(xfile, "LocalFTP/Folder")
-' '     txtlocaluser.Text = modControlSub.ShowSettingValue(xfile, "LocalFTP/User")
-' '     txtlocalpass.Text = modPassword.DecryptDBPass(modControlSub.ShowSettingValue(xfile, "LocalFTP/Password"), chkssl.Value)
-' '     Try Kill xfile
-' '   Endif
-' '
-' ' End
-' '
-' ' Public Sub btnimport_Click()
-' '
-' '   Dim sPass As String
-' '
-' '   If Not Exist(modHelpVariable.$SysConfigPath) Then
-' '     sPass = InputPassword(("Enter Password for Super User"), ("Super User"), "")
-' '
-' '     modExternal.DeleteFolderRecursive(modHelpVariable.AppDirectory)
-' '     modExternal.CopyFromFolderToFolder(User.Home &/ ".config/sishgambas", modHelpVariable.AppDirectory)
-' '     If Exist(modHelpVariable.AppDirectory &/ "sishsettings.conf") Then
-' '       If Exist(modHelpVariable.AppDirectory &/ "appsettings.conf") Then
-' '         Kill modHelpVariable.AppDirectory &/ "appsettings.conf"
-' '       Endif
-' '       Move modHelpVariable.AppDirectory &/ "sishsettings.conf" To modHelpVariable.AppDirectory &/ "appsettings.conf"
-' '     Endif
-' '     If Exist(modHelpVariable.AppDirectory &/ "sishvariable.conf") Then
-' '       If Exist(modHelpVariable.AppDirectory &/ "appvariable.conf") Then
-' '         Kill modHelpVariable.AppDirectory &/ "appvariable.conf"
-' '       Endif
-' '       Move modHelpVariable.AppDirectory &/ "sishvariable.conf" To modHelpVariable.AppDirectory &/ "appvariable.conf"
-' '     Endif
-' '     modExternal.ReplaceFileAsRoot("/etc/sishgambas/sishgambas.conf", modHelpVariable.$appetcFolder, sPass)
-' '     Wait
-' '     Shell "echo \"" & sPass & "\" | " & "sudo -S " & "mv " & modHelpVariable.$appetcFolder &/ "sishgambas.conf" & Space(1) & modHelpVariable.$appetcConfFile Wait
-' '
-' '   Endif
-' '
-' ' End
 
 ''-=================== main server ================================
 Public Sub cmbtype_Click()
@@ -414,6 +246,7 @@ Private Sub UpdateConfFile(dbFile As String)
   Dim xssl As String
   Dim xird As String
   Dim xvat As String
+  Dim ftssl As String
 
   If cmbcomp.Text Then
     SaveSysSettingsToFile("Hospital/Hospital", txthospitalname.Text)
@@ -467,6 +300,12 @@ Private Sub UpdateConfFile(dbFile As String)
     SaveSysSettingsToFile("LocalFTP/Folder", txtlocalfolder.Text)
     SaveSysSettingsToFile("LocalFTP/User", txtlocaluser.Text)
     SaveSysSettingsToFile("LocalFTP/Password", modPassword.EncryptDBPass(txtlocalpass.Text, chkssl.Value))
+    If chklocalssl.Value = True Then
+      ftssl = "Yes"
+    Else
+      ftssl = "No"
+    Endif
+    SaveSysSettingsToFile("LocalFTP/EnableSSL", ftssl)
 
     Me.Exec("Toastify({text: 'Information updated', duration: 3000}).showToast()")
   Endif

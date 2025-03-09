@@ -24,6 +24,9 @@
       { mnufiscal WebMenu
         Text = ("Fiscal Range")
       }
+      { mnualterfields WebMenu
+        Text = ("Change Fields")
+      }
       { mnuautoid WebMenu
         Text = ("Auto IDs")
       }
@@ -36,9 +39,6 @@
       { mnurepo WebMenu
         Visible = False
         Text = ("Repository")
-      }
-      { mnumaternal WebMenu
-        Text = ("DMNR")
       }
       { mnuhaiall WebMenu
         Text = ("HAI Surveillance")
@@ -128,9 +128,6 @@
     { mnufiscaltrans WebMenu
       Text = ("Fiscal Transfer")
     }
-    { mnudumpdown WebMenu
-      Text = ("DB Dump")
-    }
   }
   { mnuexecute WebMenu
     Visible = False
@@ -150,8 +147,17 @@
     { mnucgiall WebMenu
       Text = ("CGI Variables")
     }
+    { mnudbvalues WebMenu
+      Text = ("DB Variables")
+    }
     { mnufiledata WebMenu
       Text = ("File Settings")
+    }
+    { mnudumpdown WebMenu
+      Text = ("DB Dump")
+    }
+    { mnusetup WebMenu
+      Text = ("Setup Info")
     }
     { mnulogview WebMenu
       Text = ("Log Files")
@@ -179,7 +185,7 @@
   { mnuhelp WebMenu
     Text = ("Help")
     { mnuexit WebMenu
-      Text = ("Exit")
+      Text = ("Log Out")
     }
   }
   { mnufile WebMenu
