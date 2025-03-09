@@ -40,6 +40,7 @@ Private Sub MakeAllBlank()
   txtbankname.Text = ""
   txtbankaccount.Text = ""
   txttaxpercent.Value = 0
+  txtfeecharge.Value = 0
 
 End
 
@@ -54,7 +55,7 @@ Private Sub FillStaffGrid()
   If rbcode.Value Then
     $rData = modDatabase.$myConn.Exec("select fldusercode,fldusername,fldcategory,fldteleuser from tbltelemeduser where lower(fldusercode) like &1 and fldcategory like &2" & " ORDER BY fldusername", LCase(txtsearch.Text) & "%", cmbservsearch.Text)                                                                 ''
   Else If rbname.Value Then
-    $rData = modDatabase.$myConn.Exec("select fldusercode,fldusername,fldcategory,fldteleuser from tbltelemeduser where lower(fldptnamefir) like &1 and fldcategory like &2" & " ORDER BY fldusername", LCase(txtsearch.Text) & "%", cmbservsearch.Text)                                                                 ''
+    $rData = modDatabase.$myConn.Exec("select fldusercode,fldusername,fldcategory,fldteleuser from tbltelemeduser where lower(fldusername) like &1 and fldcategory like &2" & " ORDER BY fldusername", LCase(txtsearch.Text) & "%", cmbservsearch.Text)                                                                 ''
   Endif
   $aMyFields = New String[]
   modGridView.ReadSmallData(GridView1, $rData, $aMyFields)
@@ -113,7 +114,7 @@ Public Sub btnOK_Click()
       res["fldbankname"] = Trim(txtbankname.Text)
       res["fldbankaccount"] = Trim(txtbankaccount.Text)
       res["fldtaxpercent"] = txttaxpercent.Value
-      res["fldcharge"] = 0
+      res["fldcharge"] = txtfeecharge.Value
       res["fldtime"] = Now()
 
       If MMain.$WebEntry = True Then
@@ -153,7 +154,7 @@ Public Sub btnChange_Click()
     res["fldbankname"] = Trim(txtbankname.Text)
     res["fldbankaccount"] = Trim(txtbankaccount.Text)
     res["fldtaxpercent"] = txttaxpercent.Value
-    res["fldcharge"] = 0
+    res["fldcharge"] = txtfeecharge.Value
     res["fldtime"] = Now()
 
     res.Update
@@ -180,7 +181,7 @@ Private Sub SHowGridData(patcode As String)
 
   Dim res As Result
 
-  res = modDatabase.$myConn.Exec("select fldteleuser,fldusername,fldpass,fldroot,fldcategory,fldcontact,fldemail,fldfromdate,fldtodate,fldusercode,fldhospital,fldstatus,fldgovtaccount,fldbankname,fldbankaccount,fldtaxpercent from tbltelemeduser where fldteleuser=&1", patcode)                                                   ''
+  res = modDatabase.$myConn.Exec("select fldteleuser,fldusername,fldpass,fldroot,fldcategory,fldcontact,fldemail,fldfromdate,fldtodate,fldusercode,fldhospital,fldstatus,fldgovtaccount,fldbankname,fldbankaccount,fldtaxpercent,fldcharge from tbltelemeduser where fldteleuser=&1", patcode)                                                   ''
   If res.Available Then
     txtuserid.Text = res["fldteleuser"]
     txtnamefir.Text = res["fldusername"]
@@ -202,6 +203,11 @@ Private Sub SHowGridData(patcode As String)
       txttaxpercent.Value = res["fldtaxpercent"]
     Else
       txttaxpercent.Value = 0
+    Endif
+    If res["fldcharge"] Then
+      txtfeecharge.Value = res["fldcharge"]
+    Else
+      txtfeecharge.Value = 0
     Endif
   Endif
 
@@ -236,6 +242,23 @@ End
 Public Sub txtsearch_Change()
 
   FillStaffGrid()
+
+End
+
+Public Sub txthospcode_Click()
+
+  Dim res As Result
+  Dim xPath As String
+  Dim xxx As String[]
+
+  res = modDatabase.$myConn.Exec("select fldprovince,flddistrict,fldpality,fldhospcode,fldhospname from tblhospitals")
+  xPath = modTextDB.ConvertResultToCSV(res, ";", False)
+  If Exist(xPath) Then
+    xxx = TreeViewCode(xPath, ";", 4, True)
+    If xxx Then
+      cmbhospital.Text = xxx[1]
+    Endif
+  Endif
 
 End
 

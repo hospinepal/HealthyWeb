@@ -176,9 +176,10 @@
     }
     { WebTabPanel1 WebTabPanel
       #MoveScaled(1,32,116,81)
-      Class = "height-tablet-full"
+      Class = "height-tablet-full-less"
       Arrangement = Arrange.Vertical
-      Count = 5
+      Spacing = True
+      Count = 7
       Index = 0
       Text = ("Summary")
       { WebContainer15 WebContainer
@@ -202,11 +203,11 @@
             Text = ("Current")
             ShowArrow = True
           }
-          { btnlabs WebButton
-            #MoveScaled(24,1,12,2)
+          { btndrugs WebButton
+            #MoveScaled(24,1,11,2)
             Width = "33%"
             Height = "2em"
-            Text = ("History")
+            Text = ("DRUGS")
             ShowArrow = True
           }
         }
@@ -214,22 +215,22 @@
           #MoveScaled(40,1,39,4)
           Class = "size-tablet  less-container-margin"
           Arrangement = Arrange.Horizontal
-          { btndrugs WebButton
-            #MoveScaled(1,1,11,2)
+          { btnlabs WebButton
+            #MoveScaled(1,1,12,2)
             Width = "33%"
             Height = "2em"
-            Text = ("DRUGS")
+            Text = ("History")
             ShowArrow = True
           }
           { btnimage WebButton
-            #MoveScaled(12,1,11,2)
+            #MoveScaled(13,1,11,2)
             Width = "33%"
             Height = "2em"
             Text = ("IMAGES")
             ShowArrow = True
           }
           { mnuvisits WebButton
-            #MoveScaled(23,1,11,2)
+            #MoveScaled(24,1,11,2)
             Width = "33%"
             Height = "2em"
             Text = ("Visits")
@@ -237,12 +238,12 @@
         }
       }
       { WebContainer17 WebContainer
-        #MoveScaled(1,7,113.75,32)
-        Class = "height-tablet-verylow"
+        #MoveScaled(1,8,113.75,32)
+        Height = "40%"
         Arrangement = Arrange.Row
         { WebContainer18 WebContainer
           #MoveScaled(1,1,41,30)
-          Class = "size-tablet"
+          Class = "show-widertablet-less"
           Arrangement = Arrange.Vertical
           { WebContainer19 WebContainer
             #MoveScaled(1,1,39,4)
@@ -255,16 +256,19 @@
               Text = ("Complaints")
             }
           }
-          { grdchiefsymptom WebTable
-            #MoveScaled(1,5,39,19)
+          { WebScrollView1 WebScrollView
+            #MoveScaled(1,5,39,21)
             Expand = True
-            Mode = Select.Single
-            ShowCheck = False
+            Arrangement = Arrange.Vertical
+            Border = True
+            { txtcomplaints WebHtml
+              #MoveScaled(1,1,37,13)
+            }
           }
         }
         { WebContainer21 WebContainer
           #MoveScaled(42,1,46,30)
-          Class = "size-tablet"
+          Class = "show-tablet-more"
           Arrangement = Arrange.Vertical
           { WebContainer28 WebContainer
             #MoveScaled(1,1,44,4)
@@ -274,17 +278,157 @@
               #MoveScaled(1,1,10,2)
               Height = "2em"
               Font = "bold"
-              Text = ("Diagnosis")
+              Text = ("Provisional Diagnosis")
             }
           }
           { lsticdisease WebListBox
-            #MoveScaled(1,5,44,19)
+            #MoveScaled(1,5,44,7)
+            Expand = True
+          }
+          { WebContainer25 WebContainer
+            #MoveScaled(1,12,44,4)
+            Arrangement = Arrange.Horizontal
+            Border = True
+            { WebLabel11 WebLabel
+              #MoveScaled(1,1,10,2)
+              Height = "2em"
+              Font = "bold"
+              Text = ("Final Diagnosis")
+            }
+          }
+          { lsticdfinal WebListBox
+            #MoveScaled(1,16,44,8)
             Expand = True
           }
         }
       }
+      { WebScrollView2 WebScrollView
+        #MoveScaled(1,41,113.75,27)
+        Expand = True
+        Arrangement = Arrange.Vertical
+        Border = True
+        { txthistory WebHtml
+          #MoveScaled(1,1,111.75,17)
+        }
+      }
+      Index = 1
+      Text = ("Notes")
+      { WebContainer26 WebContainer
+        #MoveScaled(1,1,113.75,6)
+        Class = "less-container-margin"
+        Arrangement = Arrange.Horizontal
+        { Panel4 WebContainer
+          #MoveScaled(1,1,40,4)
+          Arrangement = Arrange.Horizontal
+          Spacing = True
+          { rbclinician WebRadioButton
+            #MoveScaled(1,1,7,2)
+            Height = "2em"
+            Text = ("Clinicians")
+          }
+          { rbnurses WebRadioButton
+            #MoveScaled(9,1,7,2)
+            Height = "2em"
+            Text = ("Nurses")
+          }
+          { rbtransfer WebRadioButton
+            #MoveScaled(17,1,8,2)
+            Height = "2em"
+            Text = ("Transfer")
+          }
+          { rbprogress WebRadioButton
+            #MoveScaled(26,1,5,2)
+            Height = "2em"
+            Text = ("Progress")
+          }
+          { rbpatient WebRadioButton
+            #MoveScaled(32,1,7,2)
+            Height = "2em"
+            Text = ("Patient")
+          }
+        }
+        { WebContainer30 WebContainer
+          #MoveScaled(41,1,5,4)
+          Expand = True
+        }
+        { btnshownote WebButton
+          #MoveScaled(46,1,12,4)
+          Width = "6em"
+          Height = "2em"
+          Text = ("Show")
+        }
+      }
+      { ColumnView1 WebTree
+        #MoveScaled(1,7,113.75,22)
+        Expand = True
+        Mode = Select.None
+        ShowHeader = True
+      }
+      Index = 2
+      Text = ("PACS")
+      { wbPacsmainpanel WebContainer
+        #MoveScaled(1,1,113.75,42)
+        Expand = True
+        Arrangement = Arrange.Horizontal
+      }
+      Index = 3
+      Text = ("Archives")
+      { WebContainer1 WebContainer
+        #MoveScaled(1,1,113.75,4)
+        Class = "less-container-margin"
+        Arrangement = Arrange.Horizontal
+        Spacing = True
+        { WebLabel10 WebLabel
+          #MoveScaled(1,1,12,2)
+          Height = "2em"
+          Text = ("Category")
+        }
+        { cmbtype WebComboBox
+          #MoveScaled(14,1,19,2)
+          Width = "12em"
+          Height = "2em"
+        }
+        { btnshowreport WebButton
+          #MoveScaled(34,1,13,2)
+          Width = "7em"
+          Height = "2em"
+          Text = ("Refresh")
+          Image = "icon:/small/refresh"
+        }
+        { WebContainer2 WebContainer
+          #MoveScaled(48,1,13,2)
+          Expand = True
+        }
+        { mnushow WebButton
+          #MoveScaled(62,1,10,2)
+          Width = "8em"
+          Height = "2em"
+          Text = ("View")
+          Image = "icon:/small/pdf"
+        }
+        { mnuprint WebButton
+          #MoveScaled(73,1,10,2)
+          Width = "8em"
+          Height = "2em"
+          Text = ("Print")
+          Image = "icon:/32/print"
+        }
+      }
+      { GridView2 WebTable
+        #MoveScaled(1,5,113.75,17)
+        Height = "20vh"
+        Mode = Select.Single
+        ShowCheck = False
+      }
+      { WebPDFView1 WebPDFView
+        #MoveScaled(1,22,113.75,42)
+        Expand = True
+        Title = ("PDF View")
+      }
+      Index = 4
+      Text = ("Diagnostic")
       { WebContainer12 WebContainer
-        #MoveScaled(1,39,113.75,5)
+        #MoveScaled(1,1,113.75,5)
         Class = "less-container-margin"
         Arrangement = Arrange.Horizontal
         { WebContainer13 WebContainer
@@ -340,80 +484,19 @@
         }
       }
       { TableView1 WebTree
-        #MoveScaled(1,44,113.75,23)
+        #MoveScaled(1,6,113.75,23)
         Expand = True
         ShowHeader = True
       }
-      Index = 1
+      Index = 5
       Text = ("History")
       { pnlhistory WebContainer
         #MoveScaled(1,1,113.75,27)
         Expand = True
         Arrangement = Arrange.Vertical
       }
-      Index = 2
-      Text = ("PACS")
-      { wbPacsmainpanel WebContainer
-        #MoveScaled(1,1,113.75,42)
-        Expand = True
-        Arrangement = Arrange.Horizontal
-      }
-      Index = 3
-      Text = ("Reports")
-      { WebContainer1 WebContainer
-        #MoveScaled(1,1,113.75,4)
-        Class = "less-container-margin"
-        Arrangement = Arrange.Horizontal
-        Spacing = True
-        { WebLabel10 WebLabel
-          #MoveScaled(1,1,12,2)
-          Height = "2em"
-          Text = ("Category")
-        }
-        { cmbtype WebComboBox
-          #MoveScaled(14,1,19,2)
-          Width = "12em"
-          Height = "2em"
-        }
-        { btnshowreport WebButton
-          #MoveScaled(34,1,13,2)
-          Width = "7em"
-          Height = "2em"
-          Text = ("Refresh")
-          Image = "icon:/small/refresh"
-        }
-        { WebContainer2 WebContainer
-          #MoveScaled(48,1,13,2)
-          Expand = True
-        }
-        { mnushow WebButton
-          #MoveScaled(62,1,10,2)
-          Width = "8em"
-          Height = "2em"
-          Text = ("View")
-          Image = "icon:/small/pdf"
-        }
-        { mnuprint WebButton
-          #MoveScaled(73,1,10,2)
-          Width = "8em"
-          Height = "2em"
-          Text = ("Print")
-          Image = "icon:/32/print"
-        }
-      }
-      { GridView2 WebTable
-        #MoveScaled(1,5,113.75,17)
-        Height = "20vh"
-        Mode = Select.Single
-        ShowCheck = False
-      }
-      { WebPDFView1 WebPDFView
-        #MoveScaled(1,22,113.75,42)
-        Expand = True
-        Title = ("PDF View")
-      }
-      Index = 4
-      Text = ("Query")
+      Index = 6
+      Text = ("Response")
       { WebContainer7 WebContainer
         #MoveScaled(1,1,113.75,4)
         Class = "less-container-margin"
@@ -442,12 +525,12 @@
         }
       }
       { txtquery WebTextHTML
-        #MoveScaled(1,5,113.75,12)
+        #MoveScaled(1,6,113.75,12)
         Height = "25vh"
         Border = True
       }
       { WebContainer8 WebContainer
-        #MoveScaled(1,17,113.75,4)
+        #MoveScaled(1,19,113.75,4)
         Class = "less-container-margin"
         Arrangement = Arrange.Horizontal
         Spacing = True
@@ -472,12 +555,12 @@
         }
       }
       { txtresponse WebTextHTML
-        #MoveScaled(1,21,113.75,16)
+        #MoveScaled(1,24,113.75,16)
         Expand = True
         Border = True
       }
       { WebContainer9 WebContainer
-        #MoveScaled(1,37,113.75,4)
+        #MoveScaled(1,41,113.75,4)
         Class = "less-container-margin"
         Arrangement = Arrange.Horizontal
         Border = True
@@ -485,13 +568,13 @@
           #MoveScaled(1,1,9,2)
           Width = "7em"
           Font = "bold"
-          Text = ("COMMENT")
+          Text = ("STATUS")
         }
-        { txtcomment WebTextBox
+        { cmbcomment WebComboBox
           #MoveScaled(10,1,33,2)
           Width = "50%"
           Height = "2em"
-          ShowClear = True
+          ReadOnly = False
         }
         { WebContainer11 WebContainer
           #MoveScaled(43,1,10,2)

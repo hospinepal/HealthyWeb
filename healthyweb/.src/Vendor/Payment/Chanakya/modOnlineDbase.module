@@ -60,6 +60,7 @@ Public Function GetTokenStatus(sToken As String, sBookID As String, sBillNo As S
   Dim res As Result
   Dim xxx As String
   Dim res1 As Result
+  Dim xIntVal As String
 
   xxx = ""
   If $OnlineCon.Opened Then
@@ -90,6 +91,14 @@ Public Function GetTokenStatus(sToken As String, sBookID As String, sBillNo As S
         res1["fldsave"] = True
         res1["fldhostmac"] = res["deviceType"]
         res1["xyz"] = False
+        If MMain.$WebEntry = True Then
+          xIntVal = modString.GetDateString(Now())
+          res1["fldid"] = CLong(xIntVal)
+          res1["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+          res1["fldrepodate"] = Now()
+          res1["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+          res1["fldhospcode"] = modBasic.$HospCode
+        Endif
         res1.Update
         xxx = "Successful"
 

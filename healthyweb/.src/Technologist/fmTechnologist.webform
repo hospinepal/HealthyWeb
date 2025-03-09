@@ -10,21 +10,26 @@
   { mnuappl WebMenu
     Text = ("Laboratory")
     { mnulabel WebMenu
-      Text = ("Master Data")
+      Tag = "Diagnostic Tests"
+      Text = ("Labs Master")
     }
     { mnusensiv WebMenu
-      Text = ("Sensitivity  Data")
+      Tag = "Antibiotics Panel"
+      Text = ("Antibiotics Panel")
     }
     { mnugroup WebMenu
+      Tag = "Test Grouping"
       Text = ("Test Grouping")
     }
   }
   { mnuradio WebMenu
     Text = ("Radiology")
     { mnuradiodetail WebMenu
-      Text = ("Master Data")
+      Tag = "Radio Diagnostics"
+      Text = ("Radio Master")
     }
     { mnuradgrp WebMenu
+      Tag = "Radio Grouping"
       Text = ("Radio Grouping")
     }
   }
@@ -49,6 +54,7 @@
       Text = ("Laboratory")
     }
     { mnusensitivity WebMenu
+      Tag = "Sensitivity Report"
       Text = ("Sensitivity")
     }
     { mnusampradio WebMenu
@@ -58,6 +64,33 @@
     { mnusaved WebMenu
       Tag = "Archived Reports"
       Text = ("Saved Reports")
+    }
+  }
+  { mnucustquery WebMenu
+    Tag = "Query Report"
+    Text = ("Custom Query")
+    { mnucust1 WebMenu
+      Visible = False
+      Text = ("AccountReport1")
+    }
+    { mnucust2 WebMenu
+      Visible = False
+      Text = ("AccountReport2")
+    }
+    { mnucust3 WebMenu
+      Visible = False
+      Text = ("AccountReport3")
+    }
+    { mnucust4 WebMenu
+      Visible = False
+      Text = ("AccountReport4")
+    }
+    { mnucust5 WebMenu
+      Visible = False
+      Text = ("AccountReport5")
+    }
+    { mnurepaccsetting WebMenu
+      Text = ("Custom Setting")
     }
   }
   { mnusett WebMenu
@@ -82,6 +115,7 @@
       Image = "icon:/small/user"
     }
     { mnupersonal WebMenu
+      Tag = "Personal Page"
       Text = ("Personal Page")
     }
     { mnuclearcache WebMenu

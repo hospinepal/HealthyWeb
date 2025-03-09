@@ -31,7 +31,6 @@ Public Sub WebForm_Open()
   MMain.GetApplVersionType()
 
   modBasic.LoadClinicalChartSetting()
-  modBasic.LoadClinicalLists()
   modBasic.ClinicalCommentSett()
   modBasic.ChartSettingsAll()
   modBasic.LoadLargeLists()

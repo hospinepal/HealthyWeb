@@ -111,6 +111,7 @@ Private Sub FillTransTable(sResponse As String)
 
   Dim res As Result
   Dim xitemVar As Collection
+  Dim xIntVal As String
 
   Try xitemVar = JSON.Decode(sResponse)
   If xitemVar Then
@@ -153,6 +154,14 @@ Private Sub FillTransTable(sResponse As String)
         res["fldsave"] = True
         res["fldhostmac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
         res["xyz"] = False
+        If MMain.$WebEntry = True Then
+          xIntVal = modString.GetDateString(Now())
+          res["fldid"] = CLong(xIntVal)
+          res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+          res["fldrepodate"] = Now()
+          res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+          res["fldhospcode"] = modBasic.$HospCode
+        Endif
         res.Update
         $sValue = "Successful"
         Me.Exec("Toastify({text: 'Transaction completed', duration: 3000}).showToast()")

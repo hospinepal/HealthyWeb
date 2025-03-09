@@ -30,8 +30,13 @@ End
 
 Public Sub WebForm_Open()
 
+  If MMain.$WebEntry = True Then
+    modDataRepo.$RepositoryMode = MMain.$AppLogCategory
+    modBasic.$HospCode = MMain.$AppLogString
+  Endif
   modHelpVariable.SetApplicationGUI()
   MMain.GetApplVersionType()
+  DiaplayCustMenu()
 
   modBasic.LoadLabRadioList()
   modBasic.LabRadiologySeting()
@@ -40,6 +45,31 @@ Public Sub WebForm_Open()
   modBasic.RemoteLogInSetting()
 
   modBasic.ChartSettingsAll()
+  modBasic.CloudAISettings()
+
+  SetFormAccess()
+
+End
+
+Private Sub SetFormAccess()
+
+  modGeneralMain.ShowSelectedFormMenu(mnulabel)
+  modGeneralMain.ShowSelectedFormMenu(mnusensiv)
+  modGeneralMain.ShowSelectedFormMenu(mnugroup)
+
+  modGeneralMain.ShowSelectedFormMenu(mnuradiodetail)
+  modGeneralMain.ShowSelectedFormMenu(mnuradgrp)
+
+  modGeneralMain.ShowSelectedFormMenu(mnuverify)
+  modGeneralMain.ShowSelectedFormMenu(mnuradioverify)
+
+  modGeneralMain.ShowSelectedFormMenu(mnusamrep)
+  modGeneralMain.ShowSelectedFormMenu(mnusensitivity)
+  modGeneralMain.ShowSelectedFormMenu(mnusampradio)
+
+  modGeneralMain.ShowSelectedFormMenu(mnusaved)
+  modGeneralMain.ShowSelectedFormMenu(mnucustquery)
+  modGeneralMain.ShowSelectedFormMenu(mnupersonal)
 
 End
 
@@ -111,6 +141,102 @@ Public Sub btnfullscreen_Click()
     Me.Exec("closeFullscreen()")
 
   Endif
+
+End
+
+''---------------------------------------- CustomAccount Reports -------------------------------------
+Private Sub DiaplayCustMenu()
+
+  If modSettings.ShowSettingForReport("Technologist.CustomQuery1/Name") Then
+    mnucust1.Text = modSettings.ShowSettingForReport("Technologist.CustomQuery1/Name")
+    mnucust1.Tag = "Technologist.CustomQuery1"
+    mnucust1.Visible = True
+  Endif
+
+  If modSettings.ShowSettingForReport("Technologist.CustomQuery2/Name") Then
+    mnucust2.Text = modSettings.ShowSettingForReport("Technologist.CustomQuery2/Name")
+    mnucust2.Tag = "Technologist.CustomQuery2"
+    mnucust2.Visible = True
+  Endif
+
+  If modSettings.ShowSettingForReport("Technologist.CustomQuery3/Name") Then
+    mnucust3.Text = modSettings.ShowSettingForReport("Technologist.CustomQuery3/Name")
+    mnucust3.Tag = "Technologist.CustomQuery3"
+    mnucust3.Visible = True
+  Endif
+
+  If modSettings.ShowSettingForReport("Technologist.CustomQuery4/Name") Then
+    mnucust4.Text = modSettings.ShowSettingForReport("Technologist.CustomQuery4/Name")
+    mnucust4.Tag = "Technologist.CustomQuery4"
+    mnucust4.Visible = True
+  Endif
+
+  If modSettings.ShowSettingForReport("Technologist.CustomQuery5/Name") Then
+    mnucust5.Text = modSettings.ShowSettingForReport("Technologist.CustomQuery5/Name")
+    mnucust5.Tag = "Technologist.CustomQuery5"
+    mnucust5.Visible = True
+  Endif
+
+End
+
+Public Sub mnucust1_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust1.Tag, Workspace1)
+
+End
+
+Public Sub mnucust2_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust2.Tag, Workspace1)
+
+End
+
+Public Sub mnucust3_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust3.Tag, Workspace1)
+
+End
+
+Public Sub mnucust4_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust4.Tag, Workspace1)
+
+End
+
+Public Sub mnucust5_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust5.Tag, Workspace1)
+
+End
+
+Public Sub mnurepaccsetting_Click()
+
+  fmCusAccReport.ShowModal
 
 End
 

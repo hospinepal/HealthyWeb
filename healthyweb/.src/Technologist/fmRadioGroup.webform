@@ -65,8 +65,10 @@
     Arrangement = Arrange.Horizontal
     { WebLabel2 WebLabel
       #MoveScaled(1,1,9,2)
-      Width = "4em"
+      Width = "6em"
+      Height = "2em"
       Text = ("Format")
+      Border = True
     }
     { cmbformat WebComboBox
       #MoveScaled(10,1,15,2)
@@ -97,8 +99,10 @@
     Arrangement = Arrange.Horizontal
     { WebLabel1 WebLabel
       #MoveScaled(1,1,9,2)
-      Width = "4em"
+      Width = "6em"
+      Height = "2em"
       Text = ("Method")
+      Border = True
     }
     { cmbmethod WebComboBox
       #MoveScaled(10,1,15,2)
@@ -110,6 +114,12 @@
       #MoveScaled(25,1,9,2)
       Expand = True
     }
+    { btnclose WebButton
+      #MoveScaled(34,1,8,2)
+      Width = "5em"
+      Height = "2em"
+      Text = ("Close")
+    }
   }
   { WebContainer6 WebContainer
     #MoveScaled(1,17,71,4)
@@ -117,8 +127,10 @@
     Arrangement = Arrange.Horizontal
     { WebLabel3 WebLabel
       #MoveScaled(1,1,9,2)
-      Width = "4em"
+      Width = "6em"
+      Height = "2em"
       Text = ("Quota")
+      Border = True
     }
     { txtquota WebValueBox
       #MoveScaled(10,1,13,2)
@@ -177,7 +189,7 @@
     Arrangement = Arrange.Horizontal
     { WebLabel5 WebLabel
       #MoveScaled(1,1,8,2)
-      Width = "5em"
+      Width = "7em"
       Text = ("CSV File")
       Border = True
     }
