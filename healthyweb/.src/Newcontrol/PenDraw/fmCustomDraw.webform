@@ -32,27 +32,26 @@
         #MoveScaled(14,1,6,2)
         Expand = True
       }
-      { btndownload WebButton
+      { btnclear WebButton
         #MoveScaled(20,1,9,2)
-        Width = "6em"
+        Width = "7em"
+        Height = "2em"
+        Text = ("Clear")
+        Image = "icon:/small/clear"
+      }
+      { btndownload WebButton
+        #MoveScaled(29,1,9,2)
+        Width = "7em"
         Height = "2em"
         Text = ("Save")
         Image = "icon:/small/down"
       }
-      { btnsave WebButton
-        #MoveScaled(29,1,6,2)
-        Width = "6em"
+      { btnsend WebButton
+        #MoveScaled(38,1,6,2)
+        Width = "7em"
         Height = "2em"
-        Visible = False
-        Text = ("Write")
+        Text = ("Send")
         Image = "icon:/small/edit"
-      }
-      { btnclear WebButton
-        #MoveScaled(35,1,9,2)
-        Width = "6em"
-        Height = "2em"
-        Text = ("Clear")
-        Image = "icon:/small/clear"
       }
     }
     { WebContainer6 WebContainer
@@ -61,7 +60,7 @@
       Arrangement = Arrange.Horizontal
       { WebContainer3 WebContainer
         #MoveScaled(1,1,5,2)
-        Expand = True
+        Width = "4em"
       }
       { WebButtonBox1 WebButtonBox
         #MoveScaled(6,1,11,2)
@@ -84,6 +83,5 @@
   { WebTextBox1 WebTextBox
     #MoveScaled(1,51,88,4)
     Height = "2em"
-    Visible = False
   }
 }

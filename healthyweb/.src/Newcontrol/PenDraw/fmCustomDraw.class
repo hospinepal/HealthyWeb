@@ -23,8 +23,27 @@ Public Sub mnudraw_Click()
 
   Dim xx As String
 
-  xx = modJavaScript.GetSketchScriptString(WebContainer2, WebTextBox1, btnclear, btnsave, btndownload)
+  ' xx = modJavaScript.GetSketchScriptString(WebContainer2, WebTextBox1, btnclear, btnsave, btndownload)
+  xx = modJavaScript.GetSketchScriptString(WebContainer2)
   Me.Exec(xx)
+
+End
+
+Public Sub btnclear_Click()
+
+  Me.Exec("clearSketchPad();")
+
+End
+
+Public Sub btndownload_Click()
+
+  Me.Exec("downloadSketchPadAsImage();")
+
+End
+
+Public Sub btnsend_Click()
+
+  WebForm._AddJavascript("$_(" & JS(WebTextBox1.Name & ":entry") & ").value = uploadSketchPadAsImage();")
 
 End
 

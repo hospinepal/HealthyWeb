@@ -1,12 +1,13 @@
 ' Gambas class file
 
+Private $sDefault As String
 Private $sValue As String
 
 Public Sub Run(Optional sTitle As String, Optional sDefault As String) As String
 
   txttitle.Text = "<b>" & sTitle & "</b>"
   If sDefault Then
-    TextArea1.Text = sDefault
+    $sDefault = sDefault
   Endif
   modGeneralMain.GetOpenModalForm(Me)
   If modBasic.$TabletModeEnable = "Yes" Then
@@ -28,6 +29,14 @@ End
 Public Sub btnclear_Click()
 
   TextArea1.Text = ""
+
+End
+
+Public Sub btnshowText_Click()
+
+  If $sDefault Then
+    TextArea1.Text = $sDefault
+  Endif
 
 End
 
@@ -82,6 +91,16 @@ Public Sub btnaddnew_Click()
   If sWord Then
     xwors = "{ key: '" & sWord[0] & "', value: '" & sWord[1] & "' }"
     WebForm._AddJavascript("$AutoTextComoleteList.push(" & xwors & ")")
+  Endif
+
+End
+
+Public Sub btncloudai_Click()
+
+  If TextArea1.Text Then
+    TextArea1.Text = TextArea1.Text & gb.NewLine & modCloudAI.GetAllCloudAIResponse()
+  Else
+    TextArea1.Text = modCloudAI.GetAllCloudAIResponse()
   Endif
 
 End

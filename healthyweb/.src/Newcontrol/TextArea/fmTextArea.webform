@@ -11,19 +11,19 @@
     Class = "less-container-margin"
     Arrangement = Arrange.Horizontal
     { txttitle WebHtml
-      #MoveScaled(1,1,50,3)
+      #MoveScaled(1,1,44,3)
       Expand = True
       Border = True
     }
     { btnaddnew WebButton
-      #MoveScaled(51,1,4,3)
+      #MoveScaled(45,1,4,3)
       Class = "toolButton"
       Width = "2em"
       Height = "2em"
       Image = "icon:/small/add"
     }
     { btnexec WebButton
-      #MoveScaled(55,1,4,3)
+      #MoveScaled(49,1,4,3)
       Class = "toolButton"
       Width = "2em"
       Height = "2em"
@@ -31,11 +31,18 @@
       Immediate = True
     }
     { dctexectext WebButton
-      #MoveScaled(59,1,4,3)
+      #MoveScaled(53,1,4,3)
       Class = "toolButton"
       Width = "2em"
       Height = "2em"
       Image = "icon:/small/attach"
+    }
+    { btncloudai WebButton
+      #MoveScaled(57,1,4,3)
+      Class = "toolButton"
+      Width = "2em"
+      Height = "2em"
+      Image = "icon:/medium/internet"
     }
   }
   { WebContainer3 WebContainer
@@ -54,27 +61,34 @@
     Class = "less-container-margin"
     Arrangement = Arrange.Horizontal
     Spacing = True
-    { btnclear WebButton
+    { btnshowText WebButton
       #MoveScaled(1,1,11,3)
+      Width = "6em"
+      Height = "2em"
+      Text = ("Paste")
+      Image = "icon:/32/paste"
+    }
+    { btnclear WebButton
+      #MoveScaled(13,1,11,3)
       Width = "6em"
       Height = "2em"
       Text = ("Clear")
       Image = "icon:/small/clear"
     }
     { WebContainer9 WebContainer
-      #MoveScaled(13,1,16,3)
+      #MoveScaled(25,1,16,3)
       Expand = True
       Arrangement = Arrange.Vertical
     }
     { btnok WebButton
-      #MoveScaled(30,1,11,3)
+      #MoveScaled(42,1,11,3)
       Width = "6em"
       Height = "2em"
       Text = ("Save")
       Image = "icon:/small/apply"
     }
     { btnclose WebButton
-      #MoveScaled(42,1,11,3)
+      #MoveScaled(54,1,11,3)
       Width = "6em"
       Height = "2em"
       Text = ("Close")

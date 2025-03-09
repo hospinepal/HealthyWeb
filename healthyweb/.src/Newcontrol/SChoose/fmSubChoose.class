@@ -172,18 +172,19 @@ Private Sub MakeNewCOntrols()
         End With
 
       Else If $strType = "Dual Columns" Then
-        aCheckBox[i] = New WebCheckBox(xpanel[i])
+        aCheckBox[i] = New WebCheckBox(xpanel[i]) As "Buttongroup"
         With aCheckBox[i]
           .Width = "40%"
           .Height = "2em"
           .Text = srt
           .Tag = i
         End With
-        aDualTextForm[i] = New DualTextBox(xpanel[i])
+        aDualTextForm[i] = New DualTextBox(lblitem.Text, xpanel[i])
         With aDualTextForm[i]
           .Width = "60%"
           .Height = "2em"
           .DataText = ""
+          .Enabled = False
           .Tag = i
         End With
 
