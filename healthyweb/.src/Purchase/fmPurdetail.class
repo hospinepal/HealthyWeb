@@ -73,6 +73,9 @@ Private Sub ShowGridView()
   Dim sql As String
   Dim xstr As String
 
+  Dim xpurchase As Float
+  Dim xpayment As Float
+
   If $sComp Then
     If $sComp = "%" Then
       xstr = ""
@@ -91,7 +94,18 @@ Private Sub ShowGridView()
   $rData = modDatabase.$syConn.Exec(sql, $strTitle, LCase(txtsearch.Text) & "%", LCase(txtinvoice.Text) & "%", modDate.StartSqlDate(dtlisted.Value), modDate.EndSqlDate(DateAdd(dtlisted.Value, gb.Day, txtrange.Value)), $sComp)
   $aMyFields = New String[]
   modGridView.ReadSmallData(GridView1, $rData, $aMyFields)
+
+  xpurchase = 0
+  xpayment = 0
+  For Each $rData
+    xpurchase = xpurchase + $rData["fldcredit"]
+    xpayment = xpayment + $rData["flddebit"]
+  Next
   ResizeGridView()
+
+  txtpurchase.Value = Round(xpurchase, -2)
+  txtpayment.Value = Round(xpayment, -2)
+  txtpending.Value = Round(xpurchase - xpayment, -2)
 
 End
 
@@ -119,7 +133,7 @@ Private Sub ResizeGridView()
 
   With GridView1
     .Columns[0].Width = CStr(75 * modBasic.$AppWidthRatio) & "px"
-    .Columns[1].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
+    .Columns[1].Width = CStr(175 * modBasic.$AppWidthRatio) & "px"
     .Columns[2].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
     .Columns[3].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
     .Columns[4].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
@@ -130,7 +144,7 @@ Private Sub ResizeGridView()
     .Columns[9].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
     .Columns[10].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
 
-    .Columns[0].Text = "No"
+    .Columns[0].Text = "SN"
     .Columns[1].Text = "Reference"
     .Columns[2].Text = "PayMode"
     .Columns[3].Text = "Date"

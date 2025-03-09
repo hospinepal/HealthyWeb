@@ -9,26 +9,59 @@
   Title = ("Purchase Desk")
   { mnumaster WebMenu
     Text = ("Information")
-    { mnuinfo WebMenu
+    { mnusurgical WebMenu
+      Tag = "Surgicals Info"
       Text = ("Surgical Info")
     }
     { mnuextraitem WebMenu
+      Tag = "Extra Item Info"
       Text = ("Extra Items")
     }
-    { mnupur WebMenu
+    { mnusupplier WebMenu
+      Tag = "Supplier Info"
       Text = ("Supplier Info")
     }
   }
   { mnuappl WebMenu
     Text = ("Activity")
     { mnufixed WebMenu
+      Tag = "Fixed Assets"
       Text = ("Fixed Assets")
     }
-    { mnupurestrict WebMenu
-      Text = ("Purchase Limit")
+    { mnutransreq WebMenu
+      Tag = "Purchase Request"
+      Text = ("Purchase  Request")
     }
+    { mnupureq WebMenu
+      Tag = "Purchase Order"
+      Text = ("Purchase Order")
+    }
+  }
+  { mnusupportall WebMenu
+    Text = ("Support")
     { mnuserv WebMenu
-      Text = ("Pur Request")
+      Tag = "Purchase Support"
+      Text = ("Purchase Support")
+    }
+    { mnupurestrict WebMenu
+      #Translate = False
+      Tag = "Purchase Restriction"
+      Text = "Purchase Limit"
+    }
+    { mnunderstock WebMenu
+      Text = ("Under Stock")
+    }
+  }
+  { mnureportall WebMenu
+    Text = ("Report")
+    { mnuinventreport WebMenu
+      Tag = "Inventory Report"
+      Text = ("Inventory")
+    }
+    { mnuinvdb WebMenu
+      #Translate = False
+      Tag = "Inventory Database"
+      Text = "Inventory DB"
     }
   }
   { mnuhelp WebMenu
@@ -38,6 +71,7 @@
       Image = "icon:/small/user"
     }
     { mnupersonal WebMenu
+      Tag = "Personal Page"
       Text = ("Personal Page")
     }
     { mnuclearcache WebMenu

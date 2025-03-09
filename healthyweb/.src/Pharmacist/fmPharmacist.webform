@@ -10,12 +10,15 @@
   { mnuinfo WebMenu
     Text = ("Information")
     { mnumedicine WebMenu
+      Tag = "Medicine Info"
       Text = ("Medicines")
     }
     { mnusurgicals WebMenu
+      Tag = "Surgicals Info"
       Text = ("Surgicals")
     }
     { mnuextra WebMenu
+      Tag = "Extra Item Info"
       Text = ("Extra Items")
     }
     { mnuformulary WebMenu
@@ -25,34 +28,72 @@
   { mnuactivity WebMenu
     Text = ("Activity")
     { mnulabeling WebMenu
+      Tag = "Label Setting"
       Text = ("Labeling")
     }
     { mnuprotocols WebMenu
+      Tag = "Pharmacy Protocols"
       Text = ("Protocols")
     }
     { mnufixed WebMenu
+      Tag = "Fixed Inventory Rate"
       Text = ("Fixed Rates")
     }
     { mnuactivation WebMenu
+      Tag = "Product Activation"
       Text = ("Activation")
     }
     { mnuoutorder WebMenu
+      Tag = "Stock Out Order"
       Text = ("Out Order")
     }
   }
   { mnureports WebMenu
     Text = ("Reports")
     { mnuinvenreport WebMenu
+      Tag = "Inventory Report"
       Text = ("Inventory")
     }
     { mnudispenreport WebMenu
-      Text = ("Dispensed")
+      #Translate = False
+      Tag = "Pharmacy Sales Report"
+      Text = "Dispensed"
     }
     { mnutransfreport WebMenu
+      Tag = "Transfer Report"
       Text = ("Transfer")
     }
     { mnuinvendb WebMenu
+      Tag = "Inventory Database"
       Text = ("Inventory DB")
+    }
+  }
+  { mnucustomquery WebMenu
+    Tag = "Query Report"
+    Text = ("CustQuery")
+    { mnucust1 WebMenu
+      Visible = False
+      Text = ("AccountReport1")
+    }
+    { mnucust2 WebMenu
+      Visible = False
+      Text = ("AccountReport2")
+    }
+    { mnucust3 WebMenu
+      Visible = False
+      Text = ("AccountReport3")
+    }
+    { mnucust4 WebMenu
+      Visible = False
+      Text = ("AccountReport4")
+    }
+    { mnucust5 WebMenu
+      Visible = False
+      Text = ("AccountReport5")
+    }
+    { mnucustsetting WebMenu
+      #Translate = False
+      Text = "Custom Query"
     }
   }
   { mnusetting WebMenu
@@ -74,6 +115,7 @@
       Image = "icon:/small/user"
     }
     { mnupersonal WebMenu
+      Tag = "Personal Page"
       Text = ("Personal Page")
     }
     { mnuclearcache WebMenu

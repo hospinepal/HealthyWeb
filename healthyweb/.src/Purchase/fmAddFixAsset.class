@@ -167,6 +167,7 @@ End
 Public Sub btnadd_Click()
 
   Dim res As Result
+  Dim xIntVal As String
 
   If btnadd.Text = "Add" Then
     btnadd.Text = "Save"
@@ -199,8 +200,16 @@ Public Sub btnadd_Click()
       res["fldcondition"] = Trim(cmbcondition.Text)
       res["fldrepairdate"] = dtrepair.Value
       res["fldcomment"] = txtremarks.Text
-      res["flduser"] = modBasic.$lbluser
+      res["flduserid"] = modBasic.$lbluser
       res["xyz"] = False
+      If MMain.$WebEntry = True Then
+        xIntVal = modString.GetDateString(Now())
+        res["fldid"] = CLong(xIntVal)
+        res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+        res["fldrepodate"] = Now()
+        res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+        res["fldhospcode"] = modBasic.$HospCode
+      Endif
       res.Update
       ShowGridData(cmbitem.Text)
       btnadd.Text = "Add"
@@ -265,7 +274,7 @@ Public Sub btnedit_Click()
         res["fldcondition"] = Trim(cmbcondition.Text)
         res["fldrepairdate"] = dtrepair.Value
         res["fldcomment"] = txtremarks.Text
-        res["flduser"] = modBasic.$lbluser
+        res["flduserid"] = modBasic.$lbluser
         res["xyz"] = False
         res.Update
         ShowGridData(cmbitem.Text)
@@ -284,7 +293,7 @@ Private Sub ShowGridData(sItem As String)
   xFldLst = [modDataRepo.SerialField(), "flditemname", "fldmanufacturer", "fldledger", "fldmodel", "fldqty", "fldditemamt", "fldcomp", "fldcondition", "fldpurdate"]
   $RepoStr = modDataRepo.GetWhereStringRepo(cmblocation.Text, cmbvalue.Text)
   If modBasic.$ViewLockAssets = "User" Then
-    sql = "select " & xFldLst.Join(",") & " from tblassetsentry where flditemname like &1 and flduser=&2 and fldcondition<>&3" & $RepoStr
+    sql = "select " & xFldLst.Join(",") & " from tblassetsentry where flditemname like &1 and flduserid=&2 and fldcondition<>&3" & $RepoStr
     $rData = modDatabase.$myConn.Exec(sql, sItem, modBasic.$lbluser, "Removed")
   Else If modBasic.$ViewLockAssets = "Location" Then
     sql = "select " & xFldLst.Join(",") & " from tblassetsentry where flditemname like &1 and fldcomp=&2 and fldcondition<>&3" & $RepoStr
@@ -389,7 +398,7 @@ Public Sub btnselgroup_Click()
   xlist = modControlSub.GetDirectFillresult(modDatabase.$myConn.Exec("select distinct(fldgroup) as col from tblassetsentry"))
   xitem = InputCombo(("Select Item Group"), "Fixed Assets", xlist, "", True)
   If xitem Then
-    xpath = modHTMLStock.FixedAssetsReport("Category", xitem, cmblocation.Text, cmbvalue.Text)
+    xpath = modHTMLFixAsset.FixedAssetsReport("Category", xitem, cmblocation.Text, cmbvalue.Text)
     modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
   Endif
 
@@ -402,7 +411,7 @@ Public Sub btnrepoitem_Click()
 
   xdate = DoubleDates("Select Dates", "Fixed Assets", [Now(), Now()])
   If xdate Then
-    xpath = modHTMLStock.FixedAssetsReportDate("Category", xdate[0], xdate[1], cmblocation.Text, cmbvalue.Text)
+    xpath = modHTMLFixAsset.FixedAssetsReportDate("Category", xdate[0], xdate[1], cmblocation.Text, cmbvalue.Text)
     modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
   Endif
 
@@ -417,7 +426,7 @@ Public Sub btnsellocation_Click()
   xlist = modControlSub.GetDirectFillresult(modDatabase.$myConn.Exec("select distinct(fldcomp) as col from tblassetsentry"))
   xitem = InputCombo(("Select Item Location"), "Fixed Assets", xlist, "", True)
   If xitem Then
-    xpath = modHTMLStock.FixedAssetsReport("Location", xitem, cmblocation.Text, cmbvalue.Text)
+    xpath = modHTMLFixAsset.FixedAssetsReport("Location", xitem, cmblocation.Text, cmbvalue.Text)
     modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
   Endif
 
@@ -430,7 +439,7 @@ Public Sub btnrepolocation_Click()
 
   xdate = DoubleDates("Select Dates", "Fixed Assets", [Now(), Now()])
   If xdate Then
-    xpath = modHTMLStock.FixedAssetsReportDate("Location", xdate[0], xdate[1], cmblocation.Text, cmbvalue.Text)
+    xpath = modHTMLFixAsset.FixedAssetsReportDate("Location", xdate[0], xdate[1], cmblocation.Text, cmbvalue.Text)
     modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
   Endif
 
@@ -443,7 +452,7 @@ Public Sub btnselinvoice_Click()
 
   xitem = InputBox(("Put Invoice Number"), "Fixed Assets", "")
   If xitem Then
-    xpath = modHTMLStock.FixedAssetsReport("Invoice", xitem, cmblocation.Text, cmbvalue.Text)
+    xpath = modHTMLFixAsset.FixedAssetsReport("Invoice", xitem, cmblocation.Text, cmbvalue.Text)
     modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
   Endif
 
@@ -456,7 +465,7 @@ Public Sub btninvoice_Click()
 
   xdate = DoubleDates("Select Dates", "Fixed Assets", [Now(), Now()])
   If xdate Then
-    xpath = modHTMLStock.FixedAssetsReportDate("Invoice", xdate[0], xdate[1], cmblocation.Text, cmbvalue.Text)
+    xpath = modHTMLFixAsset.FixedAssetsReportDate("Invoice", xdate[0], xdate[1], cmblocation.Text, cmbvalue.Text)
     modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
   Endif
 

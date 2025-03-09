@@ -6,7 +6,7 @@ Private $aMyFields As String[]
 Public Sub _new()
 
   cmbroute.List = modMedicine.ComboRoute()
-  cmbdoseunit.List = ["mg", "mg/Kg", "mg/sqm"]
+  cmbdoseunit.List = modMedicine.$MedicineUnitList
   cmbfreq.List = modMedicine.FrequencyCombo()
   cmbgroup.List = MedGroupList()
   cmbmode.List = modNonMedical.FillCashModeCombo()

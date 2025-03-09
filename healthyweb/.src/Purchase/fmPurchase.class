@@ -28,11 +28,38 @@ End
 
 Public Sub WebForm_Open()
 
+  If MMain.$WebEntry = True Then
+    modDataRepo.$RepositoryMode = MMain.$AppLogCategory
+    modBasic.$HospCode = MMain.$AppLogString
+  Endif
   modHelpVariable.SetApplicationGUI()
   MMain.GetApplVersionType()
 
   modBasic.LoadInvoicingSetting()
+  modBasic.InventorySettings()
   modBasic.InventoryUserAccessList()
+
+  SetFormAccess()
+
+End
+
+Private Sub SetFormAccess()
+
+  modGeneralMain.ShowSelectedFormMenu(mnusurgical)
+  modGeneralMain.ShowSelectedFormMenu(mnuextraitem)
+  modGeneralMain.ShowSelectedFormMenu(mnusupplier)
+
+  modGeneralMain.ShowSelectedFormMenu(mnufixed)
+  modGeneralMain.ShowSelectedFormMenu(mnutransreq)
+  modGeneralMain.ShowSelectedFormMenu(mnupureq)
+
+  modGeneralMain.ShowSelectedFormMenu(mnuserv)
+  modGeneralMain.ShowSelectedFormMenu(mnupurestrict)
+
+  modGeneralMain.ShowSelectedFormMenu(mnuinventreport)
+  modGeneralMain.ShowSelectedFormMenu(mnuinvdb)
+
+  modGeneralMain.ShowSelectedFormMenu(mnupersonal)
 
 End
 
@@ -108,7 +135,7 @@ Public Sub btnfullscreen_Click()
 End
 
 ''============== Main forms ================
-Public Sub mnuinfo_Click()
+Public Sub mnusurgical_Click()
 
 End
 
@@ -116,7 +143,7 @@ Public Sub mnuextraitem_Click()
 
 End
 
-Public Sub mnupur_Click()
+Public Sub mnusupplier_Click()
 
   Dim hForm As FmSupplier
 
@@ -143,6 +170,32 @@ Public Sub mnupurestrict_Click()
 End
 
 Public Sub mnuserv_Click()
+
+End
+
+Public Sub mnunderstock_Click()
+
+  ' Dim hForm As FmStoreAlert
+  '
+  ' hForm = New FmStoreAlert("UnderStock", Workspace1)
+  ' modWorkSpace.Add(hForm)
+
+End
+
+Public Sub mnuinventreport_Click()
+
+  Dim hForm As Fmmedreport
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New Fmmedreport(Workspace1)
+
+End
+
+Public Sub mnuinvdb_Click()
+
+  fmStockDB.ShowModal
 
 End
 
