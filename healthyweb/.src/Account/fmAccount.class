@@ -28,6 +28,10 @@ End
 
 Public Sub WebForm_Open()
 
+  If MMain.$WebEntry = True Then
+    modDataRepo.$RepositoryMode = MMain.$AppLogCategory
+    modBasic.$HospCode = MMain.$AppLogString
+  Endif
   modHelpVariable.SetApplicationGUI()
   MMain.GetApplVersionType()
 
@@ -58,7 +62,7 @@ Public Sub WebForm_Open()
     mnuspecial.Visible = False
   Endif
   SetFormAccess()
-  DefaultFormLoad()
+  ' DefaultFormLoad()
 
 End
 
@@ -78,6 +82,7 @@ Private Sub SetFormAccess()
   modGeneralMain.ShowSelectedFormMenu(mnubank)
   modGeneralMain.ShowSelectedFormMenu(mnudepcredit)
   modGeneralMain.ShowSelectedFormMenu(mnutaxcode)
+  modGeneralMain.ShowSelectedFormMenu(mnucshvendors)
   modGeneralMain.ShowSelectedFormMenu(mnuregist)
   modGeneralMain.ShowSelectedFormMenu(mnuservmode)
   modGeneralMain.ShowSelectedFormMenu(mnudiscgroup)
@@ -89,40 +94,58 @@ Private Sub SetFormAccess()
   modGeneralMain.ShowSelectedFormMenu(mnuequipment)
   modGeneralMain.ShowSelectedFormMenu(mnuservice)
   modGeneralMain.ShowSelectedFormMenu(mnuother)
+  modGeneralMain.ShowSelectedFormMenu(mnucostingall)
   modGeneralMain.ShowSelectedFormMenu(mnustock)
-  modGeneralMain.ShowSelectedFormMenu(mnurepo)
+  modGeneralMain.ShowSelectedFormMenu(mnupharmcost)
 
-  modGeneralMain.ShowSelectedFormMenu(mnurepogrp)
   modGeneralMain.ShowSelectedFormMenu(mnudemograp)
-  modGeneralMain.ShowSelectedFormMenu(mnuautoconsult)
   modGeneralMain.ShowSelectedFormMenu(mnusershare)
+  modGeneralMain.ShowSelectedFormMenu(mnuautoconsult)
   modGeneralMain.ShowSelectedFormMenu(mnupatdisc)
   modGeneralMain.ShowSelectedFormMenu(mnustafflist)
   modGeneralMain.ShowSelectedFormMenu(mnussulist)
 
-  modGeneralMain.ShowSelectedFormMenu(mnudiagnoreport)
-  modGeneralMain.ShowSelectedFormMenu(mnulabChemical)
-  modGeneralMain.ShowSelectedFormMenu(mnuserentry)
-  modGeneralMain.ShowSelectedFormMenu(mnuledger)
-
   modGeneralMain.ShowSelectedFormMenu(mnupatacc)
+  modGeneralMain.ShowSelectedFormMenu(mnucollreport)
   modGeneralMain.ShowSelectedFormMenu(mnucollection)
   modGeneralMain.ShowSelectedFormMenu(mnureturnform)
   modGeneralMain.ShowSelectedFormMenu(mnuitemstatus)
   modGeneralMain.ShowSelectedFormMenu(mnucashverify)
+  modGeneralMain.ShowSelectedFormMenu(mnuclaimup)
+  modGeneralMain.ShowSelectedFormMenu(mnussfupload)
+
+  modGeneralMain.ShowSelectedFormMenu(mnurepogrp)
+  modGeneralMain.ShowSelectedFormMenu(mnudiagnoreport)
+  modGeneralMain.ShowSelectedFormMenu(mnuserentry)
+  modGeneralMain.ShowSelectedFormMenu(mnuledger)
   modGeneralMain.ShowSelectedFormMenu(mnustockDB)
 
+  modGeneralMain.ShowSelectedFormMenu(mnurepo)
+
   modGeneralMain.ShowSelectedFormMenu(mnusummrepo)
-  modGeneralMain.ShowSelectedFormMenu(mnugeneric)
   modGeneralMain.ShowSelectedFormMenu(mnuserv)
   modGeneralMain.ShowSelectedFormMenu(mnugrpreport)
   modGeneralMain.ShowSelectedFormMenu(mnufacultyrepo)
+  modGeneralMain.ShowSelectedFormMenu(mnugeneric)
+  modGeneralMain.ShowSelectedFormMenu(mnumisreport)
   modGeneralMain.ShowSelectedFormMenu(mnusharing)
+
   modGeneralMain.ShowSelectedFormMenu(mnubill)
+  modGeneralMain.ShowSelectedFormMenu(mnubillsummary)
   modGeneralMain.ShowSelectedFormMenu(mnudeposit)
   modGeneralMain.ShowSelectedFormMenu(mnuvouchers)
+
+  modGeneralMain.ShowSelectedFormMenu(mnupur)
   modGeneralMain.ShowSelectedFormMenu(mnuinventory)
+  modGeneralMain.ShowSelectedFormMenu(mnumedsales)
   modGeneralMain.ShowSelectedFormMenu(mnutransfer)
+
+  modGeneralMain.ShowSelectedFormMenu(mnuregistparam)
+  modGeneralMain.ShowSelectedFormMenu(mnubillrule)
+  modGeneralMain.ShowSelectedFormMenu(mnuautobill)
+
+  modGeneralMain.ShowSelectedFormMenu(mnuAccReport)
+  modGeneralMain.ShowSelectedFormMenu(mnupersonal)
 
 End
 
@@ -236,8 +259,10 @@ Public Sub mnucust1_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust1.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust1.Tag, Workspace1)
 
 End
 
@@ -245,8 +270,10 @@ Public Sub mnucust2_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust2.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust2.Tag, Workspace1)
 
 End
 
@@ -254,8 +281,10 @@ Public Sub mnucust3_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust3.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust3.Tag, Workspace1)
 
 End
 
@@ -263,8 +292,10 @@ Public Sub mnucust4_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust4.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust4.Tag, Workspace1)
 
 End
 
@@ -272,8 +303,10 @@ Public Sub mnucust5_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust5.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust5.Tag, Workspace1)
 
 End
 
@@ -299,6 +332,18 @@ Public Sub mnuclaimup_Click()
   Endif
   modGeneralMain.$FormOpenList.Add(["FmHIUpload"])
   hForm = New FmHIUpload(Workspace1)
+
+End
+
+Public Sub mnussfupload_Click()
+
+  Dim hForm As FmSSFUpload
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  modGeneralMain.$FormOpenList.Add(["FmSSFUpload"])
+  hForm = New FmSSFUpload(Workspace1)
 
 End
 
@@ -508,6 +553,10 @@ Public Sub mnustock_Click()
 
 End
 
+Public Sub mnupharmcost_Click()
+
+End
+
 Public Sub mnurepo_Click()
 
   Dim xx As String
@@ -609,12 +658,22 @@ Public Sub mnuirdactivity_Click()
 
 End
 
+Public Sub mnudemograp_Click()
+
+End
+
 Public Sub mnusershare_Click()
 
   fmUserShare.ShowModal
   ''clear cache
   modSharingGroup.$GroupSharePercentData.Clear()
   modSharingGroup.$GroupShareAmountData.Clear()
+
+End
+
+Public Sub mnuautoconsult_Click()
+
+  fmAutobillsettig.ShowModal
 
 End
 

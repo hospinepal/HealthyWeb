@@ -183,6 +183,11 @@ Public Sub btnOK_Click()
       res["fldtime"] = Now()
       res["xyz"] = False
 
+      If MMain.$WebEntry = True Then
+        res["fldrepodate"] = Now()
+        res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+        res["fldhospcode"] = modBasic.$HospCode
+      Endif
       res.Update
       FillStaffGrid()
       Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")

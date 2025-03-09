@@ -9,7 +9,7 @@
   Title = ("Social Service List")
   { WebContainer1 WebContainer
     #MoveScaled(1,1,28,123)
-    Class = "show-tablet  height-innertablet-left"
+    Class = "show-tablet  height-innertablet-left-less"
     Arrangement = Arrange.Vertical
     Margin = True
     { pnlrep WebContainer
@@ -103,7 +103,7 @@
   }
   { WebContainer2 WebScrollView
     #MoveScaled(29,1,96,123)
-    Class = "show-widertablet  height-innertablet-right"
+    Class = "show-widertablet  height-innertablet-right-less"
     Arrangement = Arrange.Vertical
     Margin = True
     { WebContainer74 WebContainer
@@ -607,7 +607,7 @@
         }
         { WebContainer67 WebContainer
           #MoveScaled(19,1,4,2)
-          Width = "2em"
+          Width = "6em"
         }
       }
     }

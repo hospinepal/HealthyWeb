@@ -10,36 +10,45 @@
   { mnubil WebMenu
     Text = ("Billing")
     { mnubilmode WebMenu
+      Tag = "Rate Plan Codes"
       Text = ("Rate Plans")
     }
     { mnubank WebMenu
+      Tag = "Ledger Accounts"
       Text = ("Ledger A/C")
     }
     { mnuspolicecateg WebMenu
       Text = ("Category")
     }
     { mnudepcredit WebMenu
+      Tag = "Departments"
       Text = ("Departments")
     }
     { mnutaxcode WebMenu
+      Tag = "Tax Coding"
       Text = ("Tax Coding")
     }
     { mnucshvendors WebMenu
+      Tag = "Cash Vendors"
       Text = ("Cash Pays")
     }
     { mnuregist WebMenu
+      Tag = "Set Package"
       Text = ("Packages")
     }
     { mnutaxdisc WebMenu
       Text = ("Discounts")
       { mnuservmode WebMenu
+        Tag = "Department Discount"
         Text = ("Service Mode")
       }
       { mnudiscgroup WebMenu
+        Tag = "Discount Codes"
         Text = ("Discount Titles")
       }
     }
     { mnucurconv WebMenu
+      Tag = "Currency Codes"
       Text = ("Currency List")
     }
   }
@@ -69,8 +78,17 @@
       Tag = "Other Items Cost"
       Text = ("Other Items")
     }
+    { mnucostingall WebMenu
+      Tag = "Master Costing"
+      Text = ("Service Master")
+    }
     { mnustock WebMenu
-      Text = ("Fixed Rate")
+      Tag = "Fixed Inventory Rate"
+      Text = ("Fixed Scheme Rate")
+    }
+    { mnupharmcost WebMenu
+      Tag = "Stock Out Order"
+      Text = ("Pharmacy Rates")
     }
     { mnurepo WebMenu
       Text = ("Costing List")
@@ -115,6 +133,10 @@
         Tag = "Generic Report"
         Text = ("Generic Report")
       }
+      { mnumisreport WebMenu
+        Tag = "MIS Report"
+        Text = ("MIS Report")
+      }
       { mnusharing WebMenu
         Tag = "Sharing Report"
         Text = ("Sharing Report")
@@ -125,6 +147,10 @@
       { mnubill WebMenu
         Tag = "Billing Report"
         Text = ("Billing Report")
+      }
+      { mnubillsummary WebMenu
+        Tag = "Billing Summary"
+        Text = ("Billing Summary")
       }
       { mnudeposit WebMenu
         Tag = "Collection Report"
@@ -144,11 +170,16 @@
     { mnuinventrelated WebMenu
       Text = ("Inventory")
       { mnupur WebMenu
+        Tag = "Supplier Info"
         Text = ("Supplier Info")
       }
       { mnuinventory WebMenu
         Tag = "Inventory Report"
         Text = ("Inventory Report")
+      }
+      { mnumedsales WebMenu
+        Tag = "Pharmacy Sales Report"
+        Text = ("Dispense Report")
       }
       { mnutransfer WebMenu
         Tag = "Transfer Report"
@@ -159,6 +190,7 @@
   { mnurecords WebMenu
     Text = ("Record")
     { mnudemograp WebMenu
+      Tag = "Patient Demographics"
       Text = ("Demographics")
     }
     { mnusershare WebMenu
@@ -166,18 +198,22 @@
       Text = ("User Shares")
     }
     { mnuautoconsult WebMenu
+      Tag = "Regist AutoBilling"
       Text = ("Consult Billing")
     }
     { mnulabChemical WebMenu
       Text = ("Lab Chemicals")
     }
     { mnupatdisc WebMenu
+      Tag = "Discount Receivers"
       Text = ("Discount List")
     }
     { mnustafflist WebMenu
+      Tag = "Employee List"
       Text = ("Employee List")
     }
     { mnussulist WebMenu
+      Tag = "Social Service List"
       Text = ("SS Unit List")
     }
   }
@@ -190,9 +226,11 @@
     { mnucollectall WebMenu
       Text = ("Collection")
       { mnucollreport WebMenu
+        Tag = "User Record"
         Text = ("Reporting")
       }
       { mnucollection WebMenu
+        Tag = "User Collection"
         Text = ("Submission")
       }
     }
@@ -203,6 +241,7 @@
         Text = ("Counter Return")
       }
       { mnuitemstatus WebMenu
+        Tag = "Service Status Report"
         Text = ("Invoice Status")
       }
       { mnucashverify WebMenu
@@ -211,41 +250,54 @@
       }
     }
     { mnuclaimup WebMenu
+      Tag = "HI Upload"
       Text = ("Claim Upload")
+    }
+    { mnussfupload WebMenu
+      Tag = "SSF Upload"
+      Text = ("SSF Upload")
     }
   }
   { mnuacclist WebMenu
     Text = ("Acc Lists")
     { mnurepogrp WebMenu
+      Tag = "Report Grouping"
       Text = ("Report Groups")
     }
     { mnudiagnoreport WebMenu
+      Tag = "Diagnostic Account"
       Text = ("Diagnostic Account")
     }
     { mnuserentry WebMenu
+      Tag = "Entry Record"
       Text = ("Entry Waiting")
+    }
+    { mnuledger WebMenu
+      Tag = "Accounts Report"
+      Text = ("Accounting")
     }
     { mnustockDB WebMenu
       Tag = "Inventory Database"
       Text = ("Inventory")
     }
-    { mnuledger WebMenu
-      Text = ("Accounting")
-    }
   }
   { mnuparam WebMenu
     Text = ("Param")
     { mnuregistparam WebMenu
+      Tag = "Registration Settings"
       Text = ("Registration")
     }
     { mnubillrule WebMenu
+      Tag = "Billing Rules"
       Text = ("Billing Rules")
     }
     { mnuautobill WebMenu
+      Tag = "AutoBilling Setting"
       Text = ("Auto Billing")
     }
   }
   { mnuAccReport WebMenu
+    Tag = "Query Report"
     Text = ("CustReport")
     { mnucust1 WebMenu
       Visible = False
@@ -290,6 +342,7 @@
       Image = "icon:/small/user"
     }
     { mnupersonal WebMenu
+      Tag = "Personal Page"
       Text = ("Personal Page")
     }
     { mnuirdactivity WebMenu

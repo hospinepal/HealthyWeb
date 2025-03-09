@@ -5,7 +5,7 @@
   Height = "65vh"
   Arrangement = Arrange.Vertical
   Margin = True
-  Title = ("Discount Category")
+  Title = ("Quantity Limits")
   { WebScrollView1 WebScrollView
     #MoveScaled(1,1,77,64)
     Class = "size-popupform"
@@ -48,12 +48,8 @@
             Height = "2em"
             Expand = True
           }
-          { WebLabel1 WebLabel
-            #MoveScaled(20,1,4,2)
-            Text = ("%")
-          }
           { WebContainer3 WebContainer
-            #MoveScaled(24,1,5,2)
+            #MoveScaled(20,1,5,2)
             Width = "4em"
           }
         }
@@ -71,12 +67,8 @@
             Height = "2em"
             Expand = True
           }
-          { WebLabel3 WebLabel
-            #MoveScaled(20,1,4,2)
-            Text = ("%")
-          }
           { WebContainer5 WebContainer
-            #MoveScaled(24,1,5,2)
+            #MoveScaled(20,1,5,2)
             Width = "4em"
           }
         }
@@ -94,12 +86,8 @@
             Height = "2em"
             Expand = True
           }
-          { WebLabel5 WebLabel
-            #MoveScaled(20,1,4,2)
-            Text = ("%")
-          }
           { WebContainer8 WebContainer
-            #MoveScaled(24,1,5,2)
+            #MoveScaled(20,1,5,2)
             Width = "4em"
           }
         }
@@ -117,12 +105,8 @@
             Height = "2em"
             Expand = True
           }
-          { WebLabel9 WebLabel
-            #MoveScaled(20,1,4,2)
-            Text = ("%")
-          }
           { WebContainer12 WebContainer
-            #MoveScaled(24,1,5,2)
+            #MoveScaled(20,1,5,2)
             Width = "4em"
           }
         }
@@ -140,12 +124,8 @@
             Height = "2em"
             Expand = True
           }
-          { WebLabel11 WebLabel
-            #MoveScaled(20,1,4,2)
-            Text = ("%")
-          }
           { WebContainer14 WebContainer
-            #MoveScaled(24,1,5,2)
+            #MoveScaled(20,1,5,2)
             Width = "4em"
           }
         }
@@ -168,12 +148,8 @@
             Height = "2em"
             Expand = True
           }
-          { WebLabel13 WebLabel
-            #MoveScaled(20,1,4,2)
-            Text = ("%")
-          }
           { WebContainer16 WebContainer
-            #MoveScaled(24,1,5,2)
+            #MoveScaled(20,1,5,2)
             Width = "4em"
           }
         }
@@ -191,12 +167,8 @@
             Height = "2em"
             Expand = True
           }
-          { WebLabel15 WebLabel
-            #MoveScaled(20,1,4,2)
-            Text = ("%")
-          }
           { WebContainer18 WebContainer
-            #MoveScaled(24,1,5,2)
+            #MoveScaled(20,1,5,2)
             Width = "4em"
           }
         }
@@ -214,12 +186,8 @@
             Height = "2em"
             Expand = True
           }
-          { WebLabel17 WebLabel
-            #MoveScaled(20,1,4,2)
-            Text = ("%")
-          }
           { WebContainer20 WebContainer
-            #MoveScaled(24,1,5,2)
+            #MoveScaled(20,1,5,2)
             Width = "4em"
           }
         }
@@ -237,12 +205,8 @@
             Height = "2em"
             Expand = True
           }
-          { WebLabel19 WebLabel
-            #MoveScaled(20,1,4,2)
-            Text = ("%")
-          }
           { WebContainer22 WebContainer
-            #MoveScaled(24,1,5,2)
+            #MoveScaled(20,1,5,2)
             Width = "4em"
           }
         }
@@ -310,29 +274,24 @@
           Width = "6em"
           Height = "2em"
         }
-        { WebLabel21 WebLabel
-          #MoveScaled(11,1,4,2)
-          Width = "2em"
-          Text = ("%")
-        }
         { btnaddexcept WebButton
-          #MoveScaled(15,1,4,2)
+          #MoveScaled(11,1,4,2)
           Width = "3em"
           Height = "2em"
           Image = "icon:/small/add"
         }
         { WebContainer28 WebContainer
-          #MoveScaled(19,1,4,2)
+          #MoveScaled(15,1,4,2)
           Expand = True
         }
         { btnedit WebButton
-          #MoveScaled(23,1,4,2)
+          #MoveScaled(19,1,4,2)
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/edit"
         }
         { mnudelete WebButton
-          #MoveScaled(27,1,4,2)
+          #MoveScaled(23,1,4,2)
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/delete"

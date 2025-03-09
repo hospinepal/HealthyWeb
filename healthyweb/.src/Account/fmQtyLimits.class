@@ -25,18 +25,18 @@ Private Sub ShowDeptValues()
   
   Dim res As Result
   
-  res = modDatabase.$myConn.Exec("select fldlab,fldradio,fldproc,fldequip,fldservice,fldother,fldmedicine,fldsurgical,fldextra,fldregist from tbldiscount where fldtype=&1", txtdisclabel.Text)
+  res = modDatabase.$myConn.Exec("select fldqtylab,fldqtyradio,fldqtyproc,fldqtyequip,fldqtyservice,fldqtyother,fldqtymedicine,fldqtysurgical,fldqtyextra from tbldiscount where fldtype=&1", txtdisclabel.Text)
   If res.Available Then
-    txtlabper.Value = res["fldlab"]
-    txtradioper.Value = res["fldradio"]
-    txtprocper.Value = res["fldproc"]
-    txtequipper.Value = res["fldequip"]
-    txtserviceper.Value = res["fldservice"]
-    txtotherper.Value = res["fldother"]
-    txtmedper.Value = res["fldmedicine"]
-    txtsurgper.Value = res["fldsurgical"]
-    txtextraper.Value = res["fldextra"]
-  Endif                                                           ''
+    txtlabper.Value = res["fldqtylab"]
+    txtradioper.Value = res["fldqtyradio"]
+    txtprocper.Value = res["fldqtyproc"]
+    txtequipper.Value = res["fldqtyequip"]
+    txtserviceper.Value = res["fldqtyservice"]
+    txtotherper.Value = res["fldqtyother"]
+    txtmedper.Value = res["fldqtymedicine"]
+    txtsurgper.Value = res["fldqtysurgical"]
+    txtextraper.Value = res["fldqtyextra"]
+  Endif                                                             ''
   
 End
 
@@ -46,15 +46,15 @@ Public Sub btneditall_Click()
   
   res = modDatabase.$myConn.Edit("tbldiscount", "fldtype=&1", txtdisclabel.Text)
   If res.Available Then
-    res["fldlab"] = txtlabper.Value
-    res["fldradio"] = txtradioper.Value
-    res["fldproc"] = txtprocper.Value
-    res["fldequip"] = txtequipper.Value
-    res["fldservice"] = txtserviceper.Value
-    res["fldother"] = txtotherper.Value
-    res["fldmedicine"] = txtmedper.Value
-    res["fldsurgical"] = txtsurgper.Value
-    res["fldextra"] = txtextraper.Value
+    res["fldqtylab"] = txtlabper.Value
+    res["fldqtyradio"] = txtradioper.Value
+    res["fldqtyproc"] = txtprocper.Value
+    res["fldqtyequip"] = txtequipper.Value
+    res["fldqtyservice"] = txtserviceper.Value
+    res["fldqtyother"] = txtotherper.Value
+    res["fldqtymedicine"] = txtmedper.Value
+    res["fldqtysurgical"] = txtsurgper.Value
+    res["fldqtyextra"] = txtextraper.Value
     res.Update
     Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
     ' Balloon.Delay = modBasic.$BalloonDelay
@@ -125,11 +125,11 @@ Public Sub btnaddexcept_Click()
   Dim res As Result
   
   If cmbitem.Text Then
-    res = modDatabase.$myConn.Create("tblcustdiscount")
+    res = modDatabase.$myConn.Create("tblcustquantity")
     res["fldtype"] = txtdisclabel.Text
     res["flditemname"] = cmbitem.Text
     res["flditemtype"] = cmbtype.Text
-    res["fldpercent"] = txtexception.Text
+    res["fldmaxqty"] = txtexception.Text
     res["flduserid"] = modBasic.$lbluser
     res["fldtime"] = Now()
     res["fldcomp"] = modBasic.$compID
@@ -148,7 +148,7 @@ Private Sub ShowDiscountException()
   
   Dim sql As String
   
-  sql = "select fldid,flditemtype,flditemname,fldpercent from tblcustdiscount where fldtype=&1"
+  sql = "select fldid,flditemtype,flditemname,fldmaxqty from tblcustquantity where fldtype=&1"
   $rData = modDatabase.$myConn.Exec(sql, txtdisclabel.Text)
   $aMyFields = New String[]
   modGridView.ReadSmallData(GridView1, $rData, $aMyFields)
@@ -181,8 +181,8 @@ Public Sub btnedit_Click()
   
   If GridView1.Selection.Count Then
     $rData.MoveTo(GridView1.Selection[0])
-    xval = InputValue(("Enter Discount Precentage"), "Custom Discount", $rData["fldpercent"])
-    res = modDatabase.$myConn.Edit("tblcustdiscount", "fldid=&1", $rData["fldid"])
+    xval = InputValue(("Enter Maximum Quantity"), "Custom Quantity", $rData["fldmaxqty"])
+    res = modDatabase.$myConn.Edit("tblcustquantity", "fldid=&1", $rData["fldid"])
     res["fldpercent"] = xval
     res.Update
     ShowDiscountException()
@@ -194,7 +194,7 @@ Public Sub mnudelete_Click()
   
   If GridView1.Selection.Count Then
     $rData.MoveTo(GridView1.Selection[0])
-    modDatabase.$myConn.Delete("tblcustdiscount", "fldid=&1", $rData["fldid"])
+    modDatabase.$myConn.Delete("tblcustquantity", "fldid=&1", $rData["fldid"])
     ShowDiscountException()
     Me.Exec("Toastify({text: 'Information deleted', duration: 3000}).showToast()")
     ' Balloon.Delay = modBasic.$BalloonDelay

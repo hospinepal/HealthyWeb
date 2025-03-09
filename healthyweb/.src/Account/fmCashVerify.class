@@ -346,10 +346,10 @@ Private Sub ExecuteReturnQuery()
   Dim sql As String
 
   If txtnewinvoice.Text Then
-    sql = "select fldid,fldid,fldordtime,flditemtype,flditemno,flditemname,flditemrate,flditemqty,fldtaxper,flddiscper,fldditemamt as tot,fldorduserid from tblpatbilling where fldretbill=&1 and fldsave=&2 and fldprint=&3 and fldstatus=&4 and flditemqty<&5 ORDER BY flditemname ASC"
+    sql = "select fldid,fldid,fldordtime,flditemtype,flditemno,flditemname,flditemrate,flditemqty,fldtaxper,flddiscper,fldditemamt as tot,fldorduserid,fldreason from tblpatbilling where fldretbill=&1 and fldsave=&2 and fldprint=&3 and fldstatus=&4 and flditemqty<&5 ORDER BY flditemname ASC"
     $rData = modDatabase.$myConn.Exec(sql, Trim(txtnewinvoice.Text), False, False, "Waiting", 0)
   Else
-    sql = "select fldid,fldid,fldordtime,flditemtype,flditemno,flditemname,flditemrate,flditemqty,fldtaxper,flddiscper,fldditemamt as tot,fldorduserid from tblpatbilling where fldencounterval=&1 and fldsave=&2 and fldprint=&3 and fldstatus=&4 and flditemqty<&5 ORDER BY flditemname ASC"
+    sql = "select fldid,fldid,fldordtime,flditemtype,flditemno,flditemname,flditemrate,flditemqty,fldtaxper,flddiscper,fldditemamt as tot,fldorduserid,fldreason from tblpatbilling where fldencounterval=&1 and fldsave=&2 and fldprint=&3 and fldstatus=&4 and flditemqty<&5 ORDER BY flditemname ASC"
     $rData = modDatabase.$myConn.Exec(sql, Trim(txtencid.Text), False, False, "Waiting", 0)
   Endif
   $aMyFields = New String[]
@@ -365,6 +365,7 @@ Private Sub ExecuteReturnQuery()
     .Columns[9].Text = "Disc%"
     .Columns[10].Text = "Total"
     .Columns[11].Text = "User"
+    .Columns[12].Text = "Reason"
 
     .Columns[0].Hidden = True
     .Columns[1].Hidden = True
@@ -378,6 +379,7 @@ Private Sub ExecuteReturnQuery()
     .Columns[9].Width = CStr(50 * modBasic.$AppWidthRatio) & "px"
     .Columns[10].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
     .Columns[11].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
+    .Columns[12].Width = CStr(200 * modBasic.$AppWidthRatio) & "px"
   End With
 
 End
@@ -760,7 +762,7 @@ Public Sub mnudelete_Click()
   If TableView1.Selection.Count Then
     $rData.MoveTo(TableView1.Selection[0])
 
-    modDatabase.$myConn.Delete("tblpatbilling", "fldid=&1", $rData["fldid"])
+    modDatabase.$myConn.Delete("tblpatbilling", "fldid=&1 and fldsave=&2", $rData["fldid"], False)
     ExecuteReturnQuery()
   Endif
 
