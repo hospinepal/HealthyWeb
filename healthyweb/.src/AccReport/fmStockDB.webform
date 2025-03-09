@@ -247,7 +247,7 @@
         }
         { txtamt WebValueBox
           #MoveScaled(6,1,6,3)
-          Width = "12em"
+          Width = "10em"
           Height = "2em"
         }
         { WebContainer19 WebContainer

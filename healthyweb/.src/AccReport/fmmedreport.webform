@@ -12,8 +12,8 @@
     { mnufiscal WebMenu
       Text = ("Select Year")
     }
-    { mnutransaction WebMenu
-      Text = ("Transactions")
+    { mnuaddcolm WebMenu
+      Text = ("Add Columns")
     }
     { mnuexpocolumn WebMenu
       Text = ("Export Columns")
@@ -35,6 +35,18 @@
     }
     { mnugridsumm WebMenu
       Text = ("Summary")
+    }
+  }
+  { mnureportsall WebMenu
+    Text = ("Reports")
+    { mnunarcotic WebMenu
+      Text = ("Narcotics Record")
+    }
+    { mnuTransferSumm WebMenu
+      Text = ("Transfer Summary")
+    }
+    { mnuconsumSumm WebMenu
+      Text = ("Consume Summary")
     }
   }
   { WebContainer1 WebContainer
@@ -85,8 +97,19 @@
         }
       }
     }
+    { WebContainer34 WebContainer
+      #MoveScaled(1,12,30,5)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { btntransaction WebButton
+        #MoveScaled(1,1,19,3)
+        Height = "2em"
+        Expand = True
+        Text = ("Transaction")
+      }
+    }
     { WebContainer50 WebContainer
-      #MoveScaled(1,12,30,4)
+      #MoveScaled(1,17,30,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel16 WebLabel
@@ -106,7 +129,7 @@
       }
     }
     { WebContainer25 WebContainer
-      #MoveScaled(1,16,30,4)
+      #MoveScaled(1,21,30,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { rbmed WebRadioButton
@@ -129,13 +152,13 @@
       }
     }
     { btnload WebButton
-      #MoveScaled(1,20,30,3)
+      #MoveScaled(1,25,30,3)
       Height = "2em"
       Text = ("Load Data")
       Image = "icon:/small/cdrom"
     }
     { WebContainer5 WebContainer
-      #MoveScaled(1,23,30,4)
+      #MoveScaled(1,28,30,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { rbsel WebRadioButton
@@ -152,11 +175,11 @@
       }
     }
     { TreeView1 WebTree
-      #MoveScaled(1,27,30,14)
+      #MoveScaled(1,32,30,14)
       Expand = True
     }
     { WebContainer27 WebContainer
-      #MoveScaled(1,41,30,5)
+      #MoveScaled(1,46,30,5)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { btnback WebButton
@@ -179,12 +202,12 @@
       }
     }
     { cmbtarget WebComboBox
-      #MoveScaled(1,46,30,3)
+      #MoveScaled(1,51,30,3)
       Height = "2em"
       ReadOnly = False
     }
     { WebContainer8 WebContainer
-      #MoveScaled(1,49,30,5)
+      #MoveScaled(1,54,30,5)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { cmdrepo WebButton
@@ -305,8 +328,9 @@
           Arrangement = Arrange.Horizontal
           { WebLabel4 WebLabel
             #MoveScaled(1,1,6,3)
-            Width = "3em"
+            Width = "4em"
             Text = ("Comp")
+            Border = True
           }
           { cmbcomp WebComboBox
             #MoveScaled(7,1,12,3)
@@ -367,7 +391,7 @@
             #MoveScaled(5,1,10,1.875)
             Height = "2em"
             Expand = True
-            Text = ("Inventory")
+            Text = ("Opening")
           }
           { btnsummary WebButton
             #MoveScaled(15,1,11,1.875)

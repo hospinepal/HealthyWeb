@@ -38,8 +38,28 @@
     #MoveScaled(1,1,32,69.375)
     Class = "show-tablet  height-innertablet-left"
     Arrangement = Arrange.Vertical
-    { WebContainer25 WebContainer
+    { WebContainer50 WebContainer
       #MoveScaled(1,1,30,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel16 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "4em"
+        Text = ("Year")
+      }
+      { cmbfiscal WebComboBox
+        #MoveScaled(9,1,12,2)
+        Height = "2em"
+        Expand = True
+        ReadOnly = False
+      }
+      { WebContainer35 WebContainer
+        #MoveScaled(21,1,5,2)
+        Width = "2em"
+      }
+    }
+    { WebContainer25 WebContainer
+      #MoveScaled(1,5,30,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { rbinv WebRadioButton
@@ -56,7 +76,7 @@
       }
     }
     { WebContainer27 WebContainer
-      #MoveScaled(1,5,30,4)
+      #MoveScaled(1,9,30,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { rbcategory WebRadioButton
@@ -73,7 +93,7 @@
       }
     }
     { WebContainer22 WebContainer
-      #MoveScaled(1,9,30,3.875)
+      #MoveScaled(1,13,30,3.875)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel8 WebLabel
@@ -93,7 +113,7 @@
       }
     }
     { WebContainer21 WebContainer
-      #MoveScaled(1,12.875,30,3.875)
+      #MoveScaled(1,16.875,30,3.875)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel6 WebLabel
@@ -113,7 +133,7 @@
       }
     }
     { WebContainer5 WebContainer
-      #MoveScaled(1,16.75,30,4)
+      #MoveScaled(1,20.75,30,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { rbpayble WebRadioButton
@@ -130,20 +150,20 @@
       }
     }
     { btnload WebButton
-      #MoveScaled(1,20.75,30,3)
+      #MoveScaled(1,24.75,30,3)
       Height = "2em"
       Text = ("Load Data")
       Image = "icon:/small/cdrom"
     }
     { lstitem WebTable
-      #MoveScaled(1,23.75,30,19)
+      #MoveScaled(1,27.75,30,19)
       Expand = True
       Mode = Select.Single
       ShowCheck = False
       Header = WebTable.None
     }
     { WebContainer8 WebContainer
-      #MoveScaled(1,42.75,30,5)
+      #MoveScaled(1,46.75,30,5)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { cmdrepo WebButton
@@ -168,7 +188,7 @@
       }
     }
     { WebContainer7 WebContainer
-      #MoveScaled(1,47.75,30,5)
+      #MoveScaled(1,51.75,30,5)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { btnpatwise WebButton

@@ -116,24 +116,24 @@ Public Sub chksplit_Click()
 
 End
 
-Private Function GetPatVariables() As String[]
-
-  Dim xList As String[]
-
-  If MMain.$WebReport = "Multiple" Then
-    xList = ["Gender", "Surname", "District", "Municipality", "RatePlan", "Package", "LedgerA/C", "TargetComp", "PatLocation", "BillType", "Last Status", "Visit Type", "Visit Mode", "Year", "Month", "Date", "Hospital"]
-  Else
-    xList = ["Gender", "Surname", "District", "Municipality", "RatePlan", "Package", "LedgerA/C", "TargetComp", "PatLocation", "BillType", "Last Status", "Visit Type", "Visit Mode", "Year", "Month", "Date"]
-  Endif
-  If MMain.$IsPolice = True Then
-    xList.Add("Service Rank")
-    xList.Add("Service Unit")
-    xList.Add("Service Category")
-  Endif
-
-  Return xList
-
-End
+' Private Function GetPatVariables() As String[]
+'
+'   Dim xList As String[]
+'
+'   If MMain.$WebReport = "Multiple" Then
+'     xList = ["Gender", "Surname", "District", "Municipality", "RatePlan", "Package", "LedgerA/C", "TargetComp", "PatLocation", "BillType", "Last Status", "Visit Type", "Visit Mode", "Year", "Month", "Date", "Hospital"]
+'   Else
+'     xList = ["Gender", "Surname", "District", "Municipality", "RatePlan", "Package", "LedgerA/C", "TargetComp", "PatLocation", "BillType", "Last Status", "Visit Type", "Visit Mode", "Year", "Month", "Date"]
+'   Endif
+'   If MMain.$IsPolice = True Then
+'     xList.Add("Service Rank")
+'     xList.Add("Service Unit")
+'     xList.Add("Service Category")
+'   Endif
+'
+'   Return xList
+'
+' End
 
 Private Sub GetFieldList()
 

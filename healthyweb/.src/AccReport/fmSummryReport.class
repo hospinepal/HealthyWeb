@@ -43,7 +43,8 @@ Public Sub _new()
   cmballmode.Add("%")
   cmballmode.Text = "%"
   ''IP events
-  cmbinpatstatus.List = ["Admissions", "Bed Occupancy", "Exits(All)", "Outcome"]
+  ' cmbinpatstatus.List = ["Admissions", "Bed Occupancy", "Exits(All)", "Outcome"]
+  cmbinpatstatus.List = ["Admissions", "Exits(All)", "Outcome"]
   cmbpackage.List = modNonMedical.FillDiscountCombo()
   cmbpackage.Add("%")
   cmbpackage.Text = "%"
@@ -57,6 +58,7 @@ Public Sub _new()
 
   dtfir.Value = Now()
   dtlast.Value = Now()
+  chkshowchart.Value = True
 
 End
 
@@ -85,7 +87,6 @@ Private Sub ShowChartVisible()
   wbContallvisit.Visible = xx
   wbContipd.Visible = xx
   wbContdiagno.Visible = xx
-  wbContproced.Visible = xx
   wbContobst.Visible = xx
 
 End
@@ -348,6 +349,31 @@ Private Sub CreateChartImage(sType As String, sTitle As String, Column As Intege
 
 End
 
+Private Sub CreateStackedBarImage(sTitle As String, xFinal As Variant[], xWebCanvas As WebCanvas)
+
+  Dim xValues As Variant[]
+  Dim yValues As Variant[]
+  Dim zValues As Variant[]
+
+  Dim aColl As Collection
+  Dim xChart As Collection
+  Dim sPath As String
+
+  xValues = New Variant[]
+  yValues = New Variant[]
+  zValues = New Variant[]
+  For Each aColl In xFinal
+    xValues.Add(aColl["Category"])
+    yValues.Add(aColl["Male"])
+    zValues.Add(aColl["Female"])
+  Next
+
+  xChart = modChartJS.GetHTMLStackedScript("stacked", ["Male", "Female"], xValues, yValues, zValues)
+  sPath = "new Chart(\"" & xWebCanvas.Name & "\", " & JSON.Encode(xChart) & ")"
+  Me.Exec(sPath)
+
+End
+
 ''--------------------------------------------- Confinement --------------------------------------------
 Private Function GetDeliveryRecords(sType As String) As Result
 
@@ -405,16 +431,17 @@ Public Sub btndelivery_Click()
   xGridData8 = xFinal
 
   With GridView8
-    .Columns[0].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
-    .Columns[1].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
-    .Columns[2].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
-    .Columns[3].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
-    .Columns[4].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
+    ' .Columns[0].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
+    .Columns[0].Expand = True
+    .Columns[1].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
+    .Columns[2].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
+    .Columns[3].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
+    .Columns[4].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
 
     .Columns[0].Text = "Delivery Type"
     .Columns[1].Text = "Live Baby"
-    .Columns[2].Text = "Fresh Still Birth"
-    .Columns[3].Text = "Macerated Still Birth"
+    .Columns[2].Text = "Fresh SB"
+    .Columns[3].Text = "Macerated SB"
     .Columns[4].Text = "Total"
   End With
 
@@ -442,6 +469,10 @@ Public Sub btnallvisit_Click()
   Dim xFinal As Variant[]
   Dim xWebCanv As WebCanvas
 
+  Dim sVar As Variant[]
+  Dim xColl As Collection
+  Dim asx As Collection
+
   grpList = modControlSub.GetDirectFillresult(modDatabase.$syConn.Exec("select distinct(fldconsultname) as col from tblopvisit where fldconsulttime>=&1 and fldconsulttime<=&2 and fldconsultname like &3 and fldstatus<>&4" & modDataRepo.GetWhereStringRepo(cmblocation.Text, cmbvalue.Text), modDate.StartSqlDate(dtfir.Value), modDate.EndSqlDate(dtlast.Value), "%", "Cancelled"))
   frpList = modControlSub.GetDirectFillresult(modDatabase.$syConn.Exec("select distinct(fldconsultname) as col from tblconsult where fldconsulttime>=&1 and fldconsulttime<=&2 and fldconsultname like &3 and fldstatus<>&4" & modDataRepo.GetWhereStringRepo(cmblocation.Text, cmbvalue.Text), modDate.StartSqlDate(dtfir.Value), modDate.EndSqlDate(dtlast.Value), "%", "Cancelled"))
   GridView2.Count = frpList.Count + grpList.Count
@@ -454,11 +485,12 @@ Public Sub btnallvisit_Click()
   xGridData2 = xFinal
 
   With GridView2
-    .Columns[0].Width = CStr(300 * modBasic.$AppWidthRatio) & "px"
+    ' .Columns[0].Width = CStr(300 * modBasic.$AppWidthRatio) & "px"
+    .Columns[0].Expand = True
     .Columns[1].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
     .Columns[2].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
     .Columns[3].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
-    .Columns[4].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
+    .Columns[4].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
 
     .Columns[0].Text = "Department"
     .Columns[1].Text = "Male"
@@ -467,12 +499,23 @@ Public Sub btnallvisit_Click()
     .Columns[4].Text = "Total"
   End With
 
+  sVar = New Variant[]
+  For Each asx In xFinal
+    xColl = New Collection
+    xColl.Add(asx[CStr(0)], "Category")
+    xColl.Add(asx[CStr(1)], "Male")
+    xColl.Add(asx[CStr(2)], "Female")
+    xColl.Add(asx[CStr(3)], "Other")
+    sVar.Add(xColl)
+  Next
+
   If wbContallvisit.Children.Count Then
     wbContallvisit.DeleteChildren()
   Endif
   xWebCanv = New WebCanvas(wbContallvisit)
   xWebCanv.Expand = True
-  CreateChartImage("bar", cmballmode.Text, 4, xFinal, xWebCanv)
+  ' CreateChartImage("bar", cmballmode.Text, 4, xFinal, xWebCanv)
+  CreateStackedBarImage(cmballmode.Text, sVar, xWebCanv)
 
 End
 
@@ -585,7 +628,8 @@ Public Sub btnpharmacy_Click()
 
     With GridView9
       .Columns[0].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
-      .Columns[1].Width = CStr(450 * modBasic.$AppWidthRatio) & "px"
+      .Columns[1].Expand = True
+      ' .Columns[1].Width = CStr(450 * modBasic.$AppWidthRatio) & "px"
       .Columns[2].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
       .Columns[0].Text = "Route"
       .Columns[1].Text = "Particulars"
@@ -639,10 +683,11 @@ Public Sub btnpurchase_Click()
     modGridView.ReadSmallData(GridView10, $rData10, $aMyFields10)
 
     With GridView10
-      .Columns[0].Width = CStr(400 * modBasic.$AppWidthRatio) & "px"
+      ' .Columns[0].Width = CStr(400 * modBasic.$AppWidthRatio) & "px"
+      .Columns[0].Expand = True
       .Columns[1].Width = CStr(75 * modBasic.$AppWidthRatio) & "px"
-      .Columns[2].Width = CStr(120 * modBasic.$AppWidthRatio) & "px"
-      .Columns[3].Width = CStr(120 * modBasic.$AppWidthRatio) & "px"
+      .Columns[2].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
+      .Columns[3].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
       .Columns[0].Text = "Particulars"
       .Columns[1].Text = "QTY"
       .Columns[2].Text = "Rate"
@@ -739,7 +784,8 @@ Public Sub btnregister_Click()
   xGridData3 = xFinal
 
   With GridView3
-    .Columns[0].Width = CStr(300 * modBasic.$AppWidthRatio) & "px"
+    ' .Columns[0].Width = CStr(300 * modBasic.$AppWidthRatio) & "px"
+    .Columns[0].Expand = True
     .Columns[1].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
     .Columns[2].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
     .Columns[3].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
@@ -773,9 +819,13 @@ Public Sub btninpat_Click()
   Dim xFinal As Variant[]
   Dim xWebCanv As WebCanvas
 
+  Dim sVar As Variant[]
+  Dim xColl As Collection
+  Dim asx As Collection
+
   If cmbinpatstatus.Text Then
     If cmbinpatstatus.Text = "Admissions" Then
-      depList = modControlSub.GetDirectFillresult(modDatabase.$syConn.Exec("select distinct(fldadmitlocat) as col from tblencounter where flddoa>=&1 and flddoa<=&2 and fldadmitlocat like &3" & modDataRepo.GetWhereStringRepo(cmblocation.Text, cmbvalue.Text), modDate.StartSqlDate(dtfir.Value), modDate.EndSqlDate(dtlast.Value), "%"))
+      depList = modControlSub.GetDirectFillresult(modDatabase.$syConn.Exec("select distinct(fldadmitward) as col from tblencounter where flddoa>=&1 and flddoa<=&2 and fldadmitlocat like &3" & modDataRepo.GetWhereStringRepo(cmblocation.Text, cmbvalue.Text), modDate.StartSqlDate(dtfir.Value), modDate.EndSqlDate(dtlast.Value), "%"))
     Else If cmbinpatstatus.Text = "Bed Occupancy" Then
       depList = modGeneral.GetDepartmentWithBedList()
     Else If cmbinpatstatus.Text = "Exits(All)" Then
@@ -789,16 +839,18 @@ Public Sub btninpat_Click()
     Endif
 
     GridView4.Count = depList.Count
-    GridView4.Columns.Count = 4
+    GridView4.Columns.Count = 5
 
     xFinal = modDashBoard.GetInPatientReportDash(depList, cmbpackage.Text, dtfir.Value, dtlast.Value, cmblocation.Text, cmbvalue.Text, cmbinpatstatus.Text)
     xGridData4 = xFinal
 
     With GridView4
-      .Columns[0].Width = CStr(300 * modBasic.$AppWidthRatio) & "px"
+      ' .Columns[0].Width = CStr(300 * modBasic.$AppWidthRatio) & "px"
+      .Columns[0].Expand = True
       .Columns[1].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
       .Columns[2].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
-      .Columns[3].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
+      .Columns[3].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
+      .Columns[4].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
 
       If cmbinpatstatus.Text = "Admissions" Then
         .Columns[0].Text = "Registered"
@@ -811,15 +863,26 @@ Public Sub btninpat_Click()
       Endif
       .Columns[1].Text = "Male"
       .Columns[2].Text = "Female"
-      .Columns[3].Text = "Total"
+      .Columns[3].Text = "Other"
+      .Columns[4].Text = "Total"
     End With
+
+    sVar = New Variant[]
+    For Each asx In xFinal
+      xColl = New Collection
+      xColl.Add(asx[CStr(0)], "Category")
+      xColl.Add(asx[CStr(1)], "Male")
+      xColl.Add(asx[CStr(2)], "Female")
+      sVar.Add(xColl)
+    Next
 
     If wbContipd.Children.Count Then
       wbContipd.DeleteChildren()
     Endif
     xWebCanv = New WebCanvas(wbContipd)
     xWebCanv.Expand = True
-    CreateChartImage("bar", cmbinpatstatus.Text, 3, xFinal, xWebCanv)
+    ' CreateChartImage("bar", cmbinpatstatus.Text, 3, xFinal, xWebCanv)
+    CreateStackedBarImage(cmballmode.Text, sVar, xWebCanv)
   Endif
 
 End
@@ -861,10 +924,11 @@ Public Sub btndiagno_Click()
     xGridData5 = xFinal
 
     With GridView5
-      .Columns[0].Width = CStr(300 * modBasic.$AppWidthRatio) & "px"
+      ' .Columns[0].Width = CStr(300 * modBasic.$AppWidthRatio) & "px"
+      .Columns[0].Expand = True
       .Columns[1].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
       .Columns[2].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
-      .Columns[3].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
+      .Columns[3].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
 
       .Columns[0].Text = "Section"
       If cmbdiagnostic.Text = "Diagnostic Tests" Then

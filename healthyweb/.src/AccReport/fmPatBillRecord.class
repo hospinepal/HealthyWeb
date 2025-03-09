@@ -527,7 +527,7 @@ Private Function ExecuteQuery(xFldList As String[]) As Result
 
     Else If cmbsearch.Text = "Doc Upload" Then
       If txtselect.Text = "Pending" Then
-        xsear = " and fldbillno not in(select fldbillno from tblbillupload) ORDER BY fldchequeno"
+        xsear = " and fldbillno not in(select fldbillno from tblbillupload)"
       Else
         xsear = " and fldbillno in(select fldbillno from tblbillupload)"
       Endif
@@ -542,8 +542,8 @@ Private Function ExecuteQuery(xFldList As String[]) As Result
     Endif
   Endif
 
-  If cmbsearch.Text = "Upload" And If txtselect.Text = "Pending" Then
-    xorder = ""
+  If cmbsearch.Text = "Doc Upload" And If txtselect.Text = "Pending" Then
+    xorder = " ORDER BY fldchequeno"
   Else
     xorder = " ORDER BY fldid"
   Endif
@@ -718,7 +718,7 @@ Private Sub FillGrid()
     .Columns[17].Hidden = True
     .Columns[18].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
     .Columns[19].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
-    .Columns[20].Hidden = True
+    .Columns[20].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
     .Columns[21].Hidden = True
 
     .Columns[0].Text = "Date"
@@ -738,6 +738,7 @@ Private Sub FillGrid()
     .Columns[14].Text = "User"
     .Columns[18].Text = "Comment"
     .Columns[19].Text = "Label"
+    .Columns[20].Text = "Location"
 
     If $newColumn.Count Then
       For i = 0 To $newColumn.Count - 1
@@ -2160,35 +2161,37 @@ Public Sub mnucbmsupload_Click()
   Dim res1 As Result
   Dim Row As Integer
 
-  For Row = 0 To GridView1.Count - 1
-    $rData.MoveTo(Row)
-    xout = ""
-    sBillNo = ""
-    sBillNo = $rData["fldbillno"]
-    res1 = modDatabase.$myConn.Edit("tblfiscal", "fldbillno=&1 and (fldsync IS NULL or fldsync<>&2)", sBillNo, "200")
-    If res1.Available Then
-      If sBillNo Like "CAS" & "*" Then
-        cClass = New CCBMSUpload(sBillNo)
-        xout = cClass.CBMSOutput()
-      Else If sBillNo Like "PHM" & "*" Then
-        cClass = New CCBMSUpload(sBillNo)
-        xout = cClass.CBMSOutput()
+  If modHelpVariable.$IRDLevel = "Yes" Then
+    For Row = 0 To GridView1.Count - 1
+      $rData.MoveTo(Row)
+      xout = ""
+      sBillNo = ""
+      sBillNo = $rData["fldbillno"]
+      res1 = modDatabase.$myConn.Edit("tblfiscal", "fldbillno=&1 and (fldsync IS NULL or fldsync<>&2)", sBillNo, "200")
+      If res1.Available Then
+        If sBillNo Like "CAS" & "*" Then
+          cClass = New CCBMSUpload(sBillNo)
+          xout = cClass.CBMSOutput()
+        Else If sBillNo Like "PHM" & "*" Then
+          cClass = New CCBMSUpload(sBillNo)
+          xout = cClass.CBMSOutput()
 
-      Else If sBillNo Like "CRE" & "*" Then
-        rClass = New CCBMSReturn(sBillNo)
-        xout = rClass.CBMSOutput()
-      Else If sBillNo Like "RET" & "*" Then
-        rClass = New CCBMSReturn(sBillNo)
-        xout = rClass.CBMSOutput()
+        Else If sBillNo Like "CRE" & "*" Then
+          rClass = New CCBMSReturn(sBillNo)
+          xout = rClass.CBMSOutput()
+        Else If sBillNo Like "RET" & "*" Then
+          rClass = New CCBMSReturn(sBillNo)
+          xout = rClass.CBMSOutput()
+        Endif
+
+        res1["fldsync"] = Trim(xout)
+        res1["xyz"] = False
+        res1.Update
+      Else
+        Me.Exec("Toastify({text: 'Already Uploaded', duration: 3000}).showToast()")
       Endif
-
-      res1["fldsync"] = Trim(xout)
-      res1["xyz"] = False
-      res1.Update
-    Else
-      Me.Exec("Toastify({text: 'Already Uploaded', duration: 3000}).showToast()")
-    Endif
-  Next
+    Next
+  Endif
 
 Catch
   Message.Error(xout)
@@ -2197,160 +2200,22 @@ End
 
 Public Sub mnudetail_Click()
 
-  If $rData.Available Then
-    If $rData.Count Then
-      ExportInvoiceDepartments($rData)
-    Endif
+  Dim xdate As Date[]
+  Dim xPath As String
+  Dim sType As String
+
+  SetRepoString()
+  If rbinvoice.Value = True Then
+    sType = "Invoice"
+  Else If rbreceipt.Value = True Then
+    sType = "Receipt"
+  Else If rbboth.Value = True Then
+    sType = "Both"
   Endif
-
-End
-
-Private Sub ExportInvoiceDepartments(res As Result)
-
-  Dim $BillingReport As CReportHTML
-  Dim asx As New String[0]
-
-  Dim grpList As String[]
-  Dim accList As String[]
-  Dim hdr As String[]
-  ' Dim xitem As String
-  Dim yitem As String
-  Dim zitem As String
-
-  Dim xsex As String
-  Dim aColl As Collection
-  Dim i As Integer
-
-  ' $ProgressBar1 = modAppSupport.FindWorkProgressBar(modHelpVariable.$LogInCategory)
-  ' $ProgressBar1.Tag = "Const"
-
-  grpList = modNonMedical.GetGroupNameAccount()
-  accList = modControlSub.GetDirectFillresult(modDatabase.$myConn.Exec("select distinct(fldacledger) as col from tblacledger"))
-  hdr = New String[]
-  hdr.Add("SNo")
-  hdr.Add("Encounter")
-  hdr.Add("Invoice")
-  hdr.Add("First Name")
-  hdr.Add("Sur Name")
-  hdr.Add("Age")
-  hdr.Add("Female")
-  hdr.Add("Male")
-  hdr.Add("Ethnicity")
-  hdr.Add("District")
-  hdr.Add("Municipality")
-  hdr.Add("Ward")
-
-  ' hdr.Add("Outpatient")
-  ' hdr.Add("Emergency")
-  ' hdr.Add("Inpatient")
-  hdr.Add("State")
-
-  ' For Each xitem In accList
-  '   hdr.Add(xitem)
-  ' Next
-  hdr.Add("Account")
-  For Each yitem In grpList
-    hdr.Add(yitem)
-  Next
-
-  hdr.Add("SubTotal")
-  hdr.Add("Discount")
-  hdr.Add("Tax")
-  hdr.Add("Deposit")
-  hdr.Add("Credit")
-  hdr.Add("Cash")
-
-  $BillingReport = New CReportHTML(hdr, "", "")
-  $BillingReport.UserData.Add(cmbtype.Text & " : " & cmbaccount.Text & "  Comp: " & cmbcomp.Text & " Type: " & cmbcashcredit.Text, "PARAM1")
-  $BillingReport.UserData.Add(modReportVar.GetDateTimeReport(dtfir.Value, gb.MediumDate) & " To " & modReportVar.GetDateTimeReport(dtlast.Value, gb.MediumDate), "PARAM2")
-
-  i = 1
-  For Each res
-    With asx
-      .Add(CStr(i))
-      .Add(res["fldencounterval"])
-      .Add(res["fldbillno"])
-
-      modPatient.GetPatientDataColl(res["fldencounterval"])
-      .Add(modPatient.GetPatientFirstNameEnc(res["fldencounterval"], modDatabase.$syConn))
-      .Add(modPatient.GetPatientLastNameEnc(res["fldencounterval"], modDatabase.$syConn))
-      .Add(modPatient.GetPatientAgeString(res["fldencounterval"], modPatient.GetRecordDate(res["fldencounterval"])))
-      xsex = modPatient.GetPatientSex(res["fldencounterval"], modDatabase.$syConn)
-      If xsex = "Female" Then
-        .Add("X")
-        .Add("")
-      Else
-        .Add("")
-        .Add("X")
-      Endif
-      .Add(modPatient.GetPatientEthnicity(res["fldencounterval"], modDatabase.$syConn))
-      .Add(modPatient.GetPatDistrictByEnc(res["fldencounterval"], modDatabase.$syConn))
-      .Add(modPatient.GetPatFirAddressByEnc(res["fldencounterval"], modDatabase.$syConn))
-      .Add(modPatient.GetPatWardAddressByEnc(res["fldencounterval"], modDatabase.$syConn))
-
-      If res["fldprevdeposit"] = 1 Then
-        ' .Add("X")
-        ' .Add("")
-        ' .Add("")
-        .Add("OPD")
-      Else If res["fldprevdeposit"] > 1 Then
-        ' .Add("")
-        ' .Add("")
-        ' .Add("X")
-        .Add("IPD")
-      Endif
-
-      ' For Each xitem In accList
-      '   If xitem = res["fldbankname"] Then
-      '     .Add("X")
-      '   Else
-      '     .Add("")
-      '   Endif
-      ' Next
-      .Add(res["fldbankname"])
-
-      aColl = New Collection
-      aColl = GetInvoiceGroupNetAmount(modDatabase.$syConn, res["fldbillno"])
-      For Each zitem In grpList
-        If aColl[zitem] Then
-          .Add(modReportVar.GetLocaleNumberFormat(aColl[zitem], gb.Currency))
-        Else
-          .Add("")
-        Endif
-      Next
-
-      .Add(modReportVar.GetLocaleNumberFormat(res["flditemamt"], gb.Currency))
-      .Add(modReportVar.GetLocaleNumberFormat(res["flddiscountamt"], gb.Currency))
-      .Add(modReportVar.GetLocaleNumberFormat(res["fldtaxamt"], gb.Currency))
-      .Add(modReportVar.GetLocaleNumberFormat(res["fldcurdeposit"], gb.Currency))
-      .Add(modReportVar.GetLocaleNumberFormat(res["flditemamt"] + res["fldtaxamt"] - res["flddiscountamt"] - res["fldreceivedamt"], gb.Currency))
-      .Add(modReportVar.GetLocaleNumberFormat(res["fldreceivedamt"] + res["fldcurdeposit"], gb.Currency))
-    End With
-    $BillingReport.Add(asx)
-    asx.Clear()
-    ' $ProgressBar1.Value = (res.Index + 1) / res.Count
-    ' Wait
-    i = i + 1
-
-  Next
-
-  modControlSub.DisplayReportExport($BillingReport.NewHTMLPath())
-
-End
-
-Private Function GetInvoiceGroupNetAmount($con As Connection, billno As String) As Collection
-
-  Dim res As Result
-  Dim sColl As Collection
-
-  sColl = New Collection
-  res = $con.Exec("select SUM(tblpatbilling.fldditemamt) as itemamt,tblreportgroup.fldgroup as fldgroup from tblpatbilling inner join tblreportgroup on tblpatbilling.flditemname=tblreportgroup.flditemname where tblpatbilling.fldbillno=&1 GROUP BY tblreportgroup.fldgroup", billno)
-  If res.Available Then
-    For Each res
-      sColl.Add(res["itemamt"], res["fldgroup"])
-    Next
+  xdate = DoubleDates("Select Dates", "INVOICE DESCRIPTION", [dtfir.Value, dtlast.Value])
+  If xdate Then
+    xPath = modCHTMLInvoice.ExportInvoiceDepartments(modDatabase.$syConn, sType, xdate[0], xdate[1], cmbsearch.Text, txtselect.Text, $tblpatbilldetail, $tbltempbilldetail)
+    modControlSub.DisplayReportExport(xPath)
   Endif
-
-  Return sColl
 
 End

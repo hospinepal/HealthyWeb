@@ -129,7 +129,7 @@
       Text = ("Pat Expenses")
     }
     { mnucbmsupload WebMenu
-      Text = ("API Upload")
+      Text = ("IRD Upload")
     }
   }
   { mnuhide WebMenu

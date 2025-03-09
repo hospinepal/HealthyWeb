@@ -78,9 +78,6 @@
     { mnuexpocolumn WebMenu
       Text = ("Export Columns")
     }
-    { mnucrosstabulation WebMenu
-      Text = ("Cross Tab")
-    }
     { mnuColumns WebMenu
       Text = ("Columns")
     }
@@ -101,6 +98,12 @@
     }
     { mnucountuni WebMenu
       Text = ("Col Count")
+    }
+  }
+  { mnurepoall WebMenu
+    Text = ("Report")
+    { mnucrosstabulation WebMenu
+      Text = ("Cross Tab")
     }
   }
   { WebContainer1 WebContainer
@@ -482,7 +485,7 @@
       Index = 0
       Text = ("GridView")
       { GridView1 WebTable
-        #MoveScaled(1,1,65,21.5)
+        #MoveScaled(1,1,65,21.375)
         Expand = True
         Mode = Select.Single
         ShowCheck = False

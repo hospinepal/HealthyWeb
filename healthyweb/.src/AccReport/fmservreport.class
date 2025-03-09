@@ -17,7 +17,7 @@ Private $tblpatbilldetail As String
 Private $tbltempbilldetail As String
 
 Public Sub _new()
-
+  
   cmbcomp.List = modBasic.$AllCompPerList
   cmbcomp.Text = "%"
   If MMain.$WebReport = "Multiple" Then
@@ -32,7 +32,7 @@ Public Sub _new()
   Else
     pnlocat.Visible = False
   Endif
-
+  
   cmbitemtype.List = ["Diagnostic Tests", "General Services", "Procedures", "Equipment", "Radio Diagnostics", "Other Items", "Medicines", "Surgicals", "Extra Items", "%"]
   cmbitemtype.Text = "%"
   cmbbillmode.List = modNonMedical.FillCashModeCombo()
@@ -43,36 +43,36 @@ Public Sub _new()
   cmbdiscount.Text = "%"
   cmbilltype.List = ["Credit", "Cash", "%"]
   cmbilltype.Text = "%"
-
+  
   dtfir.Value = Now()
   dtlast.Value = Now()
   rbinv.Value = True
   rball.Value = True
-
+  
   modAccount.PasInvoiceSetting(cmbfiscal, True)
   LoadTableNames()
-
+  
 End
 
 Public Sub WebForm_Open()
-
+  
   modGeneralMain.RecordFormUse(Me)
-
+  
 End
 
 Public Sub cmblocation_Click()
-
+  
   cmbvalue.Clear()
   If cmblocation.Text Then
     cmbvalue.List = modDataRepo.GetRepoValueListType(cmblocation.Text)
   Endif
-
+  
 End
 
 Private Sub LoadTableNames()
-
+  
   Dim res As Result
-
+  
   If cmbfiscal.Text = "Current" Then
     $tblpatbilling = "tblpatbilling"
     $tblpatbilldetail = "tblpatbilldetail"
@@ -101,23 +101,23 @@ Private Sub LoadTableNames()
       $tbltempbilldetail = "tbltempbilldetail"
     Endif
   Endif
-
+  
 End
 
 Public Sub chksplit_Click()
-
+  
   GridView1.Count = 0
   Wait
   $aMyFields.Clear()
-
+  
 End
 
 Private Sub GetFieldList()
-
+  
   Dim xhospfld As String
   Dim xcashfld As String
   Dim xcrdtfld As String
-
+  
   $SSQLFields = New String[]
   xhospfld = modDataRepo.HospitalField()
   If chksplit.Value = True Then
@@ -130,17 +130,17 @@ Private Sub GetFieldList()
   If xhospfld Then
     $SSQLFields.Add(xhospfld)
   Endif
-
+  
 End
 
 Public Sub cmbfiscal_Click()
-
+  
   LoadTableNames()
-
+  
 End
 
 Public Sub btnload_Click()
-
+  
   $RepoStr = modDataRepo.GetWhereStringRepo(cmblocation.Text, cmbvalue.Text)
   If rbentry.Value Or If rbinv.Value Then
     If cmbitemtype.Text Then
@@ -149,13 +149,13 @@ Public Sub btnload_Click()
     Endif
     rball.Value = True
   Endif
-
+  
 End
 
 Private Sub FillListBox()
-
+  
   Dim xList As String[]
-
+  
   If $ItemList Then
     If txtcustom.Text Then
       xList = modString.SelectStringArrayToText(txtcustom.Text, $ItemList)
@@ -168,42 +168,42 @@ Private Sub FillListBox()
       lstitem.Clear()
     Endif
   Endif
-
+  
 End
 
 Public Sub txtcustom_Change()
-
+  
   FillListBox()
-
+  
 End
 
 Public Sub dtnepfir_Click()
-
+  
   Dim xx As String
-
+  
   xx = BSDateFormat(("Enter BS Date in yyyy/mm/dd format"), ("Date Converter"), modDate.ConvertToLocaldate(dtfir.Value))
   If xx Then
     dtfir.Value = modDate.ConvertToEnglishdate(xx)
   Endif
-
+  
 End
 
 Public Sub dtneplast_Click()
-
+  
   Dim xx As String
-
+  
   xx = BSDateFormat(("Enter BS Date in yyyy/mm/dd format"), ("Date Converter"), modDate.ConvertToLocaldate(dtlast.Value))
   If xx Then
     dtlast.Value = modDate.ConvertToEnglishdate(xx)
   Endif
-
+  
 End
 
 Public Sub mnufiscal_Click()
-
+  
   Dim res As Result
   Dim xyear As String
-
+  
   xyear = InputCombo("Select Fiscal Year Range", "Select Year", modBasic.$FiscalYearList, "", True)
   If xyear Then
     res = modDatabase.$myConn.Exec("select fldfrom,fldend from tblfiscalid where fldlabel=&1", xyear)
@@ -213,13 +213,13 @@ Public Sub mnufiscal_Click()
       dtlast.Value = res["fldend"]
     Endif
   Endif
-
+  
 End
 
 Private Function CategoryListRep() As String[]
-
+  
   Dim xx As String[]
-
+  
   If cmbitemtype.Text = "%" Then
     xx = ["Diagnostic Tests", "General Services", "Procedures", "Equipment", "Radio Diagnostics", "Other Items", "Medicines", "Surgicals", "Extra Items"]
   Else
@@ -227,28 +227,28 @@ Private Function CategoryListRep() As String[]
     xx.Add(cmbitemtype.Text)
   Endif
   Return xx
-
+  
 End
 
 Private Function GetInvoiced() As Boolean
-
+  
   Dim xx As Boolean
-
+  
   If rbinv.Value = True Then
     xx = True
   Else
     xx = False
   Endif
   Return xx
-
+  
 End
 
 Private Function ExecuteQuery(xFldList As String[], strType As String, strItem As String, $con As Connection) As Result
-
+  
   Dim sql As String
   Dim xregist As String
   Dim res As Result
-
+  
   $RepoStr = modDataRepo.GetWhereStringRepo(cmblocation.Text, cmbvalue.Text)
   If cmbdiscount.Text = "%" And If cmbilltype.Text = "%" Then
     xregist = ""
@@ -262,16 +262,16 @@ Private Function ExecuteQuery(xFldList As String[], strType As String, strItem A
   Endif
   res = $con.Exec(sql, True, modDate.StartSqlDate(dtfir.value), modDate.EndSqlDate(dtlast.value), strItem, strType, cmbcomp.Text, cmbbillmode.Text, cmbdiscount.Text, cmbilltype.Text)
   Return res
-
+  
 End
 
 Private Function ExecuteQueryList(xFldList As String[], strType As String, strItem As String[], $con As Connection) As Result
-
+  
   Dim sql As String
   Dim xregist As String
   Dim res As Result
   Dim i As Integer
-
+  
   For i = 0 To strItem.Count - 1
     strItem[i] = "'" & strItem[i] & "'"
   Next
@@ -288,14 +288,14 @@ Private Function ExecuteQueryList(xFldList As String[], strType As String, strIt
   Endif
   res = $con.Exec(sql, True, modDate.StartSqlDate(dtfir.value), modDate.EndSqlDate(dtlast.value), strType, cmbcomp.Text, cmbbillmode.Text, cmbdiscount.Text, cmbilltype.Text)
   Return res
-
+  
 End
 
 Private Function GetGridViewValue(Column As Integer, xVariable As Variant) As Variant
-
+  
   Dim xxx As Variant
   Dim i As Integer
-
+  
   If chksplit.Value = True Then
     If Column = 1 Then
       xxx = modPatient.GetPatientNameByEnc(xVariable, modDatabase.$syConn)
@@ -351,7 +351,7 @@ Private Function GetGridViewValue(Column As Integer, xVariable As Variant) As Va
       xxx = xVariable
     Endif
   Endif
-
+  
   If $newColumn.Count Then
     For i = 0 To $newColumn.Count - 1
       If Column = $ColCount + i Then
@@ -360,14 +360,14 @@ Private Function GetGridViewValue(Column As Integer, xVariable As Variant) As Va
     Next
   Endif
   Return xxx
-
+  
 End
 
 Private Function GetSQLColumns() As String[]
-
+  
   Dim xFldList As String[]
   Dim i As Integer
-
+  
   GetFieldList()
   modCustPatient.FillNewCOlumnCollection(Me.Tag)
   $newColumn = modCustPatient.CustomNewColumnsTitle(Me.Tag)
@@ -378,15 +378,15 @@ Private Function GetSQLColumns() As String[]
     Next
   Endif
   Return xFldList
-
+  
 End
 
 Public Sub cmdrepo_Click()
-
+  
   Dim xFldList As String[]
   Dim xitem As String
   Dim xList As String[]
-
+  
   TabStrip1.Index = 0
   xFldList = GetSQLColumns()
   If rbsel.Value = True Then
@@ -397,7 +397,7 @@ Public Sub cmdrepo_Click()
       xList = modFillContainer.GetSelectedItemsListBox(lstitem)
       $rData = ExecuteQueryList(xFldList, cmbitemtype.Text, xList, modDatabase.$syConn)
     Endif
-
+    
   Else If rball.Value = True Then
     $rData = ExecuteQuery(xFldList, cmbitemtype.Text, "%", modDatabase.$syConn)
   Endif
@@ -406,15 +406,15 @@ Public Sub cmdrepo_Click()
   Else
     lblrecordcount.Text = "Count: 0"
   Endif
-
+  
   ShowSaleData()
-
+  
   txtqty.Value = 0
   txtamt.Value = 0
   If chkgrid.Value = True Then
     SummaryValues()
   Endif
-
+  
   If chkqty.Value = True Or If chkamt.Value = True Then
     FillChartData()
     If chkqty.Value = True Then
@@ -424,11 +424,11 @@ Public Sub cmdrepo_Click()
       FillItemChartAMT()
     Endif
   Endif
-
+  
 End
 
 Public Sub GridView1_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rData.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   If Column > $SSQLFields.Count - 1 Then
@@ -436,13 +436,13 @@ Public Sub GridView1_Data(Row As Integer, Column As Integer, Data As WebTableDat
   Else
     Data.Text = GetGridViewValue(Column, $rData[$aMyFields[Column]])
   Endif
-
+  
 End
 
 Private Sub ShowSaleData()
-
+  
   Dim i As Integer
-
+  
   $aMyFields = New String[]
   modGridView.ReadSmallData(GridView1, $rData, $aMyFields)
   $ColCount = $SSQLFields.Count
@@ -483,7 +483,7 @@ Private Sub ShowSaleData()
       .Columns[18].Width = CStr(75 * modBasic.$AppWidthRatio) & "px"
       .Columns[19].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
     Endif
-
+    
     .Columns[0].Text = "Encounter"
     .Columns[1].Text = "Patient Name"
     .Columns[2].Text = "Particulars"
@@ -518,7 +518,7 @@ Private Sub ShowSaleData()
       .Columns[18].Text = "Type"
       .Columns[19].Text = "Receipt"
     Endif
-
+    
     If $newColumn.Count Then
       For i = 0 To $newColumn.Count - 1
         .Columns[$ColCount + i].Text = $newColumn[i]
@@ -526,13 +526,13 @@ Private Sub ShowSaleData()
       Next
     Endif
   End With
-
+  
 End
 
 Private Sub SummaryValues()
-
+  
   Dim res As Result
-
+  
   If rbsel.Value = True Then
     res = ExecuteQuery(["SUM(flditemqty) as itemtot", "SUM(fldditemamt) as amttot"], cmbitemtype.Text, lstitem.Text, modDatabase.$syConn)
   Else If rball.Value = True Then
@@ -546,11 +546,11 @@ Private Sub SummaryValues()
       txtamt.Value = Round(res["amttot"], -2)
     Endif
   Endif
-
+  
 End
 
 Private Sub FillChartData()
-
+  
   $qtyChart = New String[]
   $amtChart = New String[]
   For Each $rData
@@ -563,7 +563,7 @@ Private Sub FillChartData()
       Endif
     Endif
   Next
-
+  
 End
 
 ' Public Sub GridView1_Menu()
@@ -573,7 +573,7 @@ End
 ' End
 
 Public Sub mnuenchart_Click()
-
+  
   Dim xx As String
   Dim xField As String
   Dim Column As Integer
@@ -582,12 +582,12 @@ Public Sub mnuenchart_Click()
   Dim hFile As CUnivariate
   Dim xFldList As String[]
   Dim sOrder As String[]
-
+  
   Dim hUniv As FmAnalyzeSett
-
+  
   hUniv = New FmAnalyzeSett("Univariate", modGridView.GetGridViewColumns(GridView1))
   hUniv.ShowModal
-
+  
   xFldList = GetSQLColumns()
   hFile = New CUnivariate
   Column = modCustPatient.GetUnivariateColumn(0)
@@ -597,7 +597,7 @@ Public Sub mnuenchart_Click()
   Else If rball.Value = True Then
     res = ExecuteQuery([xField], cmbitemtype.Text, "%", modDatabase.$syConn)
   Endif
-
+  
   If res.Available Then
     For Each res
       xval = GetGridViewValue(Column, res[xField])
@@ -606,7 +606,7 @@ Public Sub mnuenchart_Click()
       Endif
     Next
   Endif
-
+  
   If modSettings.ShowSettingFromFIle("UnivariateAnalysis/DataType") = "Ordinal" Then
     sOrder = ListOrder("Select Order", hFile.DistinctValues())
   Endif
@@ -614,11 +614,11 @@ Public Sub mnuenchart_Click()
   If xx Then
     modControlSub.OpenBrowser(xx)
   Endif
-
+  
 End
 
 Public Sub mnucrosstab_Click()
-
+  
   Dim xx As String
   Dim Row As Integer
   Dim Column As Integer
@@ -627,15 +627,15 @@ Public Sub mnucrosstab_Click()
   Dim res As Result
   Dim xval As Variant
   Dim yval As Variant
-
+  
   Dim hFile As CBivariate
   Dim xFldList As String[]
   Dim sOrder As String[]
   Dim hBivar As FmAnalyzeSett
-
+  
   hBivar = New FmAnalyzeSett("Bivariate", modGridView.GetGridViewColumns(GridView1))
   hBivar.ShowModal
-
+  
   xFldList = GetSQLColumns()
   hFile = New CBivariate
   Row = modCustPatient.GetCrossVarRow(0)
@@ -647,7 +647,7 @@ Public Sub mnucrosstab_Click()
   Else If rball.Value = True Then
     res = ExecuteQuery([xFieRow, xFieColm], cmbitemtype.Text, "%", modDatabase.$syConn)
   Endif
-
+  
   If res.Available Then
     For Each res
       xval = GetGridViewValue(Row, res[xFieRow])
@@ -657,7 +657,7 @@ Public Sub mnucrosstab_Click()
       Endif
     Next
   Endif
-
+  
   If modCustPatient.$CrossOutcomeType = "Ordinal" Then
     sOrder = ListOrder("Select Order", hFile.DistinctValues())
   Endif
@@ -665,11 +665,11 @@ Public Sub mnucrosstab_Click()
   If xx Then
     modControlSub.OpenBrowser(xx)
   Endif
-
+  
 End
 
 Public Sub mnucrotab_Click()
-
+  
   Dim Row As Integer
   Dim Column As Integer
   Dim xFieRow As String
@@ -677,19 +677,19 @@ Public Sub mnucrotab_Click()
   Dim res As Result
   Dim xval As Variant
   Dim yval As Variant
-
+  
   Dim hForm As FmGridCrossTab
   Dim xForm As CCrossTab
   Dim xFldList As String[]
   Dim hGdChr As FmAnalyzeSett
-
+  
   hGdChr = New FmAnalyzeSett("GridCrossTab", modGridView.GetGridViewColumns(GridView1))
   hGdChr.ShowModal
-
+  
   xFldList = GetSQLColumns()
   If modCustPatient.$TabRowColumn And If modCustPatient.$TabFieldColumn Then
     xForm = New CCrossTab
-
+    
     Row = CInt(modCustPatient.$TabRowColumn) - 1
     xFieRow = xFldList[Row]
     Column = CInt(modCustPatient.$TabFieldColumn) - 1
@@ -699,7 +699,7 @@ Public Sub mnucrotab_Click()
     Else If rball.Value = True Then
       res = ExecuteQuery([xFieRow, xFieColm], cmbitemtype.Text, "%", modDatabase.$syConn)
     Endif
-
+    
     If res.Available Then
       For Each res
         xval = GetGridViewValue(Row, res[xFieRow])
@@ -709,26 +709,26 @@ Public Sub mnucrotab_Click()
         Endif
       Next
     Endif
-
+    
     hForm = New FmGridCrossTab(GridView1.Columns[Row].Text, xForm.GetSPSSFile())
     hForm.ShowModal
     'modExternal.$ExecValueColl.Clear()
   Endif
-
+  
 End
 
 Public Sub mnugridsummary_Click()
-
+  
   Dim xx As String
   Dim ChapCol As String
   Dim GropCol As String
   Dim xChapList As String[]
   Dim xGropList As String[]
-
+  
   Dim res As Result
   Dim valCol As String
   Dim xFieldList As String[]
-
+  
   Dim xFinList As Variant[]
   Dim xrowVar As Variant[]
   Dim xchapval As String
@@ -736,11 +736,11 @@ Public Sub mnugridsummary_Click()
   Dim xPath As String
   Dim xFldList As String[]
   Dim hGdSum As FmAnalyzeSett
-
+  
   hGdSum = New FmAnalyzeSett("GridSummary", modGridView.GetGridViewColumns(GridView1))
   hGdSum.ShowModal
   If Not modCustPatient.$SumGroupColumn Or If Not modCustPatient.$SumValueColumn Then Return
-
+  
   xFldList = GetSQLColumns()
   xFieldList = New String[]
   If modCustPatient.$SumChapterColumn Then
@@ -751,7 +751,7 @@ Public Sub mnugridsummary_Click()
   valCol = xFldList[modCustPatient.$SumValueColumn - 1]
   xFieldList.Add(GropCol)
   xFieldList.Add(valCol)
-
+  
   xChapList = New String[]
   xGropList = New String[]
   xFinList = New Variant[]
@@ -771,12 +771,12 @@ Public Sub mnugridsummary_Click()
       xgroup = GetGridViewValue(modCustPatient.$SumGroupColumn - 1, res[GropCol])
       xrowVar.Add(xgroup)
       xGropList.Add(xgroup)
-
+      
       xrowVar.Add(GetGridViewValue(modCustPatient.$SumValueColumn - 1, res[valCol]))
       xFinList.Add(xrowVar)
     Next
   Endif
-
+  
   xx = "Date: " & modReportVar.GetDateTimeReport(dtfir.Value, gb.MediumDate) & " To " & modReportVar.GetDateTimeReport(dtlast.Value, gb.MediumDate)
   If modCustPatient.$SumGroupColumn And If modCustPatient.$SumValueColumn Then
     If modCustPatient.$SumChapterColumn Then
@@ -792,19 +792,19 @@ Public Sub mnugridsummary_Click()
     Endif
     modControlSub.DisplayReportExport(xPath)
   Endif
-
+  
 End
 
 ''----------------------------------------------- QTY Chart --------------------------------------
 Private Sub FillItemChartQTY()
-
+  
   Dim sPath As String
   Dim sNew As String
-
+  
   sPath = Temp()
   File.Save(sPath, $qtyChart.Join(gb.NewLine))
   sNew = modString.GetGroupSUmmaryCSV(sPath, 0, 1, ";", gb.Tab, gb.Float)
-
+  
   ' PictureBox1.Tag = "Quantity"
   If modBasic.$ChartExecStat = "PSPP" Then
     modImage.StretchtPictureToBox(PictureBox1, modChart.HistogramChart(sNew, "[Quantity in " & modChart.GetQTYLabelChart() & "]"))
@@ -812,14 +812,14 @@ Private Sub FillItemChartQTY()
     modImage.StretchtPictureToBox(PictureBox1, modChart.HistogramChart(sNew, "[Quantity in " & modChart.GetQTYLabelChart() & "]"))
   Endif
   btnstats.Tag = sNew
-
+  
 End
 
 Public Sub btnexport_Click()
-
+  
   ' Me.Exec("printJS('" & PictureBox1.Tag & "', 'image')")
   Me.Exec("window.open('" & PictureBox1.Image & "'); ")
-
+  
 End
 '
 ' Public Sub btnstats_Click()
@@ -830,14 +830,14 @@ End
 
 ''------------------------------------------ AMT Chart --------------------------------------------------
 Private Sub FillItemChartAMT()
-
+  
   Dim sPath As String
   Dim sNew As String
-
+  
   sPath = Temp()
   File.Save(sPath, $amtChart.Join(gb.NewLine))
   sNew = modString.GetGroupSUmmaryCSV(sPath, 0, 1, ";", gb.Tab, gb.Float)
-
+  
   ' PictureBox2.Tag = "ReceivedAmount"
   If modBasic.$ChartExecStat = "PSPP" Then
     modImage.StretchtPictureToBox(PictureBox2, modChart.HistogramChart(sNew, "[Amount in " & modChart.GetAMTLabelChart() & "]"))
@@ -845,14 +845,14 @@ Private Sub FillItemChartAMT()
     modImage.StretchtPictureToBox(PictureBox2, modChart.HistogramChart(sNew, "[Amount in " & modChart.GetAMTLabelChart() & "]"))
   Endif
   btnstats2.Tag = sNew
-
+  
 End
 
 Public Sub btnexport2_Click()
-
+  
   ' Me.Exec("printJS('" & PictureBox2.Tag & "', 'image')")
   Me.Exec("window.open('" & PictureBox2.Image & "'); ")
-
+  
 End
 '
 ' Public Sub btnstats2_Click()
@@ -863,27 +863,27 @@ End
 
 ''--------------------------------- Report ----------------------------------------
 Public Sub btnfullrep_Click()
-
+  
   Dim xHeader As String[]
   Dim xhide As Integer[]
   Dim Column As Integer
   Dim xCollRow As Collection
   Dim xColum As Integer
-
+  
   Dim $hGridExportTable As CExportResult
   Dim xparam1 As String
   Dim xparam2 As String
   Dim encColumn As Integer
   Dim prm As String
-
+  
   Dim xFldList As String[]
-
+  
   If rbsel.Value = True Then
     prm = cmbitemtype.Text & "(" & lstitem.Text & ")"
   Else If rball.Value = True Then
     prm = cmbitemtype.Text & "(" & "All Items" & ")"
   Endif
-
+  
   xHeader = New String[]
   xhide = New Integer[]
   For Column = 0 To GridView1.Columns.Count - 1
@@ -896,9 +896,9 @@ Public Sub btnfullrep_Click()
   xparam2 = "Date: " & modReportVar.GetDateTimeReport(dtfir.Value, gb.MediumDate) & " To " & modReportVar.GetDateTimeReport(dtlast.Value, gb.MediumDate) & " Billing Comp: " & cmbcomp.Text
   encColumn = 0
   $hGridExportTable = New CExportResult(Me.Tag, xHeader, xhide, xparam1, xparam2, encColumn)
-
+  
   xFldList = GetSQLColumns()
-
+  
   For Each $rData
     xCollRow = New Collection
     For xColum = 0 To xFldList.Count - 1
@@ -906,206 +906,206 @@ Public Sub btnfullrep_Click()
     Next
     $hGridExportTable.Add($rData.Index, xCollRow)
   Next
-
+  
   modControlSub.DisplayReportExport($hGridExportTable.HTMLPath())
-
+  
 End
 
 Public Sub btnexpoexcel_Click()
-
+  
   Me.Exec("ExportToExcel('" & GridView1.Name & "', 'xlsx')")
-
+  
 End
 
 Public Sub btnsummary_Click()
-
+  
   Dim xPath As String
-
+  
   xPath = modRHTMLService.ServiceSummaryReport(modDatabase.$syConn, dtfir.Value, dtlast.Value, CategoryListRep(), GetInvoiced(), cmbcomp.Text, cmbbillmode.Text, cmbdiscount.Text, cmbilltype.Text, cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub btninventory_Click()
-
+  
   Dim xPath As String
-
+  
   xPath = modRHTMLService.ServiceDetailSumReport(modDatabase.$syConn, dtfir.Value, dtlast.Value, CategoryListRep(), GetInvoiced(), cmbcomp.Text, cmbbillmode.Text, cmbdiscount.Text, cmbilltype.Text, cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub btndetaildate_Click()
-
+  
   Dim xPath As String
   Dim sDtType As String
-
+  
   sDtType = InputCombo(("Group dates by: "), "Date Group", ["Year", "Month", "Day"], "Day", True)
   xPath = modRHTMLService.ServiceDetailDaywiseSumReport(modDatabase.$syConn, dtfir.Value, dtlast.Value, CategoryListRep(), GetInvoiced(), cmbcomp.Text, cmbbillmode.Text, cmbdiscount.Text, cmbilltype.Text, sDtType, cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub btndatewise_Click()
-
+  
   Dim xPath As String
   Dim sDtType As String
-
+  
   If lstitem.Text Then
     sDtType = InputCombo(("Group dates by: "), "Date Group", ["Year", "Month", "Day"], "Day", True)
     xPath = modRHTMLService.ServiceSingleDaywiseSumReport(modDatabase.$syConn, dtfir.Value, dtlast.Value, GetInvoiced(), lstitem.Text, cmbcomp.Text, cmbbillmode.Text, cmbdiscount.Text, cmbilltype.Text, sDtType, cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
     modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub chkqty_Click()
-
+  
   TabStrip1.Index = 1
-
+  
 End
 
 Public Sub chkamt_Click()
-
+  
   TabStrip1.Index = 2
-
+  
 End
 
 Public Sub mnuColumns_Click()
-
+  
   If Message.Question(modGridView.GetColumnsListString(GridView1), ("OK"), ("Setting")) = 2 Then
     fmChartSetting.ShowModal
   Endif
-
+  
 End
 
 Public Sub btnpatcount_Menu()
-
+  
   mnuhidesumm.Popup(btnpatcount)
-
+  
 End
 
 Public Sub btnpatient_Menu()
-
+  
   mnuhidegrouped.Popup(btnpatient)
-
+  
 End
 
 Public Sub mnusumcategory_Click()
-
+  
   Dim xPath As String
-
+  
   Message.Info(("Generating Report ...."), ("OK"))
   xPath = modRHTMLService.GetServiceSUmmaryReportFormat(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "Category", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumrateplan_Click()
-
+  
   Dim xPath As String
-
+  
   Message.Info(("Generating Report ...."), ("OK"))
   xPath = modRHTMLService.GetServiceSUmmaryReportFormat(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "RatePlan", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumpackage_Click()
-
+  
   Dim xPath As String
-
+  
   Message.Info(("Generating Report ...."), ("OK"))
   xPath = modRHTMLService.GetServiceSUmmaryReportFormat(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "Package", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumpayable_Click()
-
+  
   Dim xPath As String
-
+  
   Message.Info(("Generating Report ...."), ("OK"))
   xPath = modRHTMLService.GetServiceSUmmaryReportFormat(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "Payable", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumrefer_Click()
-
+  
   Dim xPath As String
-
+  
   Message.Info(("Generating Report ...."), ("OK"))
   xPath = modRHTMLService.GetServiceSUmmaryReportFormat(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "Referral", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumledger_Click()
-
+  
   Dim xPath As String
-
+  
   Message.Info(("Generating Report ...."), ("OK"))
   xPath = modRHTMLService.GetServiceSUmmaryReportFormat(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "LedgerA/C", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumtarget_Click()
-
+  
   Dim xPath As String
-
+  
   Message.Info(("Generating Report ...."), ("OK"))
   xPath = modRHTMLService.GetServiceSUmmaryReportFormat(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "TargetComp", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumcompid_Click()
-
+  
   Dim xPath As String
-
+  
   Message.Info(("Generating Report ...."), ("OK"))
   xPath = modRHTMLService.GetServiceSUmmaryReportFormat(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "PatLocation", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnubilltype_Click()
-
+  
   Dim xPath As String
-
+  
   Message.Info(("Generating Report ...."), ("OK"))
   xPath = modRHTMLService.GetServiceSUmmaryReportFormat(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "BillType", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumentry_Click()
-
+  
   Dim xPath As String
-
+  
   Message.Info(("Generating Report ...."), ("OK"))
   xPath = modRHTMLService.GetServiceSUmmaryEntryFormat(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnuaddcolm_Click()
-
+  
   Dim hForm As FmAddNewColumn
-
+  
   hForm = New FmAddNewColumn(Me.Tag)
   hForm.ShowModal
-
+  
 End
 
 '''=============== Group report ==============
 Public Sub mnusumrateplangroup_Click()
-
+  
   Dim xPath As String
   Dim xval As String
-
+  
   If cmbdiscount.Text = "%" Then
     xval = InputCombo("Group by Scheme", "Service Report", ["No", "Yes"], "No", True)
   Else
@@ -1118,24 +1118,24 @@ Public Sub mnusumrateplangroup_Click()
     xPath = modRHTMLService.GetServiceSUmmaryReportFormatGrouped(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "RatePlan", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   Endif
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumpackagegroup_Click()
-
+  
   Dim xPath As String
-
+  
   Message.Info(("Generating Report ...."), ("OK"))
   xPath = modRHTMLService.GetServiceSUmmaryReportFormatGrouped(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "Package", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnubilltypegroup_Click()
-
+  
   Dim xPath As String
   Dim xval As String
-
+  
   If cmbdiscount.Text = "%" Then
     xval = InputCombo("Group by Scheme", "Service Report", ["No", "Yes"], "No", True)
   Else
@@ -1148,14 +1148,14 @@ Public Sub mnubilltypegroup_Click()
     xPath = modRHTMLService.GetServiceSUmmaryReportFormatGrouped(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "BillType", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   Endif
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumpayablegroup_Click()
-
+  
   Dim xPath As String
   Dim xval As String
-
+  
   If cmbdiscount.Text = "%" Then
     xval = InputCombo("Group by Scheme", "Service Report", ["No", "Yes"], "No", True)
   Else
@@ -1168,14 +1168,14 @@ Public Sub mnusumpayablegroup_Click()
     xPath = modRHTMLService.GetServiceSUmmaryReportFormatGrouped(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "Payable", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   Endif
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumrefergroup_Click()
-
+  
   Dim xPath As String
   Dim xval As String
-
+  
   If cmbdiscount.Text = "%" Then
     xval = InputCombo("Group by Scheme", "Service Report", ["No", "Yes"], "No", True)
   Else
@@ -1188,14 +1188,14 @@ Public Sub mnusumrefergroup_Click()
     xPath = modRHTMLService.GetServiceSUmmaryReportFormatGrouped(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "Referral", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   Endif
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumledgergroup_Click()
-
+  
   Dim xPath As String
   Dim xval As String
-
+  
   If cmbdiscount.Text = "%" Then
     xval = InputCombo("Group by Scheme", "Service Report", ["No", "Yes"], "No", True)
   Else
@@ -1208,14 +1208,14 @@ Public Sub mnusumledgergroup_Click()
     xPath = modRHTMLService.GetServiceSUmmaryReportFormatGrouped(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "LedgerA/C", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   Endif
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumtargetgroup_Click()
-
+  
   Dim xPath As String
   Dim xval As String
-
+  
   If cmbdiscount.Text = "%" Then
     xval = InputCombo("Group by Scheme", "Service Report", ["No", "Yes"], "No", True)
   Else
@@ -1228,14 +1228,14 @@ Public Sub mnusumtargetgroup_Click()
     xPath = modRHTMLService.GetServiceSUmmaryReportFormatGrouped(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "TargetComp", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   Endif
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnusumcompidgroup_Click()
-
+  
   Dim xPath As String
   Dim xval As String
-
+  
   If cmbdiscount.Text = "%" Then
     xval = InputCombo("Group by Scheme", "Service Report", ["No", "Yes"], "No", True)
   Else
@@ -1248,21 +1248,21 @@ Public Sub mnusumcompidgroup_Click()
     xPath = modRHTMLService.GetServiceSUmmaryReportFormatGrouped(modDatabase.$syConn, dtfir.Value, dtlast.Value, cmbitemtype.Text, cmbbillmode.Text, cmbdiscount.Text, cmbcomp.Text, GetInvoiced(), cmbilltype.Text, "PatLocation", cmblocation.Text, cmbvalue.Text, $tblpatbilling, $tblpatbilldetail)
   Endif
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
-
+  
 End
 
 Public Sub mnucountuni_Click()
-
+  
   Dim Column As Integer
   Dim xFieColm As String
   Dim res As Result
   Dim yval As Variant
   Dim xList As String[]
-
+  
   Dim xVar As Variant[]
   Dim xFldList As String[]
   Dim xPath As String
-
+  
   Column = ListIndex("Column Index", modGridView.GetGridViewColumns(GridView1))
   If Column + 1 > 0 Then
     xFldList = GetSQLColumns()
@@ -1285,26 +1285,26 @@ Public Sub mnucountuni_Click()
       xVar = modString.GetUnivariateSummary(xList)
       xPath = modCHTMLReport.CreateHTMLReportFromArray(["Variable", "Count"], xVar, GridView1.Columns[Column].Text, modReportVar.GetDateTimeReport(Now(), gb.GeneralDate))
     Endif
-
+    
     modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnucrosstabulation_Click()
-
+  
   Dim hForm As FmAccCrossTab
-
+  
   hForm = New FmAccCrossTab(cmblocation.Text, cmbvalue.Text)
   hForm.ShowModal
-
+  
 End
 
 Public Sub mnuexpocolumn_Click()
-
+  
   Dim hForm As FmCustColumnSet
-
+  
   hForm = New FmCustColumnSet(Me.Tag)
   hForm.ShowModal
-
+  
 End
