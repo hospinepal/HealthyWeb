@@ -7,8 +7,10 @@ Private aIndexVal As New Object[50]
 Private aRegmLabel As New Object[50]
 Private aQuantiBox As New Object[50]
 Private aUnitLabel As New Object[50]
-Private aBlankFrame As New Object[50]
 Private aDoseLabel As New Object[50]
+Private aCountBox As New Object[50]
+Private aWeighBox As New Object[50]
+Private aBlankFrame As New Object[50]
 
 Private $rData As Result
 
@@ -52,7 +54,7 @@ Private Sub LoadControlsWeb()
 
   i = 0
   sql = "select fldid,fldroute,flditem,flddose,fldfreq,flddays,fldstatus from tblpatdosing where fldencounterval=&1 and fldsave_order=&2 and fldstarttime<=&3 and fldendtime>=&4 and fldroute<>&5 and flditemtype=&6 and fldcurval=&7"
-  $rData = modDatabase.$myConn.Exec(sql, Trim(txtencid.Text), True, modDate.EndSqlDate(Now()), modDate.StartSqlDate(Now()), "fluid", "Medicines", "Continue")
+  $rData = modDatabase.$myConn.Exec(sql, Trim(txtencid.Text), True, Now(), DateAdd(Now(), gb.Hour, -3), "fluid", "Medicines", "Continue")
   If $rData.Available Then
     For Each $rData
       If i < 49 Then
@@ -65,6 +67,8 @@ Private Sub LoadControlsWeb()
         aUnitLabel[i] = New WebLabel(aHorizPanel[i])
         aQuantiBox[i] = New WebValueBox(aHorizPanel[i])
         aDoseLabel[i] = New WebLabel(aHorizPanel[i])
+        aCountBox[i] = New WebValueBox(aHorizPanel[i])
+        aWeighBox[i] = New WebValueBox(aHorizPanel[i])
         aBlankFrame[i] = New WebContainer(Frame1)
 
         With aWebFrame[i]
@@ -72,9 +76,10 @@ Private Sub LoadControlsWeb()
         End With
 
         With aNameLabel[i]
+          .Class = "less-container-padding"
           .Expand = True
           .Font = "bold"
-          .Text = $rData["flditem"]
+          .Text = "<p>" & $rData["flditem"] & "</p>"
           .Tag = i
         End With
 
@@ -94,26 +99,41 @@ Private Sub LoadControlsWeb()
         With aRegmLabel[i]
           .Expand = True
           .Height = "2em"
-          .Text = $rData["fldroute"] & Space(2) & $rData["flddose"] & " " & modMedConstant.GetMedicineDoseUnit($rData["flditem"]) & " X " & $rData["fldfreq"]
+          .Border = True
+          .Text = $rData["fldroute"] & Space(2) & $rData["flddose"] & " " & modMedConstant.GetMedicineDoseUnit($rData["flditem"]) & " X " & $rData["fldfreq"] & " X " & $rData["flddays"] & " day(s)"
           .Tag = $rData["fldfreq"]
         End With
         With aUnitLabel[i]
-          .Width = "3em"
+          .Width = "4em"
           .Height = "2em"
           .Border = True
           .Text = Round($rData["flddose"] / modMedConstant.GetDrugInitialStrength($rData["flditem"]), -2)
           .Tag = i
         End With
         With aDoseLabel[i]
-          .Width = "4em"
+          .Width = "5em"
           .Height = "2em"
           .Border = True
           .Text = xunit
           .Tag = i
         End With
         With aQuantiBox[i]
+          .Width = "4em"
+          .Height = "2em"
+          .Tag = i
+        End With
+        With aCountBox[i]
           .Width = "3em"
           .Height = "2em"
+          .Enabled = False
+          .Value = modPharmacy.TotalDoseCount($rData["fldid"], Now())
+          .Tag = i
+        End With
+        With aWeighBox[i]
+          .Width = "4em"
+          .Height = "2em"
+          .Enabled = False
+          .Value = modPharmacy.TotalDoseAmount($rData["fldid"], Now())
           .Tag = i
         End With
 
@@ -144,6 +164,7 @@ Public Sub btnsaveall_Click()
           res.Update
         Endif
         aQuantiBox[i].Value = 0
+        aQuantiBox[i].ReadOnly = True
 
       Endif
     Endif

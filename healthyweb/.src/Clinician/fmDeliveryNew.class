@@ -4,6 +4,7 @@
 Private $UserRestrictPat As String[]
 
 ''MAIN FORM
+Private $sTatus As String
 Private $PopDiagno As Boolean
 Private $UserRestrict As String[]
 Private $PatientNum As String
@@ -14,6 +15,7 @@ Private $billModePharmacy As String
 Private $billModeProcedure As String
 Private $billModeEquipment As String
 Private $billModeService As String
+Private $billModeOthers As String
 
 Private $rData3 As Result
 Private $aMyFields3 As String[]
@@ -46,20 +48,20 @@ Private $reference As String
 Private $DELExams As String = "DELIVERY"
 
 Public Sub _new(encid As String)
-
+  
   Dim xlocat As String
-
+  
   If encid Then
     txtencid.Text = encid
   Endif
-
+  
   ''PATIENT PROFILE
   cmbpatheightunit.List = ["cm", "inch", "foot"]
   $UserRestrictPat = modBasic.$ClinicDisableCompo
   If MMain.$SISHAppMode = "HIS" Then
     txtbedno.ReadOnly = True
   Endif
-
+  
   ''MAIN FORM
   cmbpatageunit.List = ["Hours", "Days", "Months", "Years"]
   cmbattentype.List = ["SBA trained ANM", "Skilled Health Professional", "Other Health Professional", "Home Attendant"]
@@ -71,17 +73,17 @@ Public Sub _new(encid As String)
   cmblabour.List = modControlSub.GetDirectFillresult(modDatabase.$myConn.Exec("select flditem as col from tbldellabour"))
   FillCustomFormMenu()
   FillCustomMenu()
-
+  
   xlocat = modSettings.ShowSettingFromFIle("DeliveryForm/NurseList")
   If xlocat Then
     cmbnurse.List = modString.GetStringArrayFromFile(xlocat, True)
   Endif
   dtdelivery.Value = Now()
   $UserRestrict = modBasic.$ClinicDisableCompo
-
+  
   $PopDiagno = False
   rbsingle.Value = True
-
+  
   If $UserRestrictPat Then
     RestrictUserAccessPat()
   Endif
@@ -94,66 +96,66 @@ Public Sub _new(encid As String)
   Else
     txtencid.SetFocus
   Endif
-
+  
 End
 
 Public Sub WebForm_Open()
-
+  
   modGeneralMain.RecordFormUse(Me)
-
+  
 End
 
 ''====================== PATIENT PROFILE =================================
 Public Sub txtencid_Activate()
-
+  
   GetEncounterValue()
-
+  
 End
 
 Public Sub btnencidsearch_Click()
-
+  
   If Not txtencid.Text Then
     txtencid.Text = PatSearch("Encounter")
   Endif
-
+  
 End
 
 Public Sub mnusearmulti_Click()
-
+  
   If Not txtencid.Text Then
     txtencid.Text = GetEncid()
   Endif
-
+  
 End
 
 Public Sub btnwebcam_Click()
-
+  
   If txtencid.Text Then
     GetEncounterValue()
   Else
     txtencid.Text = QRScanValue("")
   Endif
-
+  
 End
 
 Private Sub GetEncounterValue()
-
+  
   Dim res As Result
-
+  
   If Not txtpatientname.Text Then
     If Not txtencid.Text Then Return
     If modBasic.$EncIdPrefix And If txtencid.Text = modBasic.$EncIdPrefix Then
       txtencid.SetFocus
       Return
     Endif
-
+    
     ' If modPatientSub.LockEncounterDesk(Trim(txtencid.Text)) = False Then
     '   txtencid.Text = ""
     '   Message.Warning(("Encounter Locked"), ("OK"))
     '   ' Balloon.Delay = modBasic.$BalloonDelay
     '   txtencid.SetFocus
     ' Endif
-
+    
     dtdob.Tag = ""
     If txtencid.Text Then
       If txtencid.Text = modBasic.$EncIdPrefix Then
@@ -171,9 +173,11 @@ Private Sub GetEncounterValue()
           txtpatientaddress.Text = modPatient.GetPatientAddressByEnc(Trim(txtencid.Text))
           dtdob.Tag = modPatient.GetPatientBirthDay(Trim(txtencid.Text))
           modDateSub.GetAgeControlFromDate(dtdob.Tag, txtpatage, cmbpatageunit)
-
-          txtnow.Text = modPatient.CurrentAdmissionStatus(Trim(txtencid.Text))
-          txtbedno.Text = modPatient.GetLocationSetting(Trim(txtencid.Text), txtnow.Text)
+          
+          $PatientNum = modPatient.GetPatientNoByEnc(Trim(txtencid.Text))
+          $sTatus = modPatient.CurrentAdmissionStatus(Trim(txtencid.Text))
+          txtnow.Text = $sTatus
+          txtbedno.Text = modPatient.GetLocationSetting(Trim(txtencid.Text), $sTatus)
           txtpatdoa.Text = modReportVar.GetDateTimeReport(modPatient.GetRecordDate(Trim(txtencid.Text)), gb.GeneralDate)
           txtpatweight.Value = modClinic.GetBodyWeight(Trim(txtencid.Text))
           btnconsult.Tag = modPatient.GetAttendingConsultant(Trim(txtencid.Text))
@@ -199,19 +203,19 @@ Private Sub GetEncounterValue()
       Endif
     Endif
   Endif
-
+  
 End
 
 Public Sub UpdateTriage()
-
+  
   txtcolor.Background = modPatient.GetPatientColor(Trim(txtencid.Text))
-
+  
 End
 
 Private Sub BlockDCButton()
-
+  
   Dim xx As Boolean
-
+  
   xx = modPatient.EnableClinicForm(txtnow.Text)
   tlbtnaddheight.Enabled = xx
   tlbtnaddbed.Enabled = xx
@@ -219,11 +223,11 @@ Private Sub BlockDCButton()
   dtdob.Enabled = xx
   btnpic.Enabled = xx
   btnselectuser.Enabled = xx
-
+  
 End
 
 Private Sub RestrictUserAccessPat()
-
+  
   If $UserRestrictPat.Exist("Bed Assignment") Then
     tlbtnaddbed.Visible = False
   Endif
@@ -233,23 +237,23 @@ Private Sub RestrictUserAccessPat()
   If $UserRestrictPat.Exist("Body Height") Then
     tlbtnaddheight.Visible = False
   Endif
-
+  
 End
 
 ''------- Basic Parameters
 Public Sub btnpic_Click()
-
+  
   Dim hForm As FmPersonImage
-
+  
   If txtencid.Text Then
     hForm = New FmPersonImage("Patient", modPatient.GetPatientNoByEnc(Trim(txtencid.Text)), False)
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub tlbtnaddheight_Click()
-
+  
   If txtencid.Text Then
     If txtpatheight.Value Then
       If cmbpatheightunit.Text Then
@@ -260,11 +264,11 @@ Public Sub tlbtnaddheight_Click()
       Endif
     Endif
   Endif
-
+  
 End
 
 Public Sub tlbtnadwt_Click()
-
+  
   If txtencid.Text Then
     If txtpatweight.Value Then
       modClinSub.AddGeneralParametersQuanti(Trim(txtencid.Text), "Body Weight", txtpatweight.Value)
@@ -273,13 +277,13 @@ Public Sub tlbtnadwt_Click()
       ' Balloon.Delay = modBasic.$BalloonDelay
     Endif
   Endif
-
+  
 End
 
 Public Sub dtdob_Click()
-
+  
   Dim dtdate As Date
-
+  
   If txtencid.Text Then
     dtdate = GetDateValue("Date of Birth of " & txtpatientname.Text, "DOBirth", dtdob.Tag)
     If dtdate Then
@@ -290,19 +294,22 @@ Public Sub dtdob_Click()
       ' Balloon.Delay = modBasic.$BalloonDelay
     Endif
   Endif
-
+  
 End
 
 ''------------Hospital related parameters
 Public Sub btnselectuser_Click()
-
+  
   Dim xMedUser As String[]
-
+  
   If txtencid.Text Then
     xMedUser = MedicalSelectedValue(("Select Consultant"), modBasic.$IPConsultUserList)
     If xMedUser And If xMedUser.Count Then
       btnconsult.Tag = xMedUser[0]
       btnconsult.Text = xMedUser[1]
+    Else
+      btnconsult.Tag = ""
+      btnconsult.Text = ""
     Endif
     If btnconsult.Tag Then
       modPatientSub.UpdateAttendingConsultant(Trim(txtencid.Text), btnconsult.Tag)
@@ -310,30 +317,30 @@ Public Sub btnselectuser_Click()
       ' Balloon.Delay = modBasic.$BalloonDelay
     Endif
   Endif
-
+  
 End
 
 Public Sub btnsms_Click()
-
+  
   Dim xval As String
-
+  
   If btnconsult.Tag Then
     xval = modDevice.SendSMSToInpatDoc(Trim(txtencid.Text), modGeneral.GetUserContact(btnconsult.Tag))
     If xval Then
       Message.Info(xval, ("OK"))
     Endif
   Endif
-
+  
 End
 
 Public Sub tlbtnaddbed_Click()
-
+  
   Dim xadmitId As String
-
+  
   If txtencid.Text Then
     If txtnow.Text = "Admitted" Then
       txtbedno.Text = GetBedNumber(Trim(txtencid.Text))
-
+      
     Else
       If modBasic.$WardAdmission = "Yes" Then
         If Message.Question(("Patient getting admitted. Are you sure?"), ("No"), ("Yes")) = 2 Then
@@ -344,42 +351,41 @@ Public Sub tlbtnaddbed_Click()
           ' Balloon.Delay = modBasic.$BalloonDelay
         Endif
       Endif
-
+      
     Endif
   Endif
-
+  
 End
 
 Public Sub btnconsult_Change()
-
+  
   If btnconsult.Text = "" Then
     btnconsult.Tag = ""
   Endif
-
+  
 End
 
 Public Sub tlbtnpayment_Click()
-
+  
   If txtencid.Text Then
     modNonMedical.CurrentPayStatusMsg(Trim(txtencid.Text))
   Endif
-
+  
 End
 
 Public Sub btnprofile_Click()
-
+  
   Dim hForm As FmMinProfile
-
+  
   hForm = New FmMinProfile(Trim(txtencid.Text))
   hForm.ShowModal()
-
+  
 End
 
 ''============================== MAIN FORM ================================
 Private Sub BasicInfoPatient()
-
+  
   If txtencid.Text Then
-    $PatientNum = modPatient.GetPatientNoByEnc(Trim(txtencid.Text))
     GetDefaultBillingmodes()
     ButtonControl()
     If txtgender.Text = "Female" Then
@@ -393,41 +399,56 @@ Private Sub BasicInfoPatient()
       mnuexam.Enabled = False
     Endif
     txtencid.ReadOnly = True
-
+    
     modPatientSub.PopUpPatientForm(Trim(txtencid.Text), Me.Tag)
   Endif
-
+  
 End
 
 Private Sub GetDefaultBillingmodes()
-
-  $billModeTest = modNonMedical.GetAutoIPBillingPack("Test", Trim(txtencid.Text))
-  $billModeRadio = modNonMedical.GetAutoIPBillingPack("Radio", Trim(txtencid.Text))
-  $billModePharmacy = modNonMedical.GetAutoIPBillingPack("Pharmacy", Trim(txtencid.Text))
-  $billModeEquipment = modNonMedical.GetAutoIPBillingPack("Equipment", Trim(txtencid.Text))
-  $billModeProcedure = modNonMedical.GetAutoIPBillingPack("Procedure", Trim(txtencid.Text))
-  $billModeService = modNonMedical.GetAutoIPBillingPack("Service", Trim(txtencid.Text))
-
+  
+  Dim xpackage As String
+  
+  Select $sTatus
+    Case "Admitted", "Discharged", "LAMA", "Death", "Refer", "Absconder"
+      $billModeTest = modNonMedical.GetAutoIPBillingPack("Test", Trim(txtencid.Text))
+      $billModeRadio = modNonMedical.GetAutoIPBillingPack("Radio", Trim(txtencid.Text))
+      $billModePharmacy = modNonMedical.GetAutoIPBillingPack("Pharmacy", Trim(txtencid.Text))
+      $billModeEquipment = modNonMedical.GetAutoIPBillingPack("Equipment", Trim(txtencid.Text))
+      $billModeProcedure = modNonMedical.GetAutoIPBillingPack("Procedure", Trim(txtencid.Text))
+      $billModeService = modNonMedical.GetAutoIPBillingPack("Service", Trim(txtencid.Text))
+      $billModeOthers = modNonMedical.GetAutoIPBillingPack("Others", Trim(txtencid.Text))
+    Case Else
+      xpackage = modNonMedical.DefaultBillingScheme(Trim(txtencid.Text), modBasic.$compID)
+      $billModeTest = xpackage
+      $billModeRadio = xpackage
+      $billModePharmacy = xpackage
+      $billModeEquipment = xpackage
+      $billModeProcedure = xpackage
+      $billModeService = xpackage
+      $billModeOthers = xpackage
+  End Select
+  
 End
 
 Public Sub mnulastenc_Click()
-
+  
   txtencid.Text = modSettings.ShowLogValues("LastValue/Encounter")
-
+  
 End
 
 Public Sub mnubtnbaby_Menu()
-
+  
   If txtencid.Text Then
     mnubabyreport.Popup(mnubtnbaby)
   Endif
-
+  
 End
 
 Private Sub ButtonControl()
-
+  
   Dim xx As Boolean
-
+  
   xx = modPatient.EnableClinicForm(txtnow.Text)
   ''delivery addition
   btnaddbaby.Enabled = xx
@@ -484,11 +505,11 @@ Private Sub ButtonControl()
   mnuessen.Enabled = xx
   ''event timing
   mnutiming.Enabled = xx
-
+  
 End
 
 Private Sub UserAccessRestrict()
-
+  
   If $UserRestrict.Exist("Delivery Addition") Then
     btnaddbaby.Visible = False
     btneditbaby.Visible = False
@@ -512,7 +533,7 @@ Private Sub UserAccessRestrict()
     btnpostflag.Visible = False
     btnpostedit.Visible = False
     btnpostdel.Visible = False
-
+    
   Endif
   If $UserRestrict.Exist("Newborn Examination") Then
     lstbabyexam.Enabled = False
@@ -521,7 +542,7 @@ Private Sub UserAccessRestrict()
     btnbabyedit.Visible = False
     btnbabydel.Visible = False
   Endif
-
+  
   If $UserRestrict.Exist("Pharmacy Request") Then
     btnaddmed.Visible = False
   Endif
@@ -540,7 +561,7 @@ Private Sub UserAccessRestrict()
   If $UserRestrict.Exist("Procedure Plan") Then
     mnumajor.Visible = False
   Endif
-
+  
   If $UserRestrict.Exist("Provisional Diagnosis") Then
     mnudiagnosis.Visible = False
   Endif
@@ -553,7 +574,7 @@ Private Sub UserAccessRestrict()
   If $UserRestrict.Exist("Event Timing") Then
     mnutiming.Visible = False
   Endif
-
+  
   If $UserRestrict.Exist("Medicine Dosing") Then
     btndoserecord.Visible = False
     btnmedstatus.Visible = False
@@ -561,19 +582,19 @@ Private Sub UserAccessRestrict()
   If $UserRestrict.Exist("IV Infusion") Then
     btnivinfusion.Visible = False
   Endif
-
+  
 End
 
 Public Sub btnblankform_Click()
-
+  
   Me.Parent.DeleteChildren()
   modGeneralMain.LoadDeliveryForm()
-
+  
 End
 
 ''============================= CUSTOM MENUS ================
 Private Sub FillCustomMenu()
-
+  
   Dim xform1 As String
   Dim xform2 As String
   Dim xform3 As String
@@ -584,7 +605,7 @@ Private Sub FillCustomMenu()
   Dim xform8 As String
   Dim xform9 As String
   Dim xform10 As String
-
+  
   xform1 = modSettings.ShowSettingFromFIle("CustomReport1/Name")
   xform2 = modSettings.ShowSettingFromFIle("CustomReport2/Name")
   xform3 = modSettings.ShowSettingFromFIle("CustomReport3/Name")
@@ -595,71 +616,71 @@ Private Sub FillCustomMenu()
   xform8 = modSettings.ShowSettingFromFIle("CustomReport8/Name")
   xform9 = modSettings.ShowSettingFromFIle("CustomReport9/Name")
   xform10 = modSettings.ShowSettingFromFIle("CustomReport10/Name")
-
+  
   If xform1 Then
     mnucust1.Title = xform1
     mnucust1.Tag = "CustomReport1"
     mnucust1.Visible = True
   Endif
-
+  
   If xform2 Then
     mnucust2.Title = xform2
     mnucust2.Tag = "CustomReport2"
     mnucust2.Visible = True
   Endif
-
+  
   If xform3 Then
     mnucust3.Title = xform3
     mnucust3.Tag = "CustomReport3"
     mnucust3.Visible = True
   Endif
-
+  
   If xform4 Then
     mnucust4.Title = xform4
     mnucust4.Tag = "CustomReport4"
     mnucust4.Visible = True
   Endif
-
+  
   If xform5 Then
     mnucust5.Title = xform5
     mnucust5.Tag = "CustomReport5"
     mnucust5.Visible = True
   Endif
-
+  
   If xform6 Then
     mnucust6.Title = xform6
     mnucust6.Tag = "CustomReport6"
     mnucust6.Visible = True
   Endif
-
+  
   If xform7 Then
     mnucust7.Title = xform7
     mnucust7.Tag = "CustomReport7"
     mnucust7.Visible = True
   Endif
-
+  
   If xform8 Then
     mnucust8.Text = xform8
     mnucust8.Tag = "CustomReport8"
     mnucust8.Visible = True
   Endif
-
+  
   If xform9 Then
     mnucust9.Title = xform9
     mnucust9.Tag = "CustomReport9"
     mnucust9.Visible = True
   Endif
-
+  
   If xform10 Then
     mnucust10.Title = xform10
     mnucust10.Tag = "CustomReport10"
     mnucust10.Visible = True
   Endif
-
+  
 End
 
 Private Sub FillCustomFormMenu()
-
+  
   Dim xform1 As String
   Dim xform2 As String
   Dim xform3 As String
@@ -670,7 +691,7 @@ Private Sub FillCustomFormMenu()
   Dim xform8 As String
   Dim xform9 As String
   Dim xform10 As String
-
+  
   xform1 = modSettings.ShowSettingForReport("CustomForm1/Form_Name")
   xform2 = modSettings.ShowSettingForReport("CustomForm2/Form_Name")
   xform3 = modSettings.ShowSettingForReport("CustomForm3/Form_Name")
@@ -681,511 +702,511 @@ Private Sub FillCustomFormMenu()
   xform8 = modSettings.ShowSettingForReport("CustomForm8/Form_Name")
   xform9 = modSettings.ShowSettingForReport("CustomForm9/Form_Name")
   xform10 = modSettings.ShowSettingForReport("CustomForm10/Form_Name")
-
+  
   If xform1 Then
     mnucustform1.Title = xform1
     mnucustform1.Tag = "CustomForm1"
     mnucustform1.Visible = True
   Endif
-
+  
   If xform2 Then
     mnucustform2.Title = xform2
     mnucustform2.Tag = "CustomForm2"
     mnucustform2.Visible = True
   Endif
-
+  
   If xform3 Then
     mnucustform3.Title = xform3
     mnucustform3.Tag = "CustomForm3"
     mnucustform3.Visible = True
   Endif
-
+  
   If xform4 Then
     mnucustform4.Title = xform4
     mnucustform4.Tag = "CustomForm4"
     mnucustform4.Visible = True
   Endif
-
+  
   If xform5 Then
     mnucustform5.Title = xform5
     mnucustform5.Tag = "CustomForm5"
     mnucustform5.Visible = True
   Endif
-
+  
   If xform6 Then
     mnucustform6.Title = xform6
     mnucustform6.Tag = "CustomForm6"
     mnucustform6.Visible = True
   Endif
-
+  
   If xform7 Then
     mnucustform7.Title = xform7
     mnucustform7.Tag = "CustomForm7"
     mnucustform7.Visible = True
   Endif
-
+  
   If xform8 Then
     mnucustform8.Title = xform8
     mnucustform8.Tag = "CustomForm8"
     mnucustform8.Visible = True
   Endif
-
+  
   If xform9 Then
     mnucustform9.Title = xform9
     mnucustform9.Tag = "CustomForm9"
     mnucustform9.Visible = True
   Endif
-
+  
   If xform10 Then
     mnucustform10.Title = xform10
     mnucustform10.Tag = "CustomForm10"
     mnucustform10.Visible = True
   Endif
-
+  
 End
 
 Public Sub mnucust1_Click()
-
+  
   Dim hCls As CReportCustom
-
+  
   If txtencid.Text Then
     hCls = New CReportCustom(Trim(txtencid.Text), mnucust1.Tag, "ReportSize", MMain.$defUnit)
     hCls.Preview()
   Endif
-
+  
 End
 
 Public Sub mnucust2_Click()
-
+  
   Dim hCls As CReportCustom
-
+  
   If txtencid.Text Then
     hCls = New CReportCustom(Trim(txtencid.Text), mnucust2.Tag, "ReportSize", MMain.$defUnit)
     hCls.Preview()
   Endif
-
+  
 End
 
 Public Sub mnucust3_Click()
-
+  
   Dim hCls As CReportCustom
-
+  
   If txtencid.Text Then
     hCls = New CReportCustom(Trim(txtencid.Text), mnucust3.Tag, "ReportSize", MMain.$defUnit)
     hCls.Preview()
   Endif
-
+  
 End
 
 Public Sub mnucust4_Click()
-
+  
   Dim hCls As CReportCustom
-
+  
   If txtencid.Text Then
     hCls = New CReportCustom(Trim(txtencid.Text), mnucust4.Tag, "ReportSize", MMain.$defUnit)
     hCls.Preview()
   Endif
-
+  
 End
 
 Public Sub mnucust5_Click()
-
+  
   Dim hCls As CReportCustom
-
+  
   If txtencid.Text Then
     hCls = New CReportCustom(Trim(txtencid.Text), mnucust5.Tag, "ReportSize", MMain.$defUnit)
     hCls.Preview()
   Endif
-
+  
 End
 
 Public Sub mnucust6_Click()
-
+  
   Dim hCls As CReportCustom
-
+  
   If txtencid.Text Then
     hCls = New CReportCustom(Trim(txtencid.Text), mnucust6.Tag, "ReportSize", MMain.$defUnit)
     hCls.Preview()
   Endif
-
+  
 End
 
 Public Sub mnucust7_Click()
-
+  
   Dim hCls As CReportCustom
-
+  
   If txtencid.Text Then
     hCls = New CReportCustom(Trim(txtencid.Text), mnucust7.Tag, "ReportSize", MMain.$defUnit)
     hCls.Preview()
   Endif
-
+  
 End
 
 Public Sub mnucust8_Click()
-
+  
   Dim hCls As CReportCustom
-
+  
   If txtencid.Text Then
     hCls = New CReportCustom(Trim(txtencid.Text), mnucust8.Tag, "ReportSize", MMain.$defUnit)
     hCls.Preview()
   Endif
-
+  
 End
 
 Public Sub mnucust9_Click()
-
+  
   Dim hCls As CReportCustom
-
+  
   If txtencid.Text Then
     hCls = New CReportCustom(Trim(txtencid.Text), mnucust9.Tag, "ReportSize", MMain.$defUnit)
     hCls.Preview()
   Endif
-
+  
 End
 
 Public Sub mnucust10_Click()
-
+  
   Dim hCls As CReportCustom
-
+  
   If txtencid.Text Then
     hCls = New CReportCustom(Trim(txtencid.Text), mnucust10.Tag, "ReportSize", MMain.$defUnit)
     hCls.Preview()
   Endif
-
+  
 End
 
 Public Sub mnucustform1_Click()
-
+  
   Dim xx As String[]
   Dim yy As String[]
   Dim hForm As FmMultiChart
-
+  
   If txtencid.Text Then
     xx = Split(modSettings.ShowSettingForReport(mnucustform1.Tag & "/" & "Form_Exam"), ";")
     yy = Split(modSettings.ShowSettingForReport(mnucustform1.Tag & "/" & "Form_Test"), ";")
     hForm = New FmMultiChart(Trim(txtencid.Text), xx, yy, modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub mnucustform2_Click()
-
+  
   Dim xx As String[]
   Dim yy As String[]
   Dim hForm As FmMultiChart
-
+  
   If txtencid.Text Then
     xx = Split(modSettings.ShowSettingForReport(mnucustform2.Tag & "/" & "Form_Exam"), ";")
     yy = Split(modSettings.ShowSettingForReport(mnucustform2.Tag & "/" & "Form_Test"), ";")
     hForm = New FmMultiChart(Trim(txtencid.Text), xx, yy, modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub mnucustform3_Click()
-
+  
   Dim xx As String[]
   Dim yy As String[]
   Dim hForm As FmMultiChart
-
+  
   If txtencid.Text Then
     xx = Split(modSettings.ShowSettingForReport(mnucustform3.Tag & "/" & "Form_Exam"), ";")
     yy = Split(modSettings.ShowSettingForReport(mnucustform3.Tag & "/" & "Form_Test"), ";")
     hForm = New FmMultiChart(Trim(txtencid.Text), xx, yy, modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub mnucustform4_Click()
-
+  
   Dim xx As String[]
   Dim yy As String[]
   Dim hForm As FmMultiChart
-
+  
   If txtencid.Text Then
     xx = Split(modSettings.ShowSettingForReport(mnucustform4.Tag & "/" & "Form_Exam"), ";")
     yy = Split(modSettings.ShowSettingForReport(mnucustform4.Tag & "/" & "Form_Test"), ";")
     hForm = New FmMultiChart(Trim(txtencid.Text), xx, yy, modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub mnucustform5_Click()
-
+  
   Dim xx As String[]
   Dim yy As String[]
   Dim hForm As FmMultiChart
-
+  
   If txtencid.Text Then
     xx = Split(modSettings.ShowSettingForReport(mnucustform5.Tag & "/" & "Form_Exam"), ";")
     yy = Split(modSettings.ShowSettingForReport(mnucustform5.Tag & "/" & "Form_Test"), ";")
     hForm = New FmMultiChart(Trim(txtencid.Text), xx, yy, modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub mnucustform6_Click()
-
+  
   Dim xx As String[]
   Dim yy As String[]
   Dim hForm As FmMultiChart
-
+  
   If txtencid.Text Then
     xx = Split(modSettings.ShowSettingForReport(mnucustform6.Tag & "/" & "Form_Exam"), ";")
     yy = Split(modSettings.ShowSettingForReport(mnucustform6.Tag & "/" & "Form_Test"), ";")
     hForm = New FmMultiChart(Trim(txtencid.Text), xx, yy, modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub mnucustform7_Click()
-
+  
   Dim xx As String[]
   Dim yy As String[]
   Dim hForm As FmMultiChart
-
+  
   If txtencid.Text Then
     xx = Split(modSettings.ShowSettingForReport(mnucustform7.Tag & "/" & "Form_Exam"), ";")
     yy = Split(modSettings.ShowSettingForReport(mnucustform7.Tag & "/" & "Form_Test"), ";")
     hForm = New FmMultiChart(Trim(txtencid.Text), xx, yy, modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub mnucustform8_Click()
-
+  
   Dim xx As String[]
   Dim yy As String[]
   Dim hForm As FmMultiChart
-
+  
   If txtencid.Text Then
     xx = Split(modSettings.ShowSettingForReport(mnucustform8.Tag & "/" & "Form_Exam"), ";")
     yy = Split(modSettings.ShowSettingForReport(mnucustform8.Tag & "/" & "Form_Test"), ";")
     hForm = New FmMultiChart(Trim(txtencid.Text), xx, yy, modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub mnucustform9_Click()
-
+  
   Dim xx As String[]
   Dim yy As String[]
   Dim hForm As FmMultiChart
-
+  
   If txtencid.Text Then
     xx = Split(modSettings.ShowSettingForReport(mnucustform9.Tag & "/" & "Form_Exam"), ";")
     yy = Split(modSettings.ShowSettingForReport(mnucustform9.Tag & "/" & "Form_Test"), ";")
     hForm = New FmMultiChart(Trim(txtencid.Text), xx, yy, modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub mnucustform10_Click()
-
+  
   Dim xx As String[]
   Dim yy As String[]
   Dim hForm As FmMultiChart
-
+  
   If txtencid.Text Then
     xx = Split(modSettings.ShowSettingForReport(mnucustform10.Tag & "/" & "Form_Exam"), ";")
     yy = Split(modSettings.ShowSettingForReport(mnucustform10.Tag & "/" & "Form_Test"), ";")
     hForm = New FmMultiChart(Trim(txtencid.Text), xx, yy, modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
     hForm.ShowModal
   Endif
-
+  
 End
 
 ''============================ MAIN MENUS =========================
 Public Sub mnulabrequest_Click()
-
+  
   Dim hForm As FmTestList
-
+  
   If txtencid.Text Then
     If modNonMedical.AllowEntryWithDeposit(Trim(txtencid.Text), "Test") = True Then
       hForm = New FmTestList(Trim(txtencid.Text), $billModeTest)
       hForm.ShowModal
     Endif
   Endif
-
+  
 End
 
 Public Sub mnuradioreq_Click()
-
+  
   Dim hForm As FmRadioList
-
+  
   If txtencid.Text Then
     If modNonMedical.AllowEntryWithDeposit(Trim(txtencid.Text), "Radio") = True Then
       hForm = New FmRadioList(Trim(txtencid.Text), $billModeRadio)
       hForm.ShowModal
     Endif
   Endif
-
+  
 End
 
 Public Sub mnuconsreq_Click()
-
+  
   Dim hForm As FmMiniConsult
-
+  
   If txtencid.Text Then
     If modNonMedical.AllowEntryWithDeposit(Trim(txtencid.Text), "Service") = True Then
       hForm = New FmMiniConsult(Trim(txtencid.Text), $billModeService)
       hForm.ShowModal
     Endif
   Endif
-
+  
 End
 
 Public Sub mnumajor_Click()
-
+  
   Dim hForm As FmMajorProced
-
+  
   If txtencid.Text Then
     If modNonMedical.AllowEntryWithDeposit(Trim(txtencid.Text), "Procedure") = True Then
       hForm = New FmMajorProced(Trim(txtencid.Text), $billModeProcedure)
       hForm.ShowModal
     Endif
   Endif
-
+  
 End
 
 Public Sub mnumonitor_Click()
-
+  
   Dim hForm As FmReqVital
-
+  
   If txtencid.Text Then
     hForm = New FmReqVital(Trim(txtencid.Text), "Delivery")
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub mnudiagnosis_Click()
-
+  
   Dim sName As String[]
-
+  
   If txtencid.Text Then
     sName = DiagnoObstetrics(Trim(txtencid.Text), True)
     If sName Then
       modPatientGeneral.AddPatientFindings("Provisional Diagnosis", Trim(txtencid.Text), sName[0], sName[1], sName[1])
     Endif
   Endif
-
+  
 End
 
 Public Sub mnudemog_Click()
-
+  
   Dim hForm As FmPatdemograph
-
+  
   If txtencid.Text Then
     hForm = New FmPatdemograph(Trim(txtencid.Text), "Clinical")
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub mnumaternal_Click()
-
+  
   Dim hForm As FmMaternalMobile
-
+  
   If txtencid.Text Then
     hForm = New FmMaternalMobile(Trim(txtencid.Text))
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub mnuvaccination_Click()
-
+  
   Dim hForm As FmVaccine
-
+  
   If txtencid.Text Then
     hForm = New FmVaccine(Trim(txtencid.Text))
     hForm.ShowModal
   Endif
-
+  
 End
 
 Public Sub mnuessen_Click()
-
+  
   Dim hForm As FmVital
-
+  
   If txtencid.Text
     hForm = New FmVital(Trim(txtencid.Text))
     hForm.ShowModal
     txtcolor.Background = modPatient.GetPatientColor(Trim(txtencid.Text))
   Endif
-
+  
 End
 
 Public Sub mnutiming_Click()
-
+  
   Dim hForm As FmEventTime
-
+  
   If txtgender.Text = "Female" Then
     hForm = New FmEventTime(Trim(txtencid.Text), "Delivery")
     hForm.ShowModal
   Endif
-
+  
 End
 
 ''--------------- Reports -------------------
 Public Sub mnulabrepo_Click()
-
+  
   Dim xPath As String
-
+  
   If txtencid.Text Then
     xPath = modCHTMLPatient.ShowPatientLaboratoryReport(Trim(txtencid.Text), modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
     modControlSub.OpenHTMLPreview(Trim(txtencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnuradiorepo_Click()
-
+  
   Dim xPath As String
-
+  
   If txtencid.Text Then
     xPath = modCHTMLPatient.ShowPatRadioReportbyEncID(Trim(txtencid.Text))
     modControlSub.OpenHTMLPreview(Trim(txtencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnurepoall_Click()
-
+  
   Dim xPath As String
-
+  
   If txtencid.Text Then
     xPath = modCHTMLPatient.ShowDeliveryReportFull(Trim(txtencid.Text))
     modControlSub.OpenHTMLPreview(Trim(txtencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnucomplate_Click()
-
+  
   If txtencid.Text Then
     modPatReports.GetSelectedPatientValues(Trim(txtencid.Text), modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
   Endif
-
+  
 End
 
 ''---- History --------------
 Public Sub mnuhistory_Click()
-
+  
   Dim res As Result
   Dim hForm As FRequest
   Dim xpatno As String
-
+  
   If txtencid.Text Then
     xpatno = $PatientNum
     If modPatientSub.GetPatPassCheck(modDatabase.$myConn, xpatno) = True Then
@@ -1194,20 +1215,20 @@ Public Sub mnuhistory_Click()
       hForm.ShowModal
     Endif
   Endif
-
+  
 End
 
 Public Sub mnuallhist_Click()
-
+  
   Dim xPath As String
   Dim xpatno As String
-
+  
   Dim xList As String[]
   Dim xvarList As Variant[]
   Dim examlist As String[]
   Dim lablist As String[]
   Dim radiolist As String[]
-
+  
   If txtencid.Text Then
     xpatno = $PatientNum
     xList = SelectMedBody("")
@@ -1222,16 +1243,16 @@ Public Sub mnuallhist_Click()
         Endif
       Endif
     Endif
-
+    
     xPath = modPatReports.ShowAllEncounterReport(Trim(txtencid.Text), xList, examlist, lablist, radiolist, modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
     modControlSub.OpenHTMLPreview(Trim(txtencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 '---File menus ----
 Public Sub mnuregister_Click()
-
+  
   If Not txtencid.Text Or If txtencid.Text = modBasic.$EncIdPrefix Then
     If modBasic.$regF1Clinic = "Yes" Or If modBasic.$regF1Clinic = "Partial" Then
       txtencid.Text = RegistrationNewForm()
@@ -1239,12 +1260,12 @@ Public Sub mnuregister_Click()
       txtencid.Text = RegistrationForm(False)
     Endif
   Endif
-
+  
 End
 
 ''========================== MAIN TABS =============================
 Public Sub TabPanel1_Click()
-
+  
   If txtgender.Text = "Female" Then
     If TabPanel1.Index = 0 Then
       NewDeliveryGrid()
@@ -1267,18 +1288,18 @@ Public Sub TabPanel1_Click()
       ShowClinicTable3()
     Endif
   Endif
-
+  
 End
 
 Private Function GetEncListConfinement(encid As String) As String[]
-
+  
   Dim res As Result
   Dim xxx As String[]
-
+  
   res = modDatabase.$myConn.Exec("select fldencounterval from tblencounter where fldpatientval in(select fldbabypatno from tblconfinement where fldencounterval=&1)", encid)
   xxx = modControlSub.GetDirectFillresult(res)
   Return xxx
-
+  
 End
 
 ' Public Sub Form_KeyRelease()
@@ -1308,76 +1329,76 @@ End
 
 ''=========================== NEW DELIVERY ==================
 Public Sub btnaddnurse_Click()
-
+  
   Dim xpath As String
-
+  
   ' If Dialog.OpenFile() Then Return
   ' xpath = Dialog.Path
   If Exist(xpath) Then
     modSettings.SaveSettingsToFile("DeliveryForm/NurseList", xpath)
     cmbnurse.List = modString.GetStringArrayFromFile(xpath, True)
   Endif
-
+  
 End
 
 Public Sub txtdelwt_Change()
-
+  
   If txtdelwt.Value > 6000 Then
     Message.Warning("Incorrect weight", "OK")
     txtdelwt.Value = 0
   Endif
-
+  
 End
 
 Public Sub btndeltype_Click()
-
+  
   Dim hForm As FmAddVariableGrid
-
+  
   hForm = New FmAddVariableGrid("flditem", "tbldelivery")
   hForm.ShowModal
   cmbdeltype.List = modControlSub.GetDirectFillresult(modDatabase.$myConn.Exec("select flditem as col from tbldelivery"))
-
+  
 End
 
 Public Sub btncomplicat_Click()
-
+  
   Dim hForm As FmAddVariableGrid
-
+  
   hForm = New FmAddVariableGrid("flditem", "tbldelcomplication")
   hForm.ShowModal
   cmbcomplicat.List = modControlSub.GetDirectFillresult(modDatabase.$myConn.Exec("select flditem as col from tbldelcomplication"))
-
+  
 End
 
 Public Sub btndeformity_Click()
-
+  
   Dim hForm As FmAddVariableGrid
-
+  
   hForm = New FmAddVariableGrid("flditem", "tbldeldeformity")
   hForm.ShowModal
   cmbdeformity.List = modControlSub.GetDirectFillresult(modDatabase.$myConn.Exec("select flditem as col from tbldeldeformity"))
-
+  
 End
 
 Public Sub btnlabour_Click()
-
+  
   Dim hForm As FmAddVariableGrid
-
+  
   hForm = New FmAddVariableGrid("flditem", "tbldellabour")
   hForm.ShowModal
   cmblabour.List = modControlSub.GetDirectFillresult(modDatabase.$myConn.Exec("select flditem as col from tbldellabour"))
-
+  
 End
 
 Public Sub dtnepfir_Click()
-
+  
   Dim xx As String
-
+  
   xx = BSDateFormat(("Enter BS Date in yyyy/mm/dd format"), ("Date Converter"), modDate.ConvertToLocaldate(dtdelivery.Value))
   If xx Then
     dtdelivery.Value = modDate.ConvertToEnglishdate(xx)
   Endif
-
+  
 End
 
 ' Public Sub cmbdeltype_KeyRelease()
@@ -1405,31 +1426,34 @@ End
 ' End
 
 Public Sub btnselectphysician_Click()
-
+  
   Dim xMedUser As String[]
-
+  
   xMedUser = MedicalSelectedValue(("Select Delivery Physician"), modBasic.$IPConsultUserList)
   If xMedUser And If xMedUser.Count Then
     btnphysician.Tag = xMedUser[0]
     btnphysician.Text = xMedUser[1]
+  Else
+    btnphysician.Tag = ""
+    btnphysician.Text = ""
   Endif
-
+  
 End
 
 Public Sub btnaddbaby_Click()
-
+  
   Dim res As Result
   Dim res2 As Result
   Dim xIntVal As String
   Dim obsref As String
-
+  
   If txtencid.Text And If cmbdeltype.Text And If cmbdelbaby.Text Then
     If cmbattentype.Text Then
       If Message.Question(("Are you sure ?"), ("No"), ("Yes")) = 2 Then
         If dtdelivery.Value > Now() Then
           Message.Warning("Incorrect Date and Time", ("OK"))
         Else
-
+          
           obsref = modPatient.GetLastObstReference($PatientNum)
           If obsref Then
             modDatabase.$myConn.Begin
@@ -1480,43 +1504,43 @@ Public Sub btnaddbaby_Click()
             modDatabase.$myConn.Commit
             NewDeliveryGrid()
             Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
-
+            
           Else
             mnudiagnosis_Click()
           Endif
-
+          
         Endif
       Endif
     Endif
   Endif
-
+  
 Catch
   modDatabase.$myConn.Rollback
   modHelpVariable.CreateErrorReport()
-
+  
 End
 
 Public Sub rbsingle_Click()
-
+  
   NewDeliveryGrid()
-
+  
 End
 
 Public Sub rbmultiple_Click()
-
+  
   NewDeliveryGrid()
-
+  
 End
 
 Private Sub NewDeliveryGrid()
-
+  
   Dim sql As String
-
+  
   sql = "select fldid,flddeltime,flddeltype,flddelresult,flddelwt,flddelphysician,fldbabypatno,flddeltime,fldbabypatno,fldcomment,fldid from tblconfinement where fldencounterval=&1"
   $rData3 = modDatabase.$myConn.Exec(sql, Trim(txtencid.Text))
   $aMyFields3 = New String[]
   modGridView.ReadSmallData(GridView3, $rData3, $aMyFields3)
-
+  
   If $rData3.Available Then
     If rbsingle.Value Then
       btnaddbaby.Enabled = False
@@ -1526,20 +1550,20 @@ Private Sub NewDeliveryGrid()
   Else
     btnaddbaby.Enabled = True
   Endif
-
+  
   With GridView3
     .Columns[0].Hidden = True
     .Columns[1].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
     .Columns[2].Width = CStr(120 * modBasic.$AppWidthRatio) & "px"
     .Columns[3].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
-    .Columns[4].Width = CStr(75 * modBasic.$AppWidthRatio) & "px"
+    .Columns[4].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
     .Columns[5].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
     .Columns[6].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
     .Columns[7].Hidden = True
     .Columns[8].Width = CStr(50 * modBasic.$AppWidthRatio) & "px"
     .Columns[9].Hidden = True
     .Columns[10].Hidden = True
-
+    
     .Columns[1].Text = "DateTime"
     .Columns[2].Text = "DelMode"
     .Columns[3].Text = "DelResult"
@@ -1547,13 +1571,13 @@ Private Sub NewDeliveryGrid()
     .Columns[5].Text = "Consultant"
     .Columns[6].Text = "PatNo"
     .Columns[8].Text = "Gender"
-
+    
   End With
-
+  
 End
 
 Public Sub GridView3_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rData3.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   If Column = 1 Then
@@ -1565,24 +1589,24 @@ Public Sub GridView3_Data(Row As Integer, Column As Integer, Data As WebTableDat
   Else
     Data.Text = $rData3[$aMyFields3[Column]]
   Endif
-
+  
 End
 
 Public Sub btneditbaby_Click()
-
+  
   Dim res As Result
   Dim res1 As Result
   Dim res2 As Result
   Dim xbool As Boolean = False
   Dim obsref As String
-
+  
   If GridView3.Selection.Count Then
     If txtencid.Text And If cmbdeltype.Text And If cmbdelbaby.Text Then
       If dtdelivery.Value > Now() Then
         Message.Warning("Incorrect Date and Time", ("OK"))
       Else
         $rData3.MoveTo(GridView3.Selection[0])
-
+        
         modDatabase.$myConn.Begin
         res = modDatabase.$myConn.Edit("tblconfinement", "fldid=&1", $rData3["fldid"])
         If modGeneral.AllowClinicalEdit(res["flduserid"]) = True Then
@@ -1623,72 +1647,78 @@ Public Sub btneditbaby_Click()
           modDatabase.$myConn.Rollback
           Message.Warning("Authorization with " & res["flduserid"], ("OK"))
         Endif
-
+        
         If xbool = True Then
           NewDeliveryGrid()
           Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
         Endif
-
+        
       Endif
     Endif
   Endif
-
+  
 Catch
   modDatabase.$myConn.Rollback
   modHelpVariable.CreateErrorReport()
-
+  
 End
 
 Public Sub GridView3_Select()
-
+  
   ShowRowDelivered()
-
+  
 End
 
 Private Sub ShowRowDelivered()
-
+  
   Dim res As Result
-
+  
   If GridView3.Selection.Count Then
     $rData3.MoveTo(GridView3.Selection[0])
     res = modDatabase.$myConn.Exec("select flddeltime,fldpresent,flddeltype,flddelresult,fldcomplication,flddeformity,fldlabour,fldbloodloss,flddelwt,flddelphysician,flddelnurse,fldcomment,flddelassist from tblconfinement where fldid=&1", $rData3["fldid"])
     If res.Available Then
       dtdelivery.Value = res["flddeltime"]
       cmbpresent.Text = res["fldpresent"]
-      modJavaScript.UpdateSelect2Combo(cmbdeltype, res["flddeltype"])
+      ' modJavaScript.UpdateSelect2Combo(cmbdeltype, res["flddeltype"])
       cmbdeltype.Text = res["flddeltype"]
-      modJavaScript.UpdateSelect2Combo(cmbdelbaby, res["flddelresult"])
+      ' modJavaScript.UpdateSelect2Combo(cmbdelbaby, res["flddelresult"])
       cmbdelbaby.Text = res["flddelresult"]
       btnphysician.Tag = res["flddelphysician"]
       btnphysician.Text = modGeneral.GetUserFullName(btnphysician.Tag)
       cmbnurse.Text = res["flddelnurse"]
-      modJavaScript.UpdateSelect2Combo(cmbattentype, res["flddelassist"])
+      ' modJavaScript.UpdateSelect2Combo(cmbattentype, res["flddelassist"])
       cmbattentype.Text = res["flddelassist"]
       cmbcomplicat.Text = res["fldcomplication"]
       cmbdeformity.Text = res["flddeformity"]
-      modJavaScript.UpdateSelect2Combo(cmblabour, res["fldlabour"])
+      ' modJavaScript.UpdateSelect2Combo(cmblabour, res["fldlabour"])
       cmblabour.Text = res["fldlabour"]
       txtdelblloss.Value = res["fldbloodloss"]
       txtdelwt.Value = res["flddelwt"]
       txtdelicomment.RichText = res["fldcomment"]
-
+      
     Endif
   Endif
-
+  
 End
 
 Public Sub btnnewregist_Click()
-
+  
+  Dim xstr As String
   Dim xx As String
   Dim res As Result
   Dim sex As String
-
+  
   If GridView3.Selection.Count Then
     $rData3.MoveTo(GridView3.Selection[0])
     If $rData3["flddelresult"] = "Live Baby" Then
       If Not $rData3["fldbabypatno"] Then
-
-        sex = InputCombo("Gender of Baby", txtencid.Text, ["Female", "Male", "Other"], "", True)
+        
+        xstr = "<b>Mother Name</b> : " & txtpatientname.Text
+        xstr = xstr & "<br>" & "<b>Delivery Date</b> : " & modReportVar.GetDateTimeReport($rData3["flddeltime"], gb.GeneralDate)
+        xstr = xstr & "<br>" & "<b>Delivery Type</b> : " & $rData3["flddeltype"]
+        xstr = xstr & "<br>" & "<b>Delivery Weight</b> : " & CStr($rData3["flddelwt"]) & " GRAMS"
+        xstr = xstr & "<br>" & "<b>Select Gender of Baby</b>"
+        sex = InputCombo(xstr, txtencid.Text, ["Male", "Female", "Other"], "", True)
         If sex Then
           xx = AddBabyDetail(sex, $rData3["flddeltime"])
           If xx Then
@@ -1700,18 +1730,18 @@ Public Sub btnnewregist_Click()
             NewDeliveryGrid()
           Endif
         Endif
-
+        
       Endif
     Endif
   Endif
-
+  
 End
 
 Public Sub btnnewgender_Click()
-
+  
   Dim sex As String
   Dim res As Result
-
+  
   If GridView3.Selection.Count Then
     $rData3.MoveTo(GridView3.Selection[0])
     If $rData3["fldbabypatno"] Then
@@ -1725,26 +1755,11 @@ Public Sub btnnewgender_Click()
       Endif
     Endif
   Endif
-
-End
-
-Public Sub mnudeathreport_Click()
-
-  Dim hCls As CReportCustom
-
-  If GridView3.Selection.Count Then
-    $rData3.MoveTo(GridView3.Selection[0])
-    If $rData3["flddeltype"] = "Live Baby" Then
-    Else
-      hCls = New CReportCustom(Trim(txtencid.Text), "Death Certificate", "ReportSize", MMain.$defUnit)
-      hCls.Preview()
-    Endif
-  Endif
-
+  
 End
 
 Private Function AddBabyDetail(sex As String, dob As Date) As String
-
+  
   Dim $patno As String
   Dim $benc As String
   Dim sql As String
@@ -1754,16 +1769,16 @@ Private Function AddBabyDetail(sex As String, dob As Date) As String
   Dim res1 As Result
   Dim idLock As Boolean
   Dim xdisc As String
-
+  
   If $PatientNum Then
     sql = "select fldptnamefir,fldptnamelast,fldethniccode,fldptaddvill,fldptaddward,fldptadddist,fldptcontact,fldptguardian,fldemail,fldrelation,fldptcode,fldencrypt from tblpatientinfo where fldpatientval=&1"                                                 ''
     rs1 = modDatabase.$myConn.Exec(sql, $PatientNum)
     rs2 = modDatabase.$myConn.Exec("select flddisctype,fldcashcredit,fldbillingmode from tblencounter where fldencounterval=&1", Trim(txtencid.Text))
-
+    
     idLock = modBillLock.LockTableForID("Registration")
     If idLock = True Then
       modDatabase.$myConn.Begin
-
+      
       $patNo = modBillLock.PatientNoValue()
       If $patNo Then
         res = modDatabase.$myConn.Create("tblpatientinfo")
@@ -1792,21 +1807,30 @@ Private Function AddBabyDetail(sex As String, dob As Date) As String
         res["fldcomment"] = ""
         res["fldencrypt"] = modBasic.$PatInfoEncrypt
         res["fldpassword"] = ""
-
+        
         res["flduserid"] = modBasic.$lbluser
         res["fldtime"] = Now()
         res["fldupuser"] = ""
         res["flduptime"] = ""
         res["xyz"] = False
+        If MMain.$WebEntry = True Then
+          res["fldrepodate"] = Now()
+          res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+          res["fldhospcode"] = modBasic.$HospCode
+        Endif
         res.Update()
-
+        
         $benc = modBillLock.EncounterIDValue()
         If $benc Then
           xdisc = modNonMedical.GetOffspringPackage(rs2["flddisctype"])
           res1 = modDatabase.$myConn.Create("tblencounter")
           res1["fldencounterval"] = $benc
           res1["fldpatientval"] = $patNo
-          res1["fldadmitlocat"] = "Birthing"
+          If modBasic.$RegistNewbornLocat Then
+            res1["fldadmitlocat"] = modBasic.$RegistNewbornLocat
+          Else
+            res1["fldadmitlocat"] = "Birthing"
+          Endif
           If xdisc Then
             res1["flddisctype"] = xdisc
           Else
@@ -1818,8 +1842,8 @@ Private Function AddBabyDetail(sex As String, dob As Date) As String
           res1["fldcomp"] = modBasic.$compID
           res1["fldvisit"] = "NEW"
           res1["fldfollow"] = "New"
-
-          res1["fldcurrlocat"] = ""
+          
+          res1["fldcurrlocat"] = modBasic.$RegistNewbornLocat
           res1["flddoa"] = ""
           res1["flddod"] = ""
           res1["fldheight"] = ""
@@ -1830,7 +1854,7 @@ Private Function AddBabyDetail(sex As String, dob As Date) As String
           res1["fldvalidity"] = DateAdd(Now(), gb.Year, 1)
           res1["fldfollowdate"] = ""
           res1["fldreferto"] = ""
-
+          
           res1["fldregistid"] = modPatient.GetPatientHMISRegVal($patNo)
           res1["fldadmitid"] = ""
           res1["xyz"] = False
@@ -1842,19 +1866,19 @@ Private Function AddBabyDetail(sex As String, dob As Date) As String
           res1.Update()
           modPatientSub.EnterPatientImpDate($benc, "Recorded", "")
         Endif  '' if baby encid exist
-
+        
       Else
         modDatabase.$myConn.Rollback
         modBillLock.ReleaseLockTable("Registration")
       Endif '' if baby pat no exist
-
+      
       modDatabase.$myConn.Commit
       modBillLock.ReleaseLockTable("Registration")
     Endif
   Endif   ''mother patno
-
+  
   Return $patNo
-
+  
 Catch
   modDatabase.$myConn.Rollback
   $patNo = ""
@@ -1862,14 +1886,60 @@ Catch
     modBillLock.ReleaseLockTable("Registration")
   Endif
   modHelpVariable.CreateErrorReport()
+  
+End
 
+Public Sub mnudeathreport_Click()
+  
+  Dim hCls As CReportCustom
+  
+  If GridView3.Selection.Count Then
+    $rData3.MoveTo(GridView3.Selection[0])
+    If $rData3["flddeltype"] = "Live Baby" Then
+    Else
+      hCls = New CReportCustom(Trim(txtencid.Text), "Death Certificate", "ReportSize", MMain.$defUnit)
+      hCls.Preview()
+    Endif
+  Endif
+  
+End
+
+Public Sub mnueditcomm_Click()
+  
+  Dim xx As Variant[]
+  Dim res As Result
+  
+  If GridView3.Selection.Count Then
+    $rData3.MoveTo(GridView3.Selection[0])
+    xx = GetQualiValues(Trim(txtencid.Text), $rData3["fldcomment"], "Exam")
+    If xx Then
+      res = modDatabase.$myConn.Edit("tblconfinement", "fldid=&1", $rData3["fldid"])
+      res["fldcomment"] = xx[0]
+      res["xyz"] = False
+      res.Update
+      NewDeliveryGrid()
+    Endif
+  Endif
+  
+End
+
+Public Sub mnudeldelivery_Click()
+  
+  If GridView3.Selection.Count Then
+    $rData3.MoveTo(GridView3.Selection[0])
+    If Message.Question("Do you want to delete this delivery record ?", ("No"), ("Yes")) = 2 Then
+      modDatabase.$myConn.Delete("tblconfinement", "fldid=&1 and fldbabypatno IS NULL", $rData3["fldid"])
+      NewDeliveryGrid()
+    Endif
+  Endif
+  
 End
 
 '''====================== COMMON FOR PRE/ON/POST DELIVERY ====================
 Private Function GetDeliveryExamCategory(sCateg As String) As String
-
+  
   Dim xx As String
-
+  
   If sCateg = "Pre Delivery Exam" Then
     xx = "Pre Delivery"
   Else If sCateg = "On Delivery Exam" Then
@@ -1880,21 +1950,21 @@ Private Function GetDeliveryExamCategory(sCateg As String) As String
     xx = "Baby Examination"
   Endif
   Return xx
-
+  
 End
 
 ''---------------- Tree View List -----------------
 Private Sub GetTreeListResult(sType As String) As Result
-
+  
   Dim res As Result
-
+  
   res = modDatabase.$myConn.Exec("select fldexamid,fldtype,fldsysconst,fldexamid,fldtanswertype from tbldeptexam where flddept=&1", sType)
   Return res
-
+  
 End
 
 Private Sub ResizeTreeView(TreeView1 As WebTable)
-
+  
   With TreeView1
     ' .Columns[0].Width = 300 * modBasic.$AppWidthRatio
     .Columns[1].Hidden = True
@@ -1902,84 +1972,84 @@ Private Sub ResizeTreeView(TreeView1 As WebTable)
     .Columns[3].Hidden = True
     .Columns[4].Hidden = True
   End With
-
+  
 End
 
 ''pre-del
 Private Sub PreDeliveryTree()
-
+  
   $rPreDelData = GetTreeListResult("Pre Delivery")
   $aPreDelMyFields = New String[]
   modGridView.ReadSmallData(lstpredel, $rPreDelData, $aPreDelMyFields)
   ResizeTreeView(lstpredel)
-
+  
 End
 
 Public Sub lstpredel_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rPreDelData.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   Data.Text = $rPreDelData[$aPreDelMyFields[Column]]
-
+  
 End
 
 ''on-del
 Private Sub OnDeliveryTree()
-
+  
   $rOnDelData = GetTreeListResult("On Delivery")
   $aOnDelMyFields = New String[]
   modGridView.ReadSmallData(lstondel, $rOnDelData, $aOnDelMyFields)
   ResizeTreeView(lstondel)
-
+  
 End
 
 Public Sub lstondel_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rOnDelData.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   Data.Text = $rOnDelData[$aOnDelMyFields[Column]]
-
+  
 End
 
 ''post-del
 Private Sub PostDeliveryTree()
-
+  
   $rPostDelData = GetTreeListResult("Post Delivery")
   $aPostDelMyFields = New String[]
   modGridView.ReadSmallData(lstpostdel, $rPostDelData, $aPostDelMyFields)
   ResizeTreeView(lstpostdel)
-
+  
 End
 
 Public Sub lstpostdel_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rPostDelData.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   Data.Text = $rPostDelData[$aPostDelMyFields[Column]]
-
+  
 End
 
 ''baby-exam
 Private Sub BabyExaminationTree()
-
+  
   $rBabyExData = GetTreeListResult("Baby Examination")
   $aBabyExMyFields = New String[]
   modGridView.ReadSmallData(lstbabyexam, $rBabyExData, $aBabyExMyFields)
   ResizeTreeView(lstbabyexam)
-
+  
 End
 
 Public Sub lstbabyexam_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rBabyExData.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   Data.Text = $rBabyExData[$aBabyExMyFields[Column]]
-
+  
 End
 
 ''------------------Data GridView ----------------
 Private Sub ResizeDataGridView(GridView1 As WebTable)
-
+  
   With GridView1
     .Columns[0].Hidden = True
     .Columns[1].Hidden = True
@@ -1996,21 +2066,21 @@ Private Sub ResizeDataGridView(GridView1 As WebTable)
     .Columns[4].Text = "Observation"
     .Columns[5].Text = "ReportTime"
   End With
-
+  
 End
 
 ''Pred-del
 Private Sub FillPreDelivery()
-
+  
   $rPreDataData = modDatabase.$myConn.Exec("select fldid,fldtype,fldhead,fldabnormal,fldid,fldtime,fldsave,fldencounterval,fldrepquali,fldsysconst,fldid from tblpatientexam where fldencounterval=&1 and fldinput=&2 and fldsave=&3", Trim(txtencid.Text), "Pre Delivery Exam", True)
   $aPreDataMyFields = New String[]
   modGridView.ReadSmallData(grdpredel, $rPreDataData, $aPreDataMyFields)
   ResizeDataGridView(grdpredel)
-
+  
 End
 
 Public Sub grdpredel_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rPreDataData.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   If Column = 3 Then
@@ -2023,21 +2093,21 @@ Public Sub grdpredel_Data(Row As Integer, Column As Integer, Data As WebTableDat
   Else
     Data.Text = $rPreDataData[$aPreDataMyFields[Column]]
   Endif
-
+  
 End
 
 ''On-deliv
 Private Sub FillonDelivery()
-
+  
   $rOnDataData = modDatabase.$myConn.Exec("select fldid,fldtype,fldhead,fldabnormal,fldid,fldtime,fldsave,fldencounterval,fldrepquali,fldsysconst,fldid from tblpatientexam where fldencounterval=&1 and fldinput=&2 and fldsave=&3", Trim(txtencid.Text), "On Delivery Exam", True)
   $aOnDataMyFields = New String[]
   modGridView.ReadSmallData(grdondel, $rOnDataData, $aOnDataMyFields)
   ResizeDataGridView(grdondel)
-
+  
 End
 
 Public Sub grdondel_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rOnDataData.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   If Column = 3 Then
@@ -2050,21 +2120,21 @@ Public Sub grdondel_Data(Row As Integer, Column As Integer, Data As WebTableData
   Else
     Data.Text = $rOnDataData[$aOnDataMyFields[Column]]
   Endif
-
+  
 End
 
 ''post-del
 Private Sub FillPostDelivery()
-
+  
   $rPostDataData = modDatabase.$myConn.Exec("select fldid,fldtype,fldhead,fldabnormal,fldid,fldtime,fldsave,fldencounterval,fldrepquali,fldsysconst,fldid from tblpatientexam where fldencounterval=&1 and fldinput=&2 and fldsave=&3", Trim(txtencid.Text), "Post Delivery Exam", True)
   $aPostDataMyFields = New String[]
   modGridView.ReadSmallData(grdpostdel, $rPostDataData, $aPostDataMyFields)
   ResizeDataGridView(grdpostdel)
-
+  
 End
 
 Public Sub grdpostdel_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rPostDataData.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   If Column = 3 Then
@@ -2077,21 +2147,21 @@ Public Sub grdpostdel_Data(Row As Integer, Column As Integer, Data As WebTableDa
   Else
     Data.Text = $rPostDataData[$aPostDataMyFields[Column]]
   Endif
-
+  
 End
 
 ''baby-exam
 Private Sub FillBabyExam()
-
+  
   $rBabyDataData = modDatabase.$myConn.Exec("select fldid,fldtype,fldhead,fldabnormal,fldid,fldtime,fldsave,fldencounterval,fldrepquali,fldsysconst,fldid from tblpatientexam where fldencounterval=&1 and fldinput=&2 and fldsave=&3", Trim(cmbbabyencid.Text), "Baby Examination", True)
   $aBabyDataMyFields = New String[]
   modGridView.ReadSmallData(grdbabyexam, $rBabyDataData, $aBabyDataMyFields)
   ResizeDataGridView(grdbabyexam)
-
+  
 End
 
 Public Sub grdbabyexam_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rBabyDataData.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   If Column = 3 Then
@@ -2104,42 +2174,42 @@ Public Sub grdbabyexam_Data(Row As Integer, Column As Integer, Data As WebTableD
   Else
     Data.Text = $rBabyDataData[$aBabyDataMyFields[Column]]
   Endif
-
+  
 End
 
 ''---------------- SHow Option Button ---------------
 Public Sub lstpredel_Select()
-
+  
   If lstpredel.Selection.Count Then
     $rPreDelData.MoveTo(lstpredel.Selection[0])
     AddDeliverySelection(Trim(txtencid.Text), $rPreDelData["fldexamid"], $rPreDelData["fldsysconst"], $rPreDelData["fldtype"], "Pre Delivery Exam", $rPreDelData["fldtanswertype"])
     FillPreDelivery()
   Endif
-
+  
 End
 
 Public Sub lstondel_Select()
-
+  
   If lstondel.Selection.Count Then
     $rOnDelData.MoveTo(lstondel.Selection[0])
     AddDeliverySelection(Trim(txtencid.Text), $rOnDelData["fldexamid"], $rOnDelData["fldsysconst"], $rOnDelData["fldtype"], "On Delivery Exam", $rOnDelData["fldtanswertype"])
     FillonDelivery()
   Endif
-
+  
 End
 
 Public Sub lstpostdel_Select()
-
+  
   If lstpostdel.Selection.Count Then
     $rPostDelData.MoveTo(lstpostdel.Selection[0])
     AddDeliverySelection(Trim(txtencid.Text), $rPostDelData["fldexamid"], $rPostDelData["fldsysconst"], $rPostDelData["fldtype"], "Post Delivery Exam", $rPostDelData["fldtanswertype"])
     FillPostDelivery()
   Endif
-
+  
 End
 
 Public Sub lstbabyexam_Select()
-
+  
   If cmbbabyencid.Text Then
     If lstbabyexam.Selection.Count Then
       $rBabyExData.MoveTo(lstbabyexam.Selection[0])
@@ -2147,11 +2217,11 @@ Public Sub lstbabyexam_Select()
       FillBabyExam()
     Endif
   Endif
-
+  
 End
 
 Private Sub AddDeliverySelection(encid As String, sExamLabel As String, sysConst As String, sType As String, xcategory As String, OptionType As String)
-
+  
   Dim sName As String
   Dim xquantival As Variant[]
   Dim yqualival As Variant[]
@@ -2163,13 +2233,13 @@ Private Sub AddDeliverySelection(encid As String, sExamLabel As String, sysConst
   Dim xval As String
   Dim xdefval As Float
   Dim xstrval As String
-
+  
   Dim cForm As CFindExam
   Dim examtype As String
   Dim sExam As String
   Dim sOptName As String
   Dim sDefault As String
-
+  
   If sysConst Then
     cForm = New CFindExam(sysConst)
     examtype = cForm.GetExamMode()
@@ -2177,13 +2247,13 @@ Private Sub AddDeliverySelection(encid As String, sExamLabel As String, sysConst
     sOptName = cForm.GetExamOption()
     sDefault = cForm.GetExamDefault()
   Endif
-
+  
   If sExam Then
     sName = sExam
   Else
     sName = sExamLabel
   Endif
-
+  
   If sType = "Quantitative" Then
     xdefval = 0
     If sysConst Then
@@ -2202,9 +2272,9 @@ Private Sub AddDeliverySelection(encid As String, sExamLabel As String, sysConst
     Endif
     xquantival = GetQuantiValues(examtype, encid, sName, xlimit[0], xlimit[1], xdefval)
     If xquantival Then
-      modClinSub.AddQuantiData(encid, "", sExamLabel, xquantival[0], xquantival[1], xcategory, sysConst)
+      modClinSub.AddQuantiData(encid, "", sExamLabel, OptionType, xquantival[0], xquantival[1], xcategory, sysConst)
     Endif
-
+    
   Else
     If sysConst Then
       xstrval = ""
@@ -2224,29 +2294,29 @@ Private Sub AddDeliverySelection(encid As String, sExamLabel As String, sysConst
         xstrval = modReportVar.GetLastQualiParamValue(examtype, sExam, encid)
         yqualival = GetQualiValues(sName, xstrval, examtype)
       Endif
-
+      
     Else
       If OptionType = "Date Time" Then
         xdate = GetDateValue(("Select Date Time"), sName, "")
         If xdate Then
           yqualival = [modDate.DateStringForExam(xdate), False]
         Endif
-
+        
       Else If OptionType = "BS Date" Then
         xdate = GetDateValue(("Select Date Time"), sName, "")
         If xdate Then
           yqualival = [modDate.ConvertToLocaldate(xdate), False]
         Endif
-
+        
       Else If OptionType = "Qualitative" Then
         yqualival = GetQualiString(sName, "", "Exam")
-
+        
       Else If OptionType = "Left and Right" Then
         lftrtval = CLeftRight(sName, "", modFixClinic.GetLeftRightMainHeader("Exam", sName))
         If lftrtval Then
           yqualival = [lftrtval[0], lftrtval[1]]
         Endif
-
+        
       Else If OptionType = "Single Selection" Or If OptionType = "Dichotomous" Or If OptionType = "Multiple Selection" Then
         opt = modControlSub.GetDirectFillresult(modDatabase.$myConn.Exec("select fldanswer from tbldeptexamoption where fldexamid=&1 and flddept=&2 and fldtanswertype=&3 ORDER BY fldindex", sExamLabel, GetDeliveryExamCategory(xcategory), OptionType))
         If opt.Count Then
@@ -2264,7 +2334,7 @@ Private Sub AddDeliverySelection(encid As String, sExamLabel As String, sysConst
             yqualival = GetQualiValues(sName, "", "Exam")
           Endif
         Endif
-
+        
       Else If OptionType = "Text Table" Then
         opt = modControlSub.GetDirectFillresult(modDatabase.$myConn.Exec("select fldanswer from tbldeptexamoption where fldexamid=&1 and flddept=&2 and fldtanswertype=&3 ORDER BY fldindex", sExamLabel, GetDeliveryExamCategory(xcategory), OptionType))
         If opt.Count Then
@@ -2275,31 +2345,31 @@ Private Sub AddDeliverySelection(encid As String, sExamLabel As String, sysConst
         Else
           yqualival = GetQualiValues(sName, "", "Exam")
         Endif
-
+        
       Else If OptionType = "RichText Area" Then
         yqualival = GetQualiRich(sName, "", "Exam")
-
+        
       Else
         yqualival = GetQualiValues(sName, "", "Exam")
       Endif
     Endif
-
+    
     If yqualival Then
       If yqualival.Count = 3 And If yqualival[2] Then
-        modClinSub.AddClinicExam(encid, "", sExamLabel, yqualival[0], CFloat(yqualival[2]), yqualival[1], xcategory, sysConst, "Regular")
+        modClinSub.AddClinicExam(encid, "", sExamLabel, OptionType, yqualival[0], CFloat(yqualival[2]), yqualival[1], xcategory, sysConst, "Regular")
       Else
-        modClinSub.AddClinicExam(encid, "", sExamLabel, yqualival[0], 0, yqualival[1], xcategory, sysConst, "Regular")
+        modClinSub.AddClinicExam(encid, "", sExamLabel, OptionType, yqualival[0], 0, yqualival[1], xcategory, sysConst, "Regular")
       Endif
     Endif
   Endif ''quali or quanti
-
+  
 End
 
 ''====================== BABY EXAMINATION ====================
 Public Sub btnbabyencid_Click()
-
+  
   Dim res As Result
-
+  
   If cmbbabyencid.Text Then
     txtbabypatno.Text = modPatient.GetPatientNoByEnc(cmbbabyencid.Text)
     If txtbabypatno.Text Then
@@ -2314,14 +2384,14 @@ Public Sub btnbabyencid_Click()
     btnbabyconsult.Text = modGeneral.GetUserFullName(btnbabyconsult.Tag)
     FillBabyExam()
   Endif
-
+  
 End
 
 Public Sub btnbabyguard_Click()
-
+  
   Dim xList As String[]
   Dim res As Result
-
+  
   If txtbabypatno.Text Then
     xList = InputDoubleText("Select Baby Guardian", ["Relation", "Guardian"], ["Father", ""])
     If xList Then
@@ -2333,19 +2403,19 @@ Public Sub btnbabyguard_Click()
       Endif
     Endif
   Endif
-
+  
 End
 
 Public Sub btnbabydob_Click()
-
+  
   Dim res As Result
-
+  
   If cmbbabyencid.Text Then
     If dtbabydob.Value Then
       If dtbabydob.Value > Now() Then
         Message.Warning("Incorrect Date and Time", ("OK"))
       Else
-
+        
         modDatabase.$myConn.Begin
         res = modDatabase.$myConn.Edit("tblconfinement", "fldbabypatno=&1", Trim(txtbabypatno.Text))
         res["flddeltime"] = dtbabydob.Value
@@ -2353,244 +2423,244 @@ Public Sub btnbabydob_Click()
         res.Update
         modPatientSub.UpdatePatDOB(Trim(cmbbabyencid.Text), dtbabydob.Value)
         modDatabase.$myConn.Commit
-
+        
         modDateSub.GetAgeControlFromDate(dtbabydob.Value, txtbabyage, txtbabyageunit)
         Me.Exec("Toastify({text: 'Information updated', duration: 3000}).showToast()")
         ' Balloon.Delay = modBasic.$BalloonDelay
       Endif
     Endif
   Endif
-
+  
 Catch
   modDatabase.$myConn.Rollback
   modHelpVariable.CreateErrorReport()
-
+  
 End
 
 Public Sub btnipform_Click()
-
+  
   Dim hForm As FmPatientMain
-
+  
   If cmbbabyencid.Text Then
     Me.Parent.DeleteChildren()
     hForm = New FmPatientMain(cmbbabyencid.Text, fmOfficer.Workspace1)
   Endif
-
+  
 End
 
 Public Sub btnbirthreport_Click()
-
+  
   Dim hCls As CReportCustom
-
+  
   If cmbbabyencid.Text Then
     hCls = New CReportCustom(cmbbabyencid.Text, "Birth Report", "ReportSize", MMain.$defUnit)
     hCls.Preview()
   Endif
-
+  
 End
 
 Public Sub btntransbaby_Click()
-
+  
   Dim hCls As CReportCustom
-
+  
   If cmbbabyencid.Text Then
     hCls = New CReportCustom(cmbbabyencid.Text, "Baby Report", "ReportSize", MMain.$defUnit)
     hCls.Preview()
   Endif
-
+  
 End
 
 ''Baby Reports
 Public Sub mnubabytransition_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.ShowBedTransitionReport(Trim(cmbbabyencid.Text))
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabysymptom_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.ShowPatientSymptomReport(Trim(cmbbabyencid.Text))
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabyinput_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.ShowPatientInputReport(Trim(cmbbabyencid.Text))
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabyexam_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.ShowPatientExaminationgReport(Trim(cmbbabyencid.Text))
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabylab_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.ShowPatientLaboratoryReport(Trim(cmbbabyencid.Text), modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabyradio_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.ShowPatRadioReportbyEncID(Trim(cmbbabyencid.Text))
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabydiagno_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.GetProvisionalDiagnosis(Trim(cmbbabyencid.Text))
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabyhistory_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.ShowPatientHistoryReport(Trim(cmbbabyencid.Text))
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabynote_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.ShowPatientNoteReport(Trim(cmbbabyencid.Text), "Inpatient Notes")
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabydisch_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.ShowPatientNoteReport(Trim(cmbbabyencid.Text), "Discharge Notes")
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabydosing_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.ShowNursingDosing(Trim(cmbbabyencid.Text))
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabyprogress_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.ShowPatientPlanningReport(Trim(cmbbabyencid.Text), "IP Monitoring")
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabyplan_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.ShowPatientPlanningReport(Trim(cmbbabyencid.Text), "Clinician Plan")
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabyexpense_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLInvoice.ShowTotalExpensebyPatient(modDatabase.$syConn, Trim(cmbbabyencid.Text), "Complete")
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabyreturn_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.PatientMedicationForReturn(Trim(cmbbabyencid.Text))
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabynurse_Click()
-
+  
   Dim xPath As String
-
+  
   If cmbbabyencid.Text Then
     xPath = modCHTMLPatient.NursingCheckReport(Trim(cmbbabyencid.Text))
     modControlSub.OpenHTMLPreview(Trim(cmbbabyencid.Text), xPath, "ReportSize")
   Endif
-
+  
 End
 
 Public Sub mnubabycomplete_Click()
-
+  
   If cmbbabyencid.Text Then
     modPatReports.GetSelectedPatientValues(Trim(cmbbabyencid.Text), modLabSub.GetTestUnitFromButton(rbsi, rbmetric))
   Endif
-
+  
 End
 
 ''----------- Edit GridViews--------------------
 Private Function GetGridColValFromColText(sType As String, sExam As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldtanswertype from tbldeptexam where flddept=&1 and fldexamid=&2", sType, sExam)
   If res.Available Then
     If res["fldtanswertype"] Then
@@ -2602,14 +2672,14 @@ Private Function GetGridColValFromColText(sType As String, sExam As String) As S
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 ''pre-del
 Public Sub btnpreflag_Click()
-
+  
   Dim xx As String
-
+  
   If grdpredel.Selection.Count Then
     $rPreDataData.MoveTo(grdpredel.Selection[0])
     xx = InputCombo("Select Flag for the observation", "Change Flag", ["Normal", "Abnormal"], modMisc.GetIconValue($rPreDataData["fldabnormal"]), True)
@@ -2618,13 +2688,13 @@ Public Sub btnpreflag_Click()
       FillPreDelivery()
     Endif
   Endif
-
+  
 End
 
 Public Sub btnpreedit_Click()
-
+  
   Dim xopt As String
-
+  
   If grdpredel.Selection.Count Then
     $rPreDataData.MoveTo(grdpredel.Selection[0])
     xopt = GetGridColValFromColText("Pre Delivery", $rPreDataData["fldhead"])
@@ -2635,13 +2705,13 @@ Public Sub btnpreedit_Click()
     Endif
     FillPreDelivery()
   Endif
-
+  
 End
 
 Public Sub btnpredel_Click()
-
+  
   Dim res As Result
-
+  
   If grdpredel.Selection.Count Then
     $rPreDataData.MoveTo(grdpredel.Selection[0])
     If Message.Question(("Are you sure?"), ("No"), ("Yes")) = 2 Then
@@ -2656,20 +2726,20 @@ Public Sub btnpredel_Click()
       Endif
     Endif
   Endif
-
+  
 End
 
 Public Sub btnpreexpo_Click()
-
+  
   modCHTMLReport.ExportGridToHTML(grdpredel, "PRE DELIVERY", "",, Trim(txtencid.Text))
-
+  
 End
 
 ''on-del
 Public Sub btnonflag_Click()
-
+  
   Dim xx As String
-
+  
   If grdondel.Selection.Count Then
     $rOnDataData.MoveTo(grdondel.Selection[0])
     xx = InputCombo("Select Flag for the observation", "Change Flag", ["Normal", "Abnormal"], modMisc.GetIconValue($rOnDataData["fldabnormal"]), True)
@@ -2678,13 +2748,13 @@ Public Sub btnonflag_Click()
       FillonDelivery()
     Endif
   Endif
-
+  
 End
 
 Public Sub btnonedit_Click()
-
+  
   Dim xopt As String
-
+  
   If grdondel.Selection.Count Then
     $rOnDataData.MoveTo(grdondel.Selection[0])
     xopt = GetGridColValFromColText("On Delivery", $rOnDataData["fldhead"])
@@ -2695,13 +2765,13 @@ Public Sub btnonedit_Click()
     Endif
     FillonDelivery()
   Endif
-
+  
 End
 
 Public Sub btnondel_Click()
-
+  
   Dim res As Result
-
+  
   If grdondel.Selection.Count Then
     $rOnDataData.MoveTo(grdondel.Selection[0])
     If Message.Question(("Are you sure?"), ("No"), ("Yes")) = 2 Then
@@ -2716,20 +2786,20 @@ Public Sub btnondel_Click()
       Endif
     Endif
   Endif
-
+  
 End
 
 Public Sub btnondelreport_Click()
-
+  
   modCHTMLReport.ExportGridToHTML(grdondel, "ON DELIVERY", "",, Trim(txtencid.Text))
-
+  
 End
 
 ''post-del
 Public Sub btnpostflag_Click()
-
+  
   Dim xx As String
-
+  
   If grdpostdel.Selection.Count Then
     $rPostDataData.MoveTo(grdpostdel.Selection[0])
     xx = InputCombo("Select Flag for the observation", "Change Flag", ["Normal", "Abnormal"], modMisc.GetIconValue($rPostDataData["fldabnormal"]), True)
@@ -2738,13 +2808,13 @@ Public Sub btnpostflag_Click()
       FillPostDelivery()
     Endif
   Endif
-
+  
 End
 
 Public Sub btnpostedit_Click()
-
+  
   Dim xopt As String
-
+  
   If grdpostdel.Selection.Count Then
     $rPostDataData.MoveTo(grdpostdel.Selection[0])
     xopt = GetGridColValFromColText("Post Delivery", $rPostDataData["fldhead"])
@@ -2755,13 +2825,13 @@ Public Sub btnpostedit_Click()
     Endif
     FillPostDelivery()
   Endif
-
+  
 End
 
 Public Sub btnpostdel_Click()
-
+  
   Dim res As Result
-
+  
   If grdpostdel.Selection.Count Then
     $rPostDataData.MoveTo(grdpostdel.Selection[0])
     If Message.Question(("Are you sure?"), ("No"), ("Yes")) = 2 Then
@@ -2776,20 +2846,20 @@ Public Sub btnpostdel_Click()
       Endif
     Endif
   Endif
-
+  
 End
 
 Public Sub btnpostreport_Click()
-
+  
   modCHTMLReport.ExportGridToHTML(grdpostdel, "POST DELIVERY", "",, Trim(txtencid.text))
-
+  
 End
 
 ''baby-exam
 Public Sub btnbabyflag_Click()
-
+  
   Dim xx As String
-
+  
   If grdbabyexam.Selection.Count Then
     $rBabyDataData.MoveTo(grdbabyexam.Selection[0])
     xx = InputCombo("Select Flag for the observation", "Change Flag", ["Normal", "Abnormal"], modMisc.GetIconValue($rBabyDataData["fldabnormal"]), True)
@@ -2798,13 +2868,13 @@ Public Sub btnbabyflag_Click()
       FillBabyExam()
     Endif
   Endif
-
+  
 End
 
 Public Sub btnbabyedit_Click()
-
+  
   Dim xopt As String
-
+  
   If grdbabyexam.Selection.Count Then
     $rBabyDataData.MoveTo(grdbabyexam.Selection[0])
     xopt = GetGridColValFromColText("Baby Examination", $rBabyDataData["fldhead"])
@@ -2813,16 +2883,16 @@ Public Sub btnbabyedit_Click()
     Else
       modExamOption.UpdateExamSelectionLabel($rBabyDataData["fldid"], $rBabyDataData["fldencounterval"], $rBabyDataData["fldhead"], $rBabyDataData["fldtype"], $rBabyDataData["fldsysconst"], $rBabyDataData["fldrepquali"], xopt)
     Endif
-
+    
     FillBabyExam()
   Endif
-
+  
 End
 
 Public Sub btnbabydel_Click()
-
+  
   Dim res As Result
-
+  
   If grdbabyexam.Selection.Count Then
     $rBabyDataData.MoveTo(grdbabyexam.Selection[0])
     If Message.Question(("Are you sure?"), ("No"), ("Yes")) = 2 Then
@@ -2837,20 +2907,20 @@ Public Sub btnbabydel_Click()
       Endif
     Endif
   Endif
-
+  
 End
 
 Public Sub btnrepobaby_Click()
-
+  
   If cmbbabyencid Then
     modCHTMLReport.ExportGridToHTML(grdbabyexam, "BABY EXAMINATION", "",, Trim(cmbbabyencid.text))
   Endif
-
+  
 End
 
 ''============================= PHARMACY ======================
 Public Sub btnshowallmed_Click()
-
+  
   If txtencid.Text Then
     If btnshowallmed.Value = True Then
       FillDosingGrid("All")
@@ -2858,13 +2928,13 @@ Public Sub btnshowallmed_Click()
       FillDosingGrid("Current")
     Endif
   Endif
-
+  
 End
 
 Private Sub FillDosingGrid(strType As String)
-
+  
   Dim sql As String
-
+  
   If strType = "Current" Then
     sql = "select fldid,fldstarttime,fldroute,flditem,flddose,fldfreq,flddays,(fldqtydisp-fldqtyret) as qty,fldlabel,fldcurval from tblpatdosing where fldencounterval=&1 and fldcomp_order=&2 and fldsave_order=&3 and flditemtype=&4"                                                   ''
     $rData5 = modDatabase.$myConn.Exec(sql, Trim(txtencid.Text), modBasic.$compID, True, "Medicines")
@@ -2874,7 +2944,7 @@ Private Sub FillDosingGrid(strType As String)
   Endif
   $aMyFields5 = New String[]
   modGridView.ReadSmallData(GridView5, $rData5, $aMyFields5)
-
+  
   With GridView5
     .Columns[0].Hidden = True
     .Columns[1].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
@@ -2886,7 +2956,7 @@ Private Sub FillDosingGrid(strType As String)
     .Columns[7].Width = CStr(40 * modBasic.$AppWidthRatio) & "px"
     .Columns[8].Hidden = True
     .Columns[9].Width = CStr(75 * modBasic.$AppWidthRatio) & "px"
-
+    
     .Columns[1].Text = "StartDate"
     .Columns[2].Text = "Route"
     .Columns[3].Text = "Particulars"
@@ -2896,11 +2966,11 @@ Private Sub FillDosingGrid(strType As String)
     .Columns[7].Text = "QTY"
     .Columns[9].Text = "Status"
   End With
-
+  
 End
 
 Public Sub GridView5_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rData5.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   If Column = 1 Then
@@ -2908,59 +2978,62 @@ Public Sub GridView5_Data(Row As Integer, Column As Integer, Data As WebTableDat
   Else
     Data.Text = $rData5[$aMyFields5[Column]]
   Endif
-
+  
 End
 
 Public Sub btnaddmed_Click()
-
+  
   Dim hForm As FmMedOrder
-
+  
   If txtencid.Text Then
     If modNonMedical.AllowEntryWithDeposit(Trim(txtencid.Text), "Pharmacy") = True Then
-      hForm = New FmMedOrder(Trim(txtencid.Text), txtnow.Text, $billModePharmacy)
-      hForm.ShowModal
+      If modBasic.$MedRequestForm = "Separate" Then
+      Else
+        hForm = New FmMedOrder(Trim(txtencid.Text), txtnow.Text, $billModePharmacy)
+        hForm.ShowModal
+      Endif
       FillDosingGrid("Current")
     Endif
   Endif
-
+  
 End
 
 Public Sub btndoserecord_Click()
-
+  
   Dim hForm As FmDosecount
-
+  
   If txtencid.Text Then
     hForm = New FmDosecount(Trim(txtencid.Text))
     hForm.ShowModal
     FillDosingGrid("Current")
   Endif
-
+  
 End
 
 Public Sub btnivinfusion_Click()
-
+  
   Dim hForm As FmIVInfusion
-
+  
   If txtencid.Text Then
     hForm = New FmIVInfusion(Trim(txtencid.Text))
     hForm.ShowModal
     FillDosingGrid("Current")
   Endif
-
+  
 End
 
 Public Sub btnmedexpo_Click()
-
+  
   modCHTMLReport.ExportGridToHTML(GridView5, "ITEMS USED: " & "Delivery", modReportVar.GetDateTimeReport(Now(), gb.GeneralDate))
-
+  
 End
 
 Public Sub btnmedstatus_Click()
-
+  
   Dim xx As String[] = ["Continue", "Completed", "Discontinue", "Hold", "Change", "ReWrite", "Cancelled", "Wasted"]
   Dim res As Result
   Dim xval As String
-
+  
   If GridView5.Selection.Count Then
     $rData5.MoveTo(GridView5.Selection[0])
     xval = InputCombo($rData5["flditem"], ("Select Current Status"), xx, $rData5["fldcurval"], True)
@@ -2972,26 +3045,14 @@ Public Sub btnmedstatus_Click()
       FillDosingGrid("Current")
     Endif
   Endif
-
-End
-
-Public Sub btntxtdelivery_Click()
-
-  txtdelicomment.RichText = txtdelicomment.RichText & Space(1) & modFillContainer.GetExtraTextArea("Delivery Note", "")
-
-End
-
-Public Sub btntempldelcomm_Click()
-
-  txtdelicomment.RichText = txtdelicomment.RichText & DictionaryVIew(modBasic.$dictadvPath)
-
+  
 End
 
 ''================== HMIS 3.61 examination (complications) ====================
 Private Sub Setreference()
-
+  
   Dim sList As String[]
-
+  
   $reference = modSettings.ShowSettingFromFIle($Category & "/RecommendedExam")
   If Not $reference Then
     sList = modMedicine.FillClinicalReference($Category)
@@ -2999,26 +3060,26 @@ Private Sub Setreference()
       $reference = sList[0]
     Endif
   Endif
-
+  
 End
 
 Private Sub LoadTreeData3()
-
+  
   Dim str3 As String
   Dim res3 As Result
-
+  
   str3 = "select distinct(flditem) from tblstructexam where fldsubclass=&1 and fldcategory=&2 and fldreferencee=&3 and fldclass=&4 ORDER BY flditemid"
   res3 = modDatabase.$myConn.Exec(str3, $Category, $DELExams, $reference, $sDepart)
   grdtreecompl.List = modControlSub.GetDirectFillresult(res3)
-
+  
 End
 
 Private Sub ShowSelectedVar3()
-
+  
   Dim res As Result
   Dim sList As String[]
   Dim hForm As FmEnterMultiExam
-
+  
   sList = New String[]
   res = modDatabase.$myConn.Exec("select fldheadcode from tblstructexam where fldclass=&1 and fldsubclass=&2 and fldcategory=&3 and flditem=&4 and fldreferencee=&5 ORDER BY fldheadid", $sDepart, $Category, $DELExams, grdtreecompl.Text, $reference)
   If res.Available Then
@@ -3029,17 +3090,17 @@ Private Sub ShowSelectedVar3()
     hForm.ShowModal
     ShowClinicTable3()
   Endif
-
+  
 End
 
 Public Sub grdtreecompl_Select()
-
+  
   ShowSelectedVar3()
-
+  
 End
 
 Private Sub ShowClinicTable3()
-
+  
   If txtencid.Text Then
     If MMain.$WebEntry = True Then
       $rData2 = modDatabase.$myConn.Exec("select fldrepoid,fldtype,fldhead,fldabnormal,fldid,fldtime,fldid,fldserialval,fldrepquali,fldrepquanti from tblpatientexam where fldinput=&1 and fldencounterval=&2 and fldsave=&3 and fldserialval in(select fldheadcode from tblstructexam where fldsubclass=&4 and fldcategory=&5 and fldclass=&6 and fldreferencee=&7)", "On Delivery", Trim(txtencid.Text), True, $Category, $DELExams, $sDepart, $reference)
@@ -3048,7 +3109,7 @@ Private Sub ShowClinicTable3()
     Endif
     $aMyFields2 = New String[]
     modGridView.ReadSmallData(grdcompl, $rData2, $aMyFields2)
-
+    
     With grdcompl
       .Columns[0].Hidden = True
       .Columns[1].Hidden = True
@@ -3060,17 +3121,17 @@ Private Sub ShowClinicTable3()
       .Columns[7].Hidden = True
       .Columns[8].Hidden = True
       .Columns[9].Hidden = True
-
+      
       .Columns[2].Text = "Examination"
       .Columns[4].Text = "Observation"
       .Columns[5].Text = "Time"
     End With
   Endif
-
+  
 End
 
 Public Sub grdcompl_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rData2.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   If Column = 3 Then
@@ -3083,32 +3144,32 @@ Public Sub grdcompl_Data(Row As Integer, Column As Integer, Data As WebTableData
   Else
     Data.Text = $rData2[$aMyFields2[Column]]
   Endif
-
+  
 End
 
 Public Sub btncomponentscompl_Click()
-
+  
   Dim yqualival As Variant[]
   Dim xquantival As Variant[]
   Dim rsn As Result
   Dim xdate As Date
-
+  
   Dim opt As String[]
   Dim xval As String
   Dim sTable As String[]
   Dim sName As String
-
+  
   Dim cForm As CFindExam
   Dim examtype As String
   Dim sExam As String
   Dim sOptName As String
   Dim sDefault As String
-
+  
   If grdcompl.Selection.Count Then
     $rData2.MoveTo(grdcompl.Selection[0])
     If $rData2["fldtype"] = "Qualitative" Then
       rsn = modDatabase.$myConn.Exec("select fldhead,fldtesttype,fldtanswertype,fldsysconst from tblstructexam where fldheadcode=&1", $rData2["fldserialval"])
-
+      
       If rsn.Available And If rsn["fldsysconst"] Then
         cForm = New CFindExam(rsn["fldsysconst"])
         examtype = cForm.GetExamMode()
@@ -3118,31 +3179,31 @@ Public Sub btncomponentscompl_Click()
       Else
         examtype = "Exam"
       Endif
-
+      
       If sExam Then
         sName = sExam
       Else
         sName = $rData2["fldhead"]
       Endif
-
+      
       If rsn["fldtanswertype"] = "Left and Right" Then
         yqualival = CLeftRight($rData2["fldhead"], $rData2["fldrepquali"], modFixClinic.GetLeftRightMainHeader("Exam", $rData2["fldhead"]))
         If yqualival Then
           modClinSub.UpdateClinicQualiData($rData2["fldid"], yqualival[0], yqualival[1])
         Endif
-
+        
       Else If rsn["fldtanswertype"] = "Date Time" Then
         xdate = GetDateValue($rData2["fldhead"], ("Select Date Time"), Val($rData2["fldrepquali"]))
         If xdate Then
           modClinSub.UpdateClinicQualiData($rData2["fldid"], modDate.DateStringForExam(xdate), False)
         Endif
-
+        
       Else If rsn["fldtanswertype"] = "BS Date" Then
         xdate = GetDateValue($rData2["fldhead"], ("Select Date Time"), modDate.ConvertToEnglishdate($rData2["fldrepquali"]))
         If xdate Then
           modClinSub.UpdateClinicQualiData($rData2["fldid"], modDate.ConvertToLocaldate(xdate), False)
         Endif
-
+        
       Else If rsn["fldtanswertype"] = "Text Table" Then
         sTable = modString.ConverTableRichTextToGrid(modClinic.GetExamValueString(Trim(txtencid.Text), $rData2["fldid"]))
         opt = Split(sTable[0], ";")
@@ -3150,15 +3211,15 @@ Public Sub btncomponentscompl_Click()
         If xval Then
           modClinSub.UpdateClinicQualiData($rData2["fldid"], modString.GetTableFormatFromText(xval), False)
         Endif
-
+        
       Else If rsn["fldtanswertype"] = "Qualitative" Then
         yqualival = GetQualiString($rData2["fldhead"], $rData2["fldrepquali"], "Exam")
         If yqualival Then
           modClinSub.UpdateClinicQualiData($rData2["fldid"], yqualival[0], yqualival[1])
         Endif
-
+        
       Else If rsn["fldtanswertype"] = "Fixed Components" Then
-
+        
       Else
         If sOptName = "Clinical Scale" Then
           yqualival = modExamOption.GetClinScalePopUp(examtype, sName)
@@ -3177,7 +3238,7 @@ Public Sub btncomponentscompl_Click()
           Endif
         Endif
       Endif
-
+      
     Else If $rData2["fldtype"] = "Quantitative" Then
       xquantival = GetQuantiValues(examtype, Trim(txtencid.Text), sName, 0, 0, $rData2["fldrepquanti"])
       If xquantival Then
@@ -3185,15 +3246,15 @@ Public Sub btncomponentscompl_Click()
       Endif
     Endif
     ShowClinicTable3()
-
+    
   Endif
-
+  
 End
 
 Public Sub btneditflagcompl_Click()
-
+  
   Dim abc As String
-
+  
   If grdcompl.Selection.Count Then
     $rData2.MoveTo(grdcompl.Selection[0])
     abc = InputCombo("Select Flag for the observation", "Change Flag", ["Normal", "Abnormal"], modMisc.GetIconValue($rData2["fldabnormal"]), True)
@@ -3202,13 +3263,13 @@ Public Sub btneditflagcompl_Click()
       ShowClinicTable3()
     Endif
   Endif
-
+  
 End
 
 Public Sub btndeletecompl_Click()
-
+  
   Dim res As Result
-
+  
   If grdcompl.Selection.Count Then
     $rData2.MoveTo(grdcompl.Selection[0])
     If Message.Question(("Are you sure?"), ("No"), ("Yes")) = 2 Then
@@ -3227,46 +3288,69 @@ Public Sub btndeletecompl_Click()
       Endif
     Endif
   Endif
-
+  
 End
 
 Public Sub btnrepocompl_Click()
-
+  
   Dim xPath As String
-
+  
   If txtencid.text Then
     xPath = modCHTMLPatient.ShowRecomExaminationpatient(Trim(txtencid.text), $Category, $DELExams, $sDepart, $reference)
     modControlSub.OpenHTMLPreview(Trim(txtencid.text), xPath, "ReportSize")
   Endif
-
+  
 End
 
-Public Sub cmbbabyencid_Render()
+' Public Sub cmbbabyencid_Render()
+'   
+'   modJavaScript.SetSelect2Combo(cmbbabyencid)
+'   
+' End
+' 
+' Public Sub cmbattentype_Render()
+'   
+'   modJavaScript.SetSelect2Combo(cmbattentype)
+'   
+' End
+' 
+' Public Sub cmbdelbaby_Render()
+'   
+'   modJavaScript.SetSelect2Combo(cmbdelbaby)
+'   
+' End
+' 
+' Public Sub cmbdeltype_Render()
+'   
+'   modJavaScript.SetSelect2Combo(cmbdeltype)
+'   
+' End
+' 
+' Public Sub cmblabour_Render()
+'   
+'   modJavaScript.SetSelect2Combo(cmblabour)
+'   
+' End
 
-  modJavaScript.SetSelect2Combo(cmbbabyencid)
-
+''------------ summary icons
+Public Sub btndatasumm_Click()
+  
 End
 
-Public Sub cmbattentype_Render()
-
-  modJavaScript.SetSelect2Combo(cmbattentype)
-
+Public Sub btnpansumm_Click()
+  
+  txtdelicomment.RichText = txtdelicomment.RichText & Space(1) & modFillContainer.GetExtraTextArea("Delivery Note", txtdelicomment.Text)
+  
 End
 
-Public Sub cmbdelbaby_Render()
-
-  modJavaScript.SetSelect2Combo(cmbdelbaby)
-
+Public Sub btnexecsumm_Click()
+  
+  txtdelicomment.RichText = txtdelicomment.RichText & modString.TextToHTML(modCloudAI.GetPatCloudAIResponse(Trim(txtencid.Text)))
+  
 End
 
-Public Sub cmbdeltype_Render()
-
-  modJavaScript.SetSelect2Combo(cmbdeltype)
-
-End
-
-Public Sub cmblabour_Render()
-
-  modJavaScript.SetSelect2Combo(cmblabour)
-
+Public Sub btnattsumm_Click()
+  
+  txtdelicomment.RichText = txtdelicomment.RichText & DictionaryVIew(modBasic.$dictadvPath)
+  
 End

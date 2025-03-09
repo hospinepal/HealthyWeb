@@ -69,20 +69,6 @@ Public Sub btnclose_Click()
 
 End
 
-Public Sub btnhelpplanfinal_Click()
-
-  If cmbnote.Text Then
-    txtnote.RichText = txtnote.RichText & Space(1) & modFillContainer.GetExtraTextArea(cmbnote.Text, "")
-  Endif
-
-End
-
-Public Sub btntemplpplanfinal_Click()
-
-  txtnote.RichText = txtnote.RichText & DictionaryVIew(modBasic.$dictadvPath)
-
-End
-
 Public Sub btnshownote_Click()
 
   FillTreeView()
@@ -112,6 +98,8 @@ Private Sub FillTreeView()
     xType = "Nurses Note"
   Else If rbtransfer.Value = True Then
     xType = "Transfer Note"
+  Else If rbpatient.Value = True Then
+    xType = "Patient Note"
   Endif
 
   dtList = modDate.GetDateArrayBetween($doa, Now())
@@ -137,11 +125,11 @@ Private Sub FillTreeView()
       Column = 0
       For Each res
         xdata = ""
-        If res["fldreportquali"] Then
-          xdata = "<b>IMPRESSION:</b>" & res["fldreportquali"]
-        Endif
         If res["flddetail"] Then
-          xdata = xdata & "<br>" & "<b>DESCRIPTION:</b>" & res["flddetail"]
+          xdata = res["flddetail"]
+        Endif
+        If res["fldreportquali"] Then
+          xdata = xdata & "<br><b>IMPRESSION:</b>" & res["fldreportquali"]
         Endif
         $sColl.Add(xdata, CStr(xdate) & ":" & CStr(Column))
         ColumnView1.Add(CStr(xdate) & ":" & CStr(Column), modReportVar.GetDateTimeReport(res["fldtime"], gb.ShortTime), pic3, CStr(xdate))
@@ -160,5 +148,30 @@ Public Sub ColumnView1_Data(Index As String, Column As Integer, Data As WebTreeD
   If Column = 1 Then
     Data.Html = $sColl[Index]
   Endif
+
+End
+
+''----------- icons
+Public Sub btndatanote_Click()
+
+End
+
+Public Sub btnpannote_Click()
+
+  If cmbnote.Text Then
+    txtnote.RichText = txtnote.RichText & Space(1) & modFillContainer.GetExtraTextArea(cmbnote.Text, txtnote.Text)
+  Endif
+
+End
+
+Public Sub btnexecnote_Click()
+
+  txtnote.RichText = txtnote.RichText & modString.TextToHTML(modCloudAI.GetPatCloudAIResponse(Trim(txtencid.Text)))
+
+End
+
+Public Sub btnattnote_Click()
+
+  txtnote.RichText = txtnote.RichText & DictionaryVIew(modBasic.$dictadvPath)
 
 End

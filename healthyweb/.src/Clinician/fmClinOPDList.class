@@ -14,7 +14,8 @@ Private $sTable As String
 
 Public Sub _new(sTable As String)
 
-  Dim xdepList As New String[]
+  Dim xdepList As String[]
+  Dim aList As String[]
 
   $sTable = sTable
   If $sTable = "tblconsult" Then
@@ -61,10 +62,16 @@ Public Sub _new(sTable As String)
       cmbdept.Enabled = False
     Endif
   Else
+    xdepList = New String[]
     If $sTable = "tblconsult" Then
-      xdepList = modGeneral.GetDepartForConsultOnly()
+      aList = modGeneral.GetDepartForConsultOnly()
+      pnlconsult.Visible = True
     Else If $sTable = "tblopvisit" Then
-      xdepList = modGeneral.GetDepartForOPVisitOnly()
+      aList = modGeneral.GetDepartForOPVisitOnly()
+      pnlconsult.Visible = False
+    Endif
+    If aList Then
+      xdepList.Insert(aList)
     Endif
     xdepList.Add("%")
     cmbdept.List = xdepList
@@ -76,6 +83,7 @@ Public Sub _new(sTable As String)
     WebContainer16.Visible = True
   Endif
   dtsort.Value = Now()
+  chkshowdepart.Value = True
 
   $structExamList = modMedicine.FillClinicalSubClass("Physician Examinations")
   FillCustomMenu()
@@ -83,6 +91,7 @@ Public Sub _new(sTable As String)
   FillExamMenu()
   modSettings.ShowCheckBox(chkdate, "OPDPatientList/SelectDate")
   rbmetric.Value = True
+  rbconsult.Value = True
   If cmbdept.Text Then
     btnrefresh_Click()
   Endif
@@ -153,6 +162,29 @@ Private Function LabUnitForm() As String
 
 End
 
+Public Sub btnselectuser_Click()
+
+  Dim xMedUser As String[]
+
+  xMedUser = MedicalSelectedValue(("Select Consultant"), modBasic.$OPConsulUserList)
+  If xMedUser And If xMedUser.Count Then
+    btnconsult.Tag = xMedUser[0]
+    btnconsult.Text = xMedUser[1]
+  Else
+    btnconsult.Tag = ""
+    btnconsult.Text = ""
+  Endif
+
+End
+
+Public Sub btnconsult_Change()
+
+  If btnconsult.Text = "" Then
+    btnconsult.Tag = ""
+  Endif
+
+End
+
 Public Sub chkdate_Click()
 
   If chkdate.Value = True Then
@@ -185,9 +217,9 @@ Private Function GetFieldsList()
 
   xhospfld = modDataRepo.HospitalField()
   If $sTable = "tblconsult" Then
-    $SSQLFields = ["fldid", "fldencounterval", "fldencounterval", "fldencounterval", "fldencounterval", "fldconsultname", "fldconsulttime", "fldencounterval", "flduserid", "fldbillingmode"]
+    $SSQLFields = ["fldid", "fldencounterval", "fldencounterval", "fldencounterval", "fldencounterval", "fldflag", "fldencounterval", "flduserid", "fldconsultname", "fldconsulttime", "fldbillingmode"]
   Else If $sTable = "tblopvisit" Then
-    $SSQLFields = ["fldid", "fldencounterval", "fldencounterval", "fldencounterval", "fldencounterval", "fldconsultname", "fldconsulttime", "fldencounterval", "fldencounterval", "fldbillingmode"]
+    $SSQLFields = ["fldid", "fldencounterval", "fldencounterval", "fldencounterval", "fldencounterval", "fldflag", "fldencounterval", "fldencounterval", "fldconsultname", "fldconsulttime", "fldbillingmode"]
   Endif
   If xhospfld Then
     $SSQLFields.Add(xhospfld)
@@ -199,6 +231,7 @@ Private Function GetSQLColumns() As String[]
 
   Dim xFldList As String[]
   Dim i As Integer
+  Dim j As Integer
 
   GetFieldsList()
   modCustPatient.FillNewCOlumnCollection(Me.Tag)
@@ -209,100 +242,10 @@ Private Function GetSQLColumns() As String[]
       xFldList.Add("fldencounterval")
     Next
   Endif
+  For j = 0 To xFldList.Count - 1
+    xFldList[j] = $sTable & "." & xFldList[j]
+  Next
   Return xFldList
-
-End
-
-Private Function ExecuteQuery(xFldList As String[]) As Result
-
-  Dim res As Result
-  Dim sql As String
-  Dim xencid As String
-  Dim xcolor As String
-  Dim xorder As String
-
-  If ToolButton1.Background = Color.White Then
-    xcolor = ""
-  Else
-    xcolor = " and fldencounterval in(select fldencounterval from tblencounter where " & db.Subst("fldheight=&1)", CStr(ToolButton1.Background))
-  Endif
-
-  If Len(txtencid.Text) Then
-    xencid = db.Subst(" and lower(fldencounterval) like &1", LCase(Trim(txtencid.Text)) & "%")
-  Else
-    xencid = ""
-  Endif
-
-  xorder = " ORDER BY fldconsulttime"
-  $RepoStr = modDataRepo.GetWhereStringRepo(cmblocation.Text, cmbvalue.Text)
-  If chkdate.Value = True Then
-    If modBasic.$FixedDepartment Then
-      sql = Subst("select &1 from &2", xFldList.Join(","), $sTable) & "  where fldconsulttime>=&1 and fldconsulttime<=&2 and fldstatus=&3 and fldconsultname=&4" & xencid & xcolor & $RepoStr & xorder                                           ''
-      res = modDatabase.$myConn.Exec(sql, modDate.StartSqlDate(dtsort.Value), modDate.EndSqlDate(dtsort.Value), "Planned", modBasic.$FixedDepartment)
-    Else
-      If cmbdept.Text = "%" Then
-        sql = Subst("select &1 from &2", xFldList.Join(","), $sTable) & " where fldconsulttime>=&1 and fldconsulttime<=&2 and fldstatus=&3" & xencid & xcolor & $RepoStr & xorder                                             ''
-      Else
-        sql = Subst("select &1 from &2", xFldList.Join(","), $sTable) & " where fldconsulttime>=&1 and fldconsulttime<=&2 and fldstatus=&3 and fldconsultname=&4" & xencid & xcolor & $RepoStr & xorder
-      Endif
-      res = modDatabase.$myConn.Exec(sql, modDate.StartSqlDate(dtsort.Value), modDate.EndSqlDate(dtsort.Value), "Planned", cmbdept.Text)
-    Endif
-
-  Else
-    If modBasic.$FixedDepartment Then
-      sql = Subst("select &1 from &2", xFldList.Join(","), $sTable) & " where fldstatus=&1 and fldconsultname=&2" & xencid & xcolor & $RepoStr & xorder                                            ''
-      res = modDatabase.$myConn.Exec(sql, "Planned", modBasic.$FixedDepartment)
-    Else
-      If cmbdept.Text = "%" Then
-        sql = Subst("select &1 from &2", xFldList.Join(","), $sTable) & " where fldstatus=&1" & xencid & xcolor & $RepoStr & xorder                                              ''
-      Else
-        sql = Subst("select &1 from &2", xFldList.Join(","), $sTable) & " where fldstatus=&1 and fldconsultname=&2" & xencid & xcolor & $RepoStr & xorder
-      Endif
-      res = modDatabase.$myConn.Exec(sql, "Planned", cmbdept.Text)
-    Endif
-  Endif
-  Return res
-
-End
-
-Private Function GetGridViewValue(Column As Integer, xVariable As Variant) As Variant
-
-  Dim xxx As Variant
-  Dim i As Integer
-
-  If Column = 1 Then
-    xxx = modPatient.GetPatientColor(xVariable)
-  Else If Column = 3 Then
-    xxx = modPatient.GetPatientNameByEnc(xVariable, modDatabase.$syConn) & "<br>" & "<small>" & modPatient.ShowDiscountCategEnc(xVariable) & "</small>"
-  Else If Column = 4 Then
-    xxx = modPatient.GetPatientAgeString(xVariable, Now()) & "/" & modPatient.GetPatientSex(xVariable, modDatabase.$syConn)    ''
-  Else If Column = 6 Then
-    If chkdate.Value = True Then
-      xxx = modReportVar.GetDateTimeReport(xVariable, gb.MediumTime)
-    Else
-      xxx = modReportVar.GetDateTimeReport(xVariable, gb.MediumDate)
-    Endif
-  Else If Column = 7 Then
-    xxx = modPatient.PatientDiagnoCurrentList(xVariable).Join(gb.NewLine)
-  Else If Column = 8 Then
-    If $sTable = "tblconsult" Then
-      xxx = modGeneral.GetUserFullName(xVariable)
-    Else If $sTable = "tblopvisit" Then
-      xxx = modGeneral.GetUserFullName(modPatient.GetAttendingConsultant(xVariable))
-    Endif
-  Else
-    xxx = xVariable
-  Endif
-
-  If $newColumn.Count Then
-    For i = 0 To $newColumn.Count - 1
-      If Column = $ColCount + i Then
-        xxx = modCustPatient.NewColValue(Me.Tag, $newColumn[i], xVariable)
-      Endif
-    Next
-  Endif
-
-  Return xxx
 
 End
 
@@ -366,6 +309,134 @@ Private Sub FillBedGrid()
 
 End
 
+Private Function ExecuteQuery(xFldList As String[]) As Result
+
+  Dim res As Result
+  Dim sql As String
+  Dim xencid As String
+  Dim xcolor As String
+  Dim xorder As String
+  Dim xconsult As String
+  Dim xunion As String
+  Dim xpreun As String
+
+  If ToolButton1.Background = Color.White Then
+    xcolor = ""
+  Else
+    If rbname.Value = True Then
+      xcolor = db.Subst(" and tblencounter.fldheight=&1", CStr(ToolButton1.Background))
+    Else If rbconsult.Value = True Then
+      xcolor = " and " & $sTable & "." & "fldencounterval in(select fldencounterval from tblencounter where " & db.Subst("fldheight=&1)", CStr(ToolButton1.Background))
+    Endif
+  Endif
+
+  If Len(txtencid.Text) Then
+    xencid = db.Subst(" and lower(" & $sTable & "." & "fldencounterval) like &1", LCase(Trim(txtencid.Text)) & "%")
+  Else
+    xencid = ""
+  Endif
+
+  If btnconsult.Tag Then
+    xconsult = db.Subst(" and " & $sTable & "." & "flduserid like &1", btnconsult.Tag)
+  Else
+    xconsult = ""
+  Endif
+
+  If rbname.Value = True Then
+    xpreun = "("
+    xunion = " inner join tblencounter on " & $sTable & "." & "fldencounterval=tblencounter.fldencounterval) inner join tblpatientinfo on tblencounter.fldpatientval=tblpatientinfo.fldpatientval"
+    xorder = " ORDER BY tblpatientinfo.fldptnamefir"
+  Else If rbconsult.Value = True Then
+    xpreun = ""
+    xunion = ""
+    xorder = " ORDER BY " & $sTable & "." & "fldconsulttime"
+  Endif
+  $RepoStr = modDataRepo.GetWhereStringRepo(cmblocation.Text, cmbvalue.Text, $sTable)
+  If chkdate.Value = True Then
+    If modBasic.$FixedDepartment Then
+      sql = Subst("select &1 from " & xpreun & "&2", xFldList.Join(","), $sTable) & xunion & "  where " & $sTable & "." & "fldconsulttime>=&1 and " & $sTable & "." & "fldconsulttime<=&2 and " & $sTable & "." & "fldstatus=&3 and " & $sTable & "." & "fldconsultname=&4" & xencid & xconsult & xcolor & $RepoStr & xorder                                           ''
+      res = modDatabase.$myConn.Exec(sql, modDate.StartSqlDate(dtsort.Value), modDate.EndSqlDate(dtsort.Value), "Planned", modBasic.$FixedDepartment)
+    Else
+      If cmbdept.Text = "%" Then
+        sql = Subst("select &1 from " & xpreun & "&2", xFldList.Join(","), $sTable) & xunion & " where " & $sTable & "." & "fldconsulttime>=&1 and " & $sTable & "." & "fldconsulttime<=&2 and " & $sTable & "." & "fldstatus=&3" & xencid & xconsult & xcolor & $RepoStr & xorder                                             ''
+      Else
+        sql = Subst("select &1 from " & xpreun & "&2", xFldList.Join(","), $sTable) & xunion & " where " & $sTable & "." & "fldconsulttime>=&1 and " & $sTable & "." & "fldconsulttime<=&2 and " & $sTable & "." & "fldstatus=&3 and " & $sTable & "." & "fldconsultname=&4" & xencid & xconsult & xcolor & $RepoStr & xorder
+      Endif
+      res = modDatabase.$myConn.Exec(sql, modDate.StartSqlDate(dtsort.Value), modDate.EndSqlDate(dtsort.Value), "Planned", cmbdept.Text)
+    Endif
+
+  Else
+    If modBasic.$FixedDepartment Then
+      sql = Subst("select &1 from " & xpreun & "&2", xFldList.Join(","), $sTable) & xunion & " where " & $sTable & "." & "fldstatus=&1 and " & $sTable & "." & "fldconsultname=&2" & xencid & xconsult & xcolor & $RepoStr & xorder                                            ''
+      res = modDatabase.$myConn.Exec(sql, "Planned", modBasic.$FixedDepartment)
+    Else
+      If cmbdept.Text = "%" Then
+        sql = Subst("select &1 from " & xpreun & "&2", xFldList.Join(","), $sTable) & xunion & " where " & $sTable & "." & "fldstatus=&1" & xencid & xconsult & xcolor & $RepoStr & xorder                                              ''
+      Else
+        sql = Subst("select &1 from " & xpreun & "&2", xFldList.Join(","), $sTable) & xunion & " where " & $sTable & "." & "fldstatus=&1 and " & $sTable & "." & "fldconsultname=&2" & xencid & xconsult & xcolor & $RepoStr & xorder
+      Endif
+      res = modDatabase.$myConn.Exec(sql, "Planned", cmbdept.Text)
+    Endif
+  Endif
+  Return res
+
+End
+
+Private Function GetGridViewValue(Column As Integer, xVariable As Variant) As Variant
+
+  Dim xxx As Variant
+  Dim i As Integer
+
+  If Column = 1 Then
+    xxx = modPatient.GetPatientColor(xVariable)
+  Else If Column = 3 Then
+    xxx = modPatient.GetPatientNameByEnc(xVariable, modDatabase.$syConn) & "<br>" & "<small>" & modPatient.ShowDiscountCategEnc(xVariable) & "</small>"
+  Else If Column = 4 Then
+    xxx = modPatient.GetPatientAgeString(xVariable, Now()) & "/" & modPatient.GetPatientSex(xVariable, modDatabase.$syConn)    ''
+  Else If Column = 5 Then
+    If xVariable = True Then
+      xxx = "icons/coll5.png"
+    Else
+      xxx = "icons/checked.png"
+    Endif
+  Else If Column = 6 Then
+    xxx = modPatient.PatientDiagnoCurrentList(xVariable).Join(gb.NewLine)
+  Else If Column = 7 Then
+    If chkshowdepart.Value = True Then
+      If $sTable = "tblconsult" Then
+        xxx = modGeneral.GetUserFullName(xVariable)
+      Else If $sTable = "tblopvisit" Then
+        xxx = modGeneral.GetUserFullName(modPatient.GetAttendingConsultant(xVariable))
+      Endif
+    Else
+      xxx = ""
+    Endif
+  Else If Column = 9 Then
+    If chkshowdepart.Value = True Then
+      If chkdate.Value = True Then
+        xxx = modReportVar.GetDateTimeReport(xVariable, gb.MediumTime)
+      Else
+        xxx = modReportVar.GetDateTimeReport(xVariable, gb.MediumDate)
+      Endif
+    Else
+      xxx = ""
+    Endif
+  Else
+    xxx = xVariable
+  Endif
+
+  If $newColumn.Count Then
+    For i = 0 To $newColumn.Count - 1
+      If Column = $ColCount + i Then
+        xxx = modCustPatient.NewColValue(Me.Tag, $newColumn[i], xVariable)
+      Endif
+    Next
+  Endif
+
+  Return xxx
+
+End
+
 Private Sub ResizeGrid()
 
   Dim i As Integer
@@ -381,22 +452,34 @@ Private Sub ResizeGrid()
   With GridView1
     .Columns[0].Hidden = True
     .Columns[1].Width = CStr(15 * modBasic.$AppWidthRatio) & "px"
-    .Columns[2].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
+    .Columns[2].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
     .Columns[3].Width = CStr(200 * modBasic.$AppWidthRatio) & "px"
     .Columns[4].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
-    .Columns[5].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
-    .Columns[6].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
-    .Columns[7].Width = CStr(175 * modBasic.$AppWidthRatio) & "px"
-    .Columns[8].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
-    .Columns[9].Hidden = True
+    .Columns[5].Width = CStr(30 * modBasic.$AppWidthRatio) & "px"
+    .Columns[6].Width = CStr(175 * modBasic.$AppWidthRatio) & "px"
+    If chkshowdepart.Value = True Then
+      .Columns[7].Hidden = False
+      .Columns[8].Hidden = False
+      .Columns[9].Hidden = False
+      .Columns[7].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
+      .Columns[8].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
+      .Columns[9].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
+    Else
+      .Columns[7].Hidden = True
+      .Columns[8].Hidden = True
+      .Columns[9].Hidden = True
+    Endif
+    .Columns[10].Hidden = True
 
     .Columns[2].Text = "EncID"
     .Columns[3].Text = "Name"
     .Columns[4].Text = "Age/Sex"
-    .Columns[5].Text = "Depart"
-    .Columns[6].Text = "DateTime"
-    .Columns[7].Text = "Diagnosis"
-    .Columns[8].Text = "Consult"
+    .Columns[6].Text = "Diagnosis"
+    If chkshowdepart.Value = True Then
+      .Columns[7].Text = "Consult"
+      .Columns[8].Text = "Depart"
+      .Columns[9].Text = "DateTime"
+    Endif
 
     If $newColumn.Count Then
       For i = 0 To $newColumn.Count - 1
@@ -429,8 +512,15 @@ Public Sub GridView1_Data(Row As Integer, Column As Integer, Data As WebTableDat
     Data.Html = GetGridViewValue(Column, $rData[$aMyFields[Column]])
   Else If Column = 4 Then
     Data.Html = GetGridViewValue(Column, $rData[$aMyFields[Column]])
+  Else If Column = 5 Then
+    btnflagicon.Image = GetGridViewValue(Column, $rData[$aMyFields[Column]])
+    Data.Control = btnflagicon
   Else
-    Data.Text = GetGridViewValue(Column, $rData[$aMyFields[Column]])
+    If Column > $SSQLFields.Count - 1 Then
+      Data.Html = modString.TextToHTML(GetGridViewValue(Column, $rData[$aMyFields[Column]]))
+    Else
+      Data.Text = GetGridViewValue(Column, $rData[$aMyFields[Column]])
+    Endif
   Endif
 
 End
@@ -440,6 +530,26 @@ Public Sub GridView1_Select()
   If GridView1.Selection.Count Then
     $rData.MoveTo(GridView1.Selection[0])
     SHowPatIndicators($rData["fldencounterval"])
+  Endif
+
+End
+
+Public Sub btnmarkid_Click()
+
+  If GridView1.Selection.Count Then
+    $rData.MoveTo(GridView1.Selection[0])
+    modPatientSub.MarkConsultVisitFlag($rData["fldid"], $sTable)
+    FillBedGrid()
+  Endif
+
+End
+
+Public Sub btnunmarkid_Click()
+
+  If GridView1.Selection.Count Then
+    $rData.MoveTo(GridView1.Selection[0])
+    modPatientSub.UnMarkConsultVisitFlag($rData["fldid"], $sTable)
+    FillBedGrid()
   Endif
 
 End
@@ -581,7 +691,7 @@ Public Sub btnmobilediagno_Click()
 
   If GridView1.Selection.Count Then
     $rData.MoveTo(GridView1.Selection[0])
-    hForm = New FmAddDiagno("Disease", $rData["fldencounterval"], "")
+    hForm = New FmAddDiagno("Disease", $rData["fldencounterval"], "", modBasic.$DefaultDiagnoGroup)
     hForm.ShowModal
     FillBedGrid()
   Endif
@@ -687,8 +797,11 @@ Public Sub btnpharm_Click()
   If GridView1.Selection.Count Then
     $rData.MoveTo(GridView1.Selection[0])
     If modNonMedical.AllowEntryWithDeposit($rData["fldencounterval"], "Pharmacy") = True Then
-      hForm12 = New FmMedOrder($rData["fldencounterval"], "Registered", modNonMedical.DefaultBillingScheme($rData["fldencounterval"], modBasic.$compID))
-      hForm12.ShowModal
+      If modBasic.$MedRequestForm = "Separate" Then
+      Else
+        hForm12 = New FmMedOrder($rData["fldencounterval"], "Registered", modNonMedical.DefaultBillingScheme($rData["fldencounterval"], modBasic.$compID))
+        hForm12.ShowModal
+      Endif
       SHowPatIndicators($rData["fldencounterval"])
     Endif
   Endif
@@ -915,10 +1028,12 @@ End
 Public Sub btnbilling_Click()
 
   Dim hForm14 As FmMiniService
+  Dim xmode As String
 
   If GridView1.Selection.Count Then
     $rData.MoveTo(GridView1.Selection[0])
-    hForm14 = New FmMiniService($rData["fldencounterval"], modNonMedical.DefaultBillingScheme($rData["fldencounterval"], modBasic.$compID))
+    xmode = modNonMedical.DefaultBillingScheme($rData["fldencounterval"], modBasic.$compID)
+    hForm14 = New FmMiniService($rData["fldencounterval"], xmode, xmode, xmode)
     hForm14.ShowModal
   Endif
 
@@ -927,12 +1042,13 @@ End
 Public Sub btndraw_Click()
 
   Dim ximg As String
+  Dim xval As String
 
   If GridView1.Selection.Count Then
     $rData.MoveTo(GridView1.Selection[0])
     ximg = CustomDraw()
     If ximg Then
-      modImage.SaveClinicScreenDraw($rData["fldencounterval"], modString.GetDateString(Now()), ximg)
+      xval = modImage.SaveClinicScreenDraw($rData["fldencounterval"], modString.GetDateString(Now()), ximg)
     Endif
   Endif
 
@@ -1443,8 +1559,8 @@ Private Function GetPharmacyPending(encid As String) As Boolean
   Dim res As Result
   Dim xval As Boolean
 
-  sql = "select fldid from tblpatdosing where fldencounterval=&1 and fldsave_order=&2 and fldstatus=&3 and fldorder=&4 and fldcurval=&5"                                                   ''
-  res = modDatabase.$myConn.Exec(sql, encid, False, "Admitted", "Request", "Continue")
+  sql = "select fldid from tblpatdosing where fldencounterval=&1 and fldsave_order=&2 and (fldstatus=&3 or fldstatus=&4) and fldorder=&5 and fldcurval=&6"                                                   ''
+  res = modDatabase.$myConn.Exec(sql, encid, False, "Recorded", "Registered", "Request", "Continue")
   xval = res.Available
 
   Return xval
@@ -1904,7 +2020,7 @@ Public Sub mnuscanner_Click()
 
   If GridView1.Selection.Count Then
     $rData.MoveTo(GridView1.Selection[0])
-    hForm = New FmScanForm($rData["fldencounterval"], "Scanned Images")
+    hForm = New FmScanForm($rData["fldencounterval"], "Scanned Images", "")
     hForm.ShowModal
   Endif
 

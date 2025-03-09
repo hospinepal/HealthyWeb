@@ -1,7 +1,7 @@
 # Gambas Form File 3.0
 
 { WebForm WebForm
-  #MoveScaled(0,0,64,91)
+  #MoveScaled(0,0,64,77)
   Class = "widesize-popupform"
   Height = "75vh"
   Arrangement = Arrange.Vertical
@@ -82,34 +82,41 @@
       Expand = True
       Arrangement = Arrange.Vertical
     }
-    { btntxtcomplain WebButton
+    { btndatacompl WebButton
       #MoveScaled(21,1,4,2)
-      Class = "toolButton"
-      Width = "2em"
-      Height = "2em"
-      Image = "icon:/32/pen"
-    }
-    { btncomplaindef WebButton
-      #MoveScaled(25,1,4,2)
       Class = "toolButton"
       Width = "2em"
       Height = "2em"
       Image = "icon:/small/database"
     }
-    { btntemplpgencomp WebButton
+    { btnpancompl WebButton
+      #MoveScaled(25,1,4,2)
+      Class = "toolButton"
+      Width = "2em"
+      Height = "2em"
+      Image = "icon:/32/pen"
+    }
+    { btnexeccompl WebButton
       #MoveScaled(29,1,4,2)
+      Class = "toolButton"
+      Width = "2em"
+      Height = "2em"
+      Image = "icon:/32/exec"
+    }
+    { btnattcompl WebButton
+      #MoveScaled(33,1,4,2)
       Class = "toolButton"
       Width = "2em"
       Height = "2em"
       Image = "icon:/small/attach"
     }
     { WebContainer1 WebContainer
-      #MoveScaled(33,1,4,2)
+      #MoveScaled(37,1,4,2)
       Expand = True
       Arrangement = Arrange.Vertical
     }
     { btngencompln WebButton
-      #MoveScaled(37,1,4,2)
+      #MoveScaled(41,1,4,2)
       Width = "2em"
       Height = "2em"
       Image = "icon:/32/apply"
@@ -127,9 +134,10 @@
       #MoveScaled(1,1,23,2)
       Width = "45%"
       Height = "2em"
+      ReadOnly = False
       PlaceHolder = ("Select History")
     }
-    { btnshowhistory WebButton
+    { btndatahistory WebButton
       #MoveScaled(24,1,4,2)
       Width = "2em"
       Height = "2em"
@@ -147,27 +155,34 @@
       Height = "2em"
       Image = "icon:/small/database"
     }
-    { btntxthistory WebButton
+    { btnpanhistory WebButton
       #MoveScaled(38,1,4,2)
       Class = "toolButton"
       Width = "2em"
       Height = "2em"
       Image = "icon:/32/pen"
     }
-    { btntemplphistory WebButton
+    { btnexechistory WebButton
       #MoveScaled(42,1,4,2)
+      Class = "toolButton"
+      Width = "2em"
+      Height = "2em"
+      Image = "icon:/32/exec"
+    }
+    { btnatthistory WebButton
+      #MoveScaled(46,1,4,2)
       Class = "toolButton"
       Width = "2em"
       Height = "2em"
       Image = "icon:/small/attach"
     }
     { WebContainer90 WebContainer
-      #MoveScaled(46,1,5,2)
+      #MoveScaled(50,1,5,2)
       Expand = True
       Arrangement = Arrange.Vertical
     }
     { tlbtnhistory WebButton
-      #MoveScaled(51,1,4,2)
+      #MoveScaled(55,1,4,2)
       Width = "2em"
       Height = "2em"
       Image = "icon:/32/apply"

@@ -82,36 +82,41 @@
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { Panel4 WebContainer
-        #MoveScaled(1,1,35,4)
+        #MoveScaled(1,1,40,4)
         Arrangement = Arrange.Horizontal
         Spacing = True
-        { rbprogress WebRadioButton
-          #MoveScaled(1,1,5,2)
-          Height = "2em"
-          Text = ("Progress")
-        }
         { rbclinician WebRadioButton
-          #MoveScaled(7,1,7,2)
+          #MoveScaled(1,1,7,2)
           Height = "2em"
           Text = ("Clinicians")
         }
         { rbnurses WebRadioButton
-          #MoveScaled(15,1,7,2)
+          #MoveScaled(9,1,7,2)
           Height = "2em"
           Text = ("Nurses")
         }
         { rbtransfer WebRadioButton
-          #MoveScaled(23,1,8,2)
+          #MoveScaled(17,1,8,2)
           Height = "2em"
           Text = ("Transfer")
         }
+        { rbprogress WebRadioButton
+          #MoveScaled(26,1,5,2)
+          Height = "2em"
+          Text = ("Progress")
+        }
+        { rbpatient WebRadioButton
+          #MoveScaled(32,1,7,2)
+          Height = "2em"
+          Text = ("Patient")
+        }
       }
       { WebContainer8 WebContainer
-        #MoveScaled(36,1,5,4)
+        #MoveScaled(41,1,5,4)
         Expand = True
       }
       { btnshownote WebButton
-        #MoveScaled(41,1,12,4)
+        #MoveScaled(46,1,12,4)
         Width = "6em"
         Height = "2em"
         Text = ("Show")
@@ -145,15 +150,41 @@
         #MoveScaled(34,1,6,2)
         Expand = True
       }
-      { btnsaveall WebButton
-        #MoveScaled(40,1,12,2)
-        Width = "5em"
-        Text = ("Save")
-        Image = "icon:/32/apply"
+      { btndatanote WebButton
+        #MoveScaled(40,1,4,2)
+        Class = "toolButton"
+        Width = "2em"
+        Height = "2em"
+        Image = "icon:/small/database"
+      }
+      { btnpannote WebButton
+        #MoveScaled(44,1,4,2)
+        Class = "toolButton"
+        Width = "2em"
+        Height = "2em"
+        Image = "icon:/32/pen"
+      }
+      { btnexecnote WebButton
+        #MoveScaled(48,1,4,2)
+        Class = "toolButton"
+        Width = "2em"
+        Height = "2em"
+        Image = "icon:/32/exec"
+      }
+      { btnattnote WebButton
+        #MoveScaled(52,1,4,2)
+        Class = "toolButton"
+        Width = "2em"
+        Height = "2em"
+        Image = "icon:/small/attach"
       }
     }
+    { txtnote WebTextHTML
+      #MoveScaled(1,5,71.75,25)
+      Expand = True
+    }
     { WebContainer3 WebContainer
-      #MoveScaled(1,5,71.75,4)
+      #MoveScaled(1,30,71.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel1 WebLabel
@@ -168,24 +199,16 @@
         Expand = True
         ReadOnly = False
       }
-      { btnhelpplanfinal WebButton
-        #MoveScaled(34,1,4,2)
-        Class = "toolButton"
-        Width = "2em"
-        Height = "2em"
-        Image = "icon:/32/pen"
+      { WebContainer9 WebContainer
+        #MoveScaled(34,1,6,2)
+        Expand = True
       }
-      { btntemplpplanfinal WebButton
-        #MoveScaled(38,1,4,2)
-        Class = "toolButton"
-        Width = "2em"
-        Height = "2em"
-        Image = "icon:/small/attach"
+      { btnsaveall WebButton
+        #MoveScaled(40,1,12,2)
+        Width = "5em"
+        Text = ("Save")
+        Image = "icon:/32/apply"
       }
-    }
-    { txtnote WebTextHTML
-      #MoveScaled(1,9,71.75,25)
-      Expand = True
     }
     Index = 0
   }

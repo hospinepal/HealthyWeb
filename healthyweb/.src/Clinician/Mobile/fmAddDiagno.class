@@ -10,12 +10,14 @@ Private $sType As String
 Private $selList As String[]
 Private $erList As String[]
 Private $allList As String[]
+Private $sDefGroup As String
 Private $sValue As String[]
 
-Public Sub _new(sType As String, encid As String, sDept As String)
+Public Sub _new(sType As String, encid As String, sDept As String, sDefGroup As String)
 
   $sType = sType
   txtencid.Text = encid
+  $sDefGroup = sDefGroup
   If sDept Then
     cmbdept.Text = sDept
     cmbdept.Enabled = False
@@ -26,8 +28,9 @@ Public Sub _new(sType As String, encid As String, sDept As String)
 
   If $sType = "Disease" Then
     If modBasic.$LockDiagnosisList = "No" Then
-    Else
       pnldiagnosis.Visible = True
+    Else
+      pnldiagnosis.Visible = False
     Endif
   Else If $sType = "Consult" Then
     pnlconsult1.Visible = True
@@ -100,7 +103,11 @@ Private Sub SetFixedListData()
   If rbemergency.Value = True Then
     aList.Insert($erList)
   Else If rboutpatient.Value = True
-    aList.Insert($selList)
+    If $sDefGroup Then
+      aList = GetDefaultDiagnoList()
+    Else
+      aList.Insert($selList)
+    Endif
   Else If rbicdlist.Value = True Then
     aList.Insert($allList)
   Endif
@@ -177,6 +184,9 @@ Public Sub btnselectuser_Click()
   If xMedUser And If xMedUser.Count Then
     btnconsult.Tag = xMedUser[0]
     btnconsult.Text = xMedUser[1]
+  Else
+    btnconsult.Tag = ""
+    btnconsult.Text = ""
   Endif
 
 End
@@ -219,6 +229,7 @@ Private Sub LoadDefinedDiagnosis(sItem As String)
   txtlist.Text = ""
   txtcode.Text = ""
   txtname.Text = ""
+  txtfixed.Text = ""
   If $SubListView Then
     $SubListView.Clear()
   Endif
@@ -226,7 +237,11 @@ Private Sub LoadDefinedDiagnosis(sItem As String)
   If rbemergency.Value = True Then
     $FixedListGrp = GetFixDiagnosisList(sItem, "Emergency Groups")
   Else If rboutpatient.Value = True
-    $FixedListGrp = GetFixDiagnosisList(sItem, "Diagnosis Groups")
+    If $sDefGroup Then
+      $FixedListGrp = GetICDDiagnosisSelected(sItem)
+    Else
+      $FixedListGrp = GetFixDiagnosisList(sItem, "Diagnosis Groups")
+    Endif
   Else
     $FixedListGrp = GetICDDiagnosisList(sItem)
   Endif
@@ -279,6 +294,43 @@ Private Function GetICDDiagnosisList(sGroup As String) As Variant[]
     For Each res
       sList.Add([res["fldicdcode"], res["fldoldcode"], res["fldicdnme"]])
     Next
+  Endif
+  Return sList
+
+End
+
+''-------------------------- Default Group --------------------
+Private Function GetDefaultDiagnoList() As String[]
+
+  Dim sList As String[]
+  Dim res As Result
+
+  sList = New String[]
+  res = modDatabase.$icdConn.Exec("select fldicdcode,fldoldcode,fldicdnme from tblicddisease where fldicdchpter=&1 and fldicdcode NOT LIKE &2", $sDefGroup, "%.%")
+  If res.Available Then
+    For Each res
+      sList.Add(res["fldicdcode"] & "|" & res["fldicdnme"])
+    Next
+  Endif
+  Return sList
+
+End
+
+Private Function GetICDDiagnosisSelected(sItem As String) As Variant[]
+
+  Dim res As Result
+  Dim asx As String[]
+  Dim sList As Variant[]
+
+  sList = New String[]
+  If sItem Then
+    asx = Split(sItem, "|")
+    res = modDatabase.$icdConn.Exec("select fldicdcode,fldoldcode,fldicdnme from tblicddisease where fldicdchpter=&1 and (fldicdcode=&2 or fldicdcode like &3)", $sDefGroup, asx[0], asx[0] & "." & "%")
+    If res.Available Then
+      For Each res
+        sList.Add([res["fldicdcode"], res["fldoldcode"], res["fldicdnme"]])
+      Next
+    Endif
   Endif
   Return sList
 
@@ -397,6 +449,7 @@ Public Sub GridView2_Select()
     txtcode.Text = $SubListView[GridView2.Selection[0]][0]
     txtcodeold.Text = $SubListView[GridView2.Selection[0]][1]
     txtname.Text = $SubListView[GridView2.Selection[0]][2]
+    txtfixed.Text = $SubListView[GridView2.Selection[0]][2]
   Endif
 
 End

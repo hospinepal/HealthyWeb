@@ -60,6 +60,12 @@
       Height = "2em"
       Text = ("Save")
     }
+    { btnclose WebButton
+      #MoveScaled(53,1,12,3)
+      Width = "6em"
+      Height = "2em"
+      Text = ("Close")
+    }
   }
   { txthistory WebTextHTML
     #MoveScaled(1,43,68,22)

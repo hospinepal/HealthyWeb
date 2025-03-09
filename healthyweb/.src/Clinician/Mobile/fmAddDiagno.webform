@@ -1,7 +1,7 @@
 # Gambas Form File 3.0
 
 { WebForm WebForm
-  #MoveScaled(0,0,65,97)
+  #MoveScaled(0,0,65,103)
   Class = "size-popupform"
   Arrangement = Arrange.Vertical
   Margin = True
@@ -255,28 +255,23 @@
     }
     { txtcode WebTextBox
       #MoveScaled(6,1,14,3)
+      Width = "6em"
       Height = "2em"
-      Expand = True
       ReadOnly = True
       PlaceHolder = ("ICD Code")
     }
-    { btnadd WebButton
-      #MoveScaled(20,1,11,3)
-      Width = "6em"
+    { txtfixed WebTextBox
+      #MoveScaled(20,1,14,3)
       Height = "2em"
-      Text = ("Add")
-      Image = "icon:/32/apply"
+      Enabled = False
+      Expand = True
     }
     { btnclose WebButton
-      #MoveScaled(31,1,8,3)
-      Width = "6em"
+      #MoveScaled(34,1,8,3)
+      Width = "5em"
       Height = "2em"
       Text = ("Close")
       Cancel = True
-    }
-    { txtcodeold WebTextBox
-      #MoveScaled(39,1,13,3)
-      Visible = False
     }
   }
   { WebContainer14 WebContainer
@@ -295,6 +290,16 @@
       Expand = True
       PlaceHolder = ("ICD Diagnosis")
       ShowClear = True
+    }
+    { btnadd WebButton
+      #MoveScaled(20,1,11,3)
+      Width = "5em"
+      Height = "2em"
+      Text = ("Add")
+    }
+    { txtcodeold WebTextBox
+      #MoveScaled(31,1,8,3)
+      Visible = False
     }
   }
 }

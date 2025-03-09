@@ -26,7 +26,7 @@ Private Sub FillMedicineList()
   Dim sql As String
 
   sql = "select fldid,fldroute,flditem,flddose,fldfreq,flddays,fldstatus from tblpatdosing where fldencounterval=&1 and fldsave_order=&2 and fldstarttime<=&3 and fldendtime>=&4 and fldroute<>&5 and flditemtype=&6 and fldcurval=&7"                    ''
-  $rData1 = modDatabase.$myConn.Exec(sql, $encid, True, modDate.EndSqlDate(Now()), modDate.StartSqlDate(Now()), "fluid", "Medicines", "Continue")
+  $rData1 = modDatabase.$myConn.Exec(sql, $encid, True, Now(), DateAdd(Now(), gb.Hour, -3), "fluid", "Medicines", "Continue")
   $aMyFields1 = New String[]
   modGridView.ReadSmallData(ListBox1, $rData1, $aMyFields1)
   With ListBox1
@@ -56,8 +56,6 @@ End
 
 Private Sub ShowSelectedDosing()
 
-  txtdose.Value = 0
-  txtdose.Tag = ""
   If ListBox1.Selection.Count Then
     $rData1.MoveTo(ListBox1.Selection[0])
     txtid.Value = $rData1["fldid"]
@@ -65,16 +63,16 @@ Private Sub ShowSelectedDosing()
     txtmedname.Text = modMedConstant.GetDrugFromStockID(lblmedicine.Text)
 
     txtinitstren.Value = modMedConstant.GetDrugInitialStrength($rData1["flditem"])
-    lblregimen.Text = $rData1["fldroute"] & Space(2) & $rData1["flddose"] & Space(1) & modMedConstant.GetMedicineDoseUnit($rData1["flditem"]) & " X " & $rData1["fldfreq"]
+    lblregimen.Text = $rData1["fldroute"] & Space(2) & $rData1["flddose"] & Space(1) & modMedConstant.GetMedicineDoseUnit($rData1["flditem"]) & " X " & $rData1["fldfreq"] & " X " & $rData1["flddays"] & " day(s)"
     lblregimen.Tag = $rData1["fldfreq"]
     lblunit.Text = modPharmLabel.GetDosageFormForLabel($rData1["flditem"], "Inpatient")
+    txtdose.Value = Round($rData1["flddose"] / txtinitstren.Value, -2)
 
     FillGridView(txtid.Value)
     btnsave.Enabled = True
-    txtdose.Value = Round($rData1["flddose"] / txtinitstren.Value, -2)
     If modBasic.$TabletModeEnable = "Yes" Then
     Else
-      txtdose.SetFocus
+      ' txtdose.SetFocus
     Endif
 
   Endif
@@ -82,8 +80,6 @@ Private Sub ShowSelectedDosing()
 End
 
 Private Sub FillGridView(dosno As Long)
-
-  Dim xval As Float
 
   $rData = modDatabase.$syConn.Exec("select fldid,fldtime,fldid,fldvalue,fldunit,fldid,fldvalue from tblnurdosing where fldencounterval=&1 and flddoseno=&2", $encid, dosno)
   $aMyFields = New String[]
@@ -105,13 +101,11 @@ Private Sub FillGridView(dosno As Long)
     .Columns[6].Text = "Dose"
   End With
 
-  txtall.Value = modPharmacy.TotalDoseNumner(dosno)
-  txttoday.Value = modPharmacy.TodayDoseNumner(dosno)
-  xval = 0
-  For Each $rData
-    xval = xval + $rData["fldvalue"] * txtinitstren.Value
-  Next
-  txtdosesum.Value = xval
+  txtcounttoday.Value = modPharmacy.TotalDoseCount(dosno, Now())
+  txtdosetoday.Value = modPharmacy.TotalDoseAmount(dosno, Now())
+
+  txtcountsum.Value = modPharmacy.TotalDoseCount(dosno)
+  txtdosesum.Value = modPharmacy.TotalDoseAmount(dosno)
 
 End
 
@@ -173,7 +167,7 @@ Public Sub btnsave_Click()
     FillGridView(txtid.Value)
     btnsave.Enabled = False
     txtdose.Value = 0
-    txtdose.Tag = ""
+
   Endif
 
 End

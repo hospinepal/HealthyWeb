@@ -14,7 +14,11 @@ Public Sub Run(encid As String) As String
   $encid = encid
 
   modGeneralMain.GetOpenModalForm(Me)
-  lstdepartment.List = modBasic.$IPDDepartmentsAll
+  If modBasic.$ClinDepartFormat = "Service" Then
+    lstdepartment.List = modBasic.$IPDServDepartments
+  Else
+    lstdepartment.List = modBasic.$IPDDepartmentsAll
+  Endif
   GetCurrentBedData()
   $DiscType = modNonMedical.GetAutoIPBillingPack("Service", $encid)
   If modBasic.$ClinMidBedRelease = "Enable" Then
@@ -83,7 +87,11 @@ Private Sub FillBedGrid()
 
   Dim sql As String
 
-  sql = "select fldencounterval,fldoxyport,fldventilator,fldbed,fldencounterval,fldencounterval,fldencounterval,fldbed,fldbed from tbldepartmentbed where flddept=&1 and (fldstatus IS NULL or fldstatus=&2)"
+  If modBasic.$ClinDepartFormat = "Service" Then
+    sql = "select fldencounterval,fldoxyport,fldventilator,fldbed,fldencounterval,fldencounterval,fldencounterval,fldbed,fldbed from tbldepartmentbed where (fldservice=&1 or fldaddservice=&1) and (fldstatus IS NULL or fldstatus=&2)"
+  Else
+    sql = "select fldencounterval,fldoxyport,fldventilator,fldbed,fldencounterval,fldencounterval,fldencounterval,fldbed,fldbed from tbldepartmentbed where flddept=&1 and (fldstatus IS NULL or fldstatus=&2)"
+  Endif
   $rData = modDatabase.$myConn.Exec(sql, lstdepartment.Text, "Active")
   $aMyFields = New String[]
   modGridView.ReadSmallData(GridView1, $rData, $aMyFields)
@@ -246,6 +254,7 @@ Private Sub SelectBed(bedno As String)
 
   Dim xrefer As String
   Dim xpayble As String
+  Dim xidno As Long
 
   If $encid Then
     xrefer = modBillings.GetReferralUserSetting("Service", $encid)
@@ -258,7 +267,8 @@ Private Sub SelectBed(bedno As String)
 
       res = modDatabase.$myConn.Exec("select fldid,flditem,flddisctype,fldfirsttime,fldfirstreport from tblpattiming where fldencounterval=&1 and fldtype=&2 and fldfirstsave=&3 and fldsecondsave=&4 and fldfirstreport=&5", $encid, "General Services", True, False, "Bed")                                                                   ''
       If res.Available = False Then
-        modPatientGeneral.AddPatientTableFirstTime($encid, "General Services", $DiscType, lstdepartment.Text, "Bed", dtnow.Value)
+        modPatientSub.UpdateAdmissionWard($encid, lstdepartment.Text)
+        xidno = modPatientGeneral.AddPatientTableFirstTime($encid, "General Services", $DiscType, lstdepartment.Text, "Bed", dtnow.Value)
       Else
         res.MoveFirst
         modDatabase.$myConn.Begin
@@ -276,7 +286,7 @@ Private Sub SelectBed(bedno As String)
             WebForm.Exec("Toastify({text: 'Bed Charge not specified', duration: 3000}).showToast()")
           Endif
         Endif
-        modPatientGeneral.AddPatientTableFirstTime($encid, "General Services", $DiscType, lstdepartment.Text, "Bed", dtnow.Value)
+        xidno = modPatientGeneral.AddPatientTableFirstTime($encid, "General Services", $DiscType, lstdepartment.Text, "Bed", dtnow.Value)
         modDatabase.$myConn.Commit
       Endif
 

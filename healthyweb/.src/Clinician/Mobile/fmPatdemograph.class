@@ -203,7 +203,7 @@ Private Sub DIsplayTextForm()
         ' .Width = CStr(300 * AppFactor) & "px"
         ' .Height = "2em"
         .Font = "bold"
-        .Text = $ItemList[i]
+        .Text = "<p>" & $ItemList[i] & "</p>"
         .Tag = i
         .ToolTip = $ItemList[i]
       End With
@@ -597,7 +597,7 @@ Public Sub btndefaiult_Click()
       Else If $sType = "Acount" Then
         sql = "select flddefault from tblaccdemograp where flddemoid=&1 and (fldcomp=&2 or fldcomp=&3)"
       Endif
-      res = modDatabase.$myConn.Exec(sql, aNameLabel[j].Text, modBasic.$compID, "%")
+      res = modDatabase.$myConn.Exec(sql, $ItemList[j], modBasic.$compID, "%")
       If res.Available Then
         For Each res
           If aComboBox[j] Then
@@ -638,7 +638,7 @@ Public Sub btnlastval_Click()
     If j < 49 Then
 
       If $sType = "Clinical" Then
-        stVal = modPatPatho.GetDemographicValue(encid, aNameLabel[j].Text)
+        stVal = modPatPatho.GetDemographicValue(encid, $ItemList[j])
       Else If $sType = "Acount" Then
       Endif
 

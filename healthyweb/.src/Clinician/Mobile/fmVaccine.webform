@@ -73,6 +73,7 @@
       #MoveScaled(10,1,18,3)
       Height = "2em"
       Expand = True
+      ReadOnly = False
     }
     { btnadd WebButton
       #MoveScaled(28,1,4,3)
@@ -151,6 +152,7 @@
       #MoveScaled(10,1,18,3)
       Width = "12em"
       Height = "2em"
+      ReadOnly = False
     }
     { WebContainer11 WebContainer
       #MoveScaled(28,1,5,3)

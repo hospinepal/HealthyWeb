@@ -176,8 +176,8 @@ Public Sub btnsave_Click()
 
   Dim xday As Integer
   Dim res As Result
-
   Dim xrefNo As String
+  Dim xIntVal As String
 
   If dtlmp.Value And If dtedd.Value And If txtgesweek.Value Then
     xday = 7 * txtgesweek.Value + txtgesdays.Value
@@ -228,6 +228,14 @@ Public Sub btnsave_Click()
         res["fldsave"] = True
         res["flddelref"] = xrefNo
         res["xyz"] = False
+        If MMain.$WebEntry = True Then
+          xIntVal = modString.GetDateString(Now())
+          res["fldid"] = CLong(xIntVal)
+          res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+          res["fldrepodate"] = Now()
+          res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+          res["fldhospcode"] = modBasic.$HospCode
+        Endif
         res.Update
         modClinSub.AddGeneralParametersQuali(Trim(txtencid.Text), "Pregnancy Status", GetTrimesterLabel(xday))
         modDatabase.$myConn.Commit
@@ -306,6 +314,7 @@ Public Sub AddConsultDataMat(encid As String, consultname As String, consulttime
       res["fldbillingmode"] = $billMode
       res["fldoutcome"] = ""
       res["fldnotice"] = anotice
+      res["fldflag"] = False
       res["flduserid"] = modBasic.$lbluser
       res["fldtime"] = Now()
       res["fldcomp"] = modBasic.$compID

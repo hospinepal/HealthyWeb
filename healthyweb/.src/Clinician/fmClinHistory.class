@@ -89,7 +89,9 @@ End
 
 Public Sub btnsave_Click()
 
+  modPatPatho.$HistoryComment = True
   ShowReportEncid()
+  modPatPatho.$HistoryComment = False
 
 End
 

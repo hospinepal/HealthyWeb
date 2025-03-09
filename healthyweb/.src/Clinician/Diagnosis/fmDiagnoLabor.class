@@ -232,6 +232,7 @@ Public Sub btnsave_Click()
   Dim res As Result
   Dim xrefNo As String
   Dim xclose As Boolean
+  Dim xIntVal As String
 
   xclose = False
   If txtgesweek.Value Then
@@ -285,6 +286,14 @@ Public Sub btnsave_Click()
         res["fldsave"] = True
         res["flddelref"] = xrefNo
         res["xyz"] = False
+        If MMain.$WebEntry = True Then
+          xIntVal = modString.GetDateString(Now())
+          res["fldid"] = CLong(xIntVal)
+          res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+          res["fldrepodate"] = Now()
+          res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+          res["fldhospcode"] = modBasic.$HospCode
+        Endif
         res.Update
         modClinSub.AddGeneralParametersQuali($encid, "Pregnancy Status", GetTrimesterLabel(xday))
         modDatabase.$myConn.Commit

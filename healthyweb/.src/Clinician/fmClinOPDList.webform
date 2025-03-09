@@ -313,7 +313,7 @@
     }
   }
   { WebContainer7 WebContainer
-    #MoveScaled(1,1,120,53)
+    #MoveScaled(1,1,120,57)
     Class = "height-tablet-prefull"
     Arrangement = Arrange.Vertical
     { WebContainer4 WebContainer
@@ -321,7 +321,7 @@
       Arrangement = Arrange.Row
       Border = True
       { WebContainer6 WebContainer
-        #MoveScaled(1,1,50,5)
+        #MoveScaled(1,1,59,5)
         Class = "size-tablet  less-container-margin"
         Arrangement = Arrange.Horizontal
         { WebLabel1 WebLabel
@@ -349,24 +349,34 @@
           #MoveScaled(25,1,4,3)
           Expand = True
         }
-        { btnrefresh WebButton
-          #MoveScaled(29,1,7,3)
-          Width = "9em"
-          Height = "2em"
-          Text = ("Show")
-          Image = "icon:/small/refresh"
+        { pnlconsult WebContainer
+          #MoveScaled(29,1,17.875,3)
+          Expand = True
+          Arrangement = Arrange.Horizontal
+          { btnconsult WebTextBox
+            #MoveScaled(1,1,13,1)
+            Height = "2em"
+            Expand = True
+          }
+          { btnselectuser WebButton
+            #MoveScaled(14,1,4,1)
+            Width = "2em"
+            Height = "2em"
+            Image = "icon:/32/user"
+          }
         }
         { WebContainer14 WebContainer
-          #MoveScaled(36,1,4,3)
+          #MoveScaled(46.875,1,4,3)
           Width = "2em"
         }
       }
       { WebContainer9 WebContainer
-        #MoveScaled(51,1,58,5)
+        #MoveScaled(60,1,54,5)
         Class = "size-tablet  less-container-margin"
         Arrangement = Arrange.Horizontal
         { chkdate WebCheckBox
           #MoveScaled(1,1,7,3)
+          Width = "5em"
           Height = "2em"
           Text = ("Date")
         }
@@ -376,7 +386,7 @@
           Arrangement = Arrange.Horizontal
           { dtsort WebDateBox
             #MoveScaled(1,1,10,1)
-            Width = "9em"
+            Width = "10em"
             Height = "2em"
             ReadOnly = False
           }
@@ -391,37 +401,32 @@
           #MoveScaled(24,1,5,3)
           Expand = True
         }
-        { btntriage WebButton
+        { btnopdsheet WebButton
           #MoveScaled(29,1,4,3)
+          Width = "5em"
+          Height = "2em"
+          Text = ("OPD")
+        }
+        { btntriage WebButton
+          #MoveScaled(33,1,5,3)
           Width = "2em"
           Height = "2em"
           Visible = False
           Image = "icon:/small/color"
         }
-        { WebContainer2 WebContainer
-          #MoveScaled(33,1,18,3)
-          Arrangement = Arrange.Horizontal
-          Spacing = True
-          { btnopdsheet WebButton
-            #MoveScaled(1,1,4,1)
-            Width = "5em"
-            Height = "2em"
-            Text = ("OPD")
-          }
-          { btnpersonal WebButton
-            #MoveScaled(6,1,4,1)
-            Class = "toolButton"
-            Width = "2em"
-            Height = "2em"
-            Image = "icon:/small/house"
-          }
-          { btnexpo WebButton
-            #MoveScaled(11,1,4,1)
-            Class = "toolButton"
-            Width = "2em"
-            Height = "2em"
-            Image = "icon:/small/html"
-          }
+        { btnmarkid WebButton
+          #MoveScaled(38,1,4,3)
+          Class = "toolButton"
+          Width = "2em"
+          Height = "2em"
+          Image = "icons/coll5.png"
+        }
+        { btnunmarkid WebButton
+          #MoveScaled(42,1,4,3)
+          Class = "toolButton"
+          Width = "2em"
+          Height = "2em"
+          Image = "icons/checked.png"
         }
       }
     }
@@ -429,7 +434,7 @@
       #MoveScaled(1,8,118,7)
       Arrangement = Arrange.Row
       { WebContainer10 WebContainer
-        #MoveScaled(1,1,44,5)
+        #MoveScaled(1,1,47,5)
         Class = "size-tablet  less-container-margin"
         Arrangement = Arrange.Horizontal
         { WebLabel2 WebLabel
@@ -447,28 +452,27 @@
           #MoveScaled(17,1,4,3)
           Expand = True
         }
-        { WebContainer22 WebContainer
-          #MoveScaled(21,1,17,3)
-          Arrangement = Arrange.Horizontal
-          Spacing = True
-          { rbsi WebRadioButton
-            #MoveScaled(1,1,5,1)
-            Height = "2em"
-            Text = ("SI")
-          }
-          { rbmetric WebRadioButton
-            #MoveScaled(7,1,7,1)
-            Height = "2em"
-            Text = ("Metric")
-          }
+        { btnrefresh WebButton
+          #MoveScaled(21,1,7,3)
+          Width = "9em"
+          Height = "2em"
+          Text = ("Show")
+          Image = "icon:/small/refresh"
         }
         { WebContainer19 WebContainer
-          #MoveScaled(38,1,3,3)
+          #MoveScaled(28,1,3,3)
           Width = "2em"
+        }
+        { btnflagicon WebButton
+          #MoveScaled(31,1,4,3)
+          Class = "toolButton"
+          Width = "2em"
+          Height = "2em"
+          Visible = False
         }
       }
       { WebContainer5 WebContainer
-        #MoveScaled(45,1,40.875,5)
+        #MoveScaled(48,1,40.875,5)
         Class = "size-tablet  less-container-margin"
         Arrangement = Arrange.Horizontal
         { WebLabel3 WebLabel
@@ -706,6 +710,67 @@
       Mode = Select.Single
       ShowCheck = False
       Header = WebTable.Both
+    }
+    { WebContainer20 WebContainer
+      #MoveScaled(1,50,118,5)
+      Arrangement = Arrange.Horizontal
+      { WebContainer22 WebContainer
+        #MoveScaled(1,1,17,3)
+        Arrangement = Arrange.Horizontal
+        Spacing = True
+        { rbsi WebRadioButton
+          #MoveScaled(1,1,5,1)
+          Height = "2em"
+          Text = ("SI")
+        }
+        { rbmetric WebRadioButton
+          #MoveScaled(7,1,7,1)
+          Height = "2em"
+          Text = ("Metric")
+        }
+      }
+      { WebContainer21 WebContainer
+        #MoveScaled(18,1,12,3)
+        Expand = True
+      }
+      { WebContainer2 WebContainer
+        #MoveScaled(30,1,17,3)
+        Arrangement = Arrange.Horizontal
+        Spacing = True
+        { rbconsult WebRadioButton
+          #MoveScaled(1,1,5,1)
+          Height = "2em"
+          Text = ("Consult")
+        }
+        { rbname WebRadioButton
+          #MoveScaled(7,1,7,1)
+          Height = "2em"
+          Text = ("Name")
+        }
+      }
+      { WebContainer23 WebContainer
+        #MoveScaled(47,1,12,3)
+        Expand = True
+      }
+      { chkshowdepart WebCheckBox
+        #MoveScaled(59,1,9,3)
+        Width = "8em"
+        Text = ("Show Depart")
+      }
+      { btnpersonal WebButton
+        #MoveScaled(68,1,4,3)
+        Class = "toolButton"
+        Width = "2em"
+        Height = "2em"
+        Image = "icon:/small/house"
+      }
+      { btnexpo WebButton
+        #MoveScaled(72,1,4,3)
+        Class = "toolButton"
+        Width = "2em"
+        Height = "2em"
+        Image = "icon:/small/html"
+      }
     }
   }
 }
