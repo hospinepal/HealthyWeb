@@ -4,11 +4,12 @@ Export
 Inherits WebContainer
 
 Public Const _IsContainer As Boolean = False
-Public Const _Properties As String = "*,RichText,Text,KeyList,PlaceHolder"
+Public Const _Properties As String = "*,RichText,Text,KeyList,PlaceHolder,UserList"
 
 Property Text As String
 Property RichText As String
 Property KeyList As String[]
+Property UserList As Variant[]
 Property PlaceHolder As String
 
 Private hTopBox As WebContainer
@@ -30,6 +31,10 @@ Private btnlistOrder As WebButton
 Private btnlistunorder As WebButton
 Private btnsubscript As WebButton
 Private btnsuperscript As WebButton
+Private btnuserlist As WebButton
+
+Private $KeyList As String[]
+Private $UserList As Variant[]
 
 Public Sub _new()
 
@@ -37,6 +42,7 @@ Public Sub _new()
 
   hTopBox = New WebContainer(Me)
   hTopBox.Arrangement = Arrange.Row
+  $KeyList = New String[]
 
   ' btnComplete = New WebButton(hBox) As "btnComplete"
   ' btnComplete.Immediate = True
@@ -101,6 +107,10 @@ Public Sub _new()
   btnsuperscript.Image = "icon:/small/sort-descent"
   FormatButton(btnsuperscript, "Superscript")
 
+  btnuserlist = New WebButton(hTopBox) As "btnuserlist"
+  btnuserlist.Image = "icon:/small/user"
+  SetButtonNormal(btnuserlist, "Select User")
+
   ''Main control
   WebContainer1 = New WebScrollView(Me)
   WebContainer1.Class = "test-autocomplete-container"
@@ -123,16 +133,33 @@ Private Sub FormatButton(xButton As WebButton, sToolTip As String)
 
 End
 
+Private Sub SetButtonNormal(xButton As WebButton, sToolTip As String)
+
+  xButton.Class = "toolButton"
+  xButton.Height = "2em"
+  xButton.Width = "2em"
+  xButton.Tooltip = sToolTip
+  xButton.Immediate = False
+
+End
+
 ''========================= Functions ========================
 Private Function Text_Read() As String
 
-  Return TextEdit1.Html
+  Dim xstr As String
+
+  If modString.GetRichTextMode(TextEdit1.Html) = True Then
+    xstr = modString.ConvertRichTextToPlain(TextEdit1.Html)
+  Else
+    xstr = TextEdit1.Html
+  Endif
+  Return xstr
 
 End
 
 Private Sub Text_Write(Value As String)
 
-  TextEdit1.Html = Value
+  TextEdit1.Html = modString.TextToHTML(Value)
 
 End
 
@@ -174,16 +201,24 @@ End
 
 Private Function KeyList_Read() As String[]
 
-  Dim xx As String[]
-
-  xx = New String[]
-  Return xx
+  Return $KeyList
 
 End
 
 Private Sub KeyList_Write(Value As String[])
 
   ''nothing
+
+End
+
+Private Function UserList_Read() As Variant[]
+  ''nothing
+
+End
+
+Private Sub UserList_Write(Value As Variant[])
+
+  $UserList = Value
 
 End
 
@@ -275,5 +310,20 @@ End
 Public Sub btnsuperscript_Click()
 
   WebForm.Exec("document.execCommand('Superscript', false, false)")
+
+End
+
+Public Sub btnuserlist_Click()
+
+  Dim xval As String
+
+  If $UserList And If $UserList.Count Then
+    xval = MedicalSelectedUser("Select User", $UserList)
+    If xval Then
+      If $KeyList.Exist(xval) = False Then
+        $KeyList.Add(xval)
+      Endif
+    Endif
+  Endif
 
 End

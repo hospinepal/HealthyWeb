@@ -118,27 +118,22 @@
     }
     { txtcode WebTextBox
       #MoveScaled(6,1,14,3)
+      Width = "6em"
       Height = "2em"
-      Expand = True
       ReadOnly = True
     }
-    { btnadd WebButton
-      #MoveScaled(20,1,11,3)
-      Width = "6em"
+    { txtfixed WebTextBox
+      #MoveScaled(20,1,14,3)
       Height = "2em"
-      Text = ("Save")
-      Image = "icon:/32/apply"
+      Enabled = False
+      Expand = True
     }
     { btnclose WebButton
-      #MoveScaled(31,1,8,3)
-      Width = "6em"
+      #MoveScaled(34,1,8,3)
+      Width = "5em"
       Height = "2em"
       Text = ("Close")
       Cancel = True
-    }
-    { txtoldcode WebTextBox
-      #MoveScaled(39,1,13,3)
-      Visible = False
     }
   }
   { WebContainer8 WebContainer
@@ -156,6 +151,16 @@
       Height = "2em"
       Expand = True
       ShowClear = True
+    }
+    { txtoldcode WebTextBox
+      #MoveScaled(20,1,8,3)
+      Visible = False
+    }
+    { btnadd WebButton
+      #MoveScaled(28,1,11,3)
+      Width = "5em"
+      Height = "2em"
+      Text = ("Save")
     }
   }
 }
