@@ -30,6 +30,10 @@ End
 
 Public Sub WebForm_Open()
 
+  If MMain.$WebEntry = True Then
+    modDataRepo.$RepositoryMode = MMain.$AppLogCategory
+    modBasic.$HospCode = MMain.$AppLogString
+  Endif
   modHelpVariable.SetApplicationGUI()
   MMain.GetApplVersionType()
 
@@ -51,6 +55,32 @@ Public Sub WebForm_Open()
   modBasic.MedicineDoseSetting()
   modBasic.DispLabelSettings()
   modBasic.LoadLargeLists()
+  modBasic.CloudAISettings()
+  SetFormAccess()
+
+End
+
+Private Sub SetFormAccess()
+
+  modGeneralMain.ShowSelectedFormMenu(mnudisp)
+  modGeneralMain.ShowSelectedFormMenu(mnureturn)
+  modGeneralMain.ShowSelectedFormMenu(mnuextrareceipt)
+  modGeneralMain.ShowSelectedFormMenu(mnudisplist)
+  modGeneralMain.ShowSelectedFormMenu(mnureqlist)
+
+  modGeneralMain.ShowSelectedFormMenu(mnustoconsume)
+  modGeneralMain.ShowSelectedFormMenu(mnutransfer)
+  modGeneralMain.ShowSelectedFormMenu(mnuadjust)
+  modGeneralMain.ShowSelectedFormMenu(mnuoutorder)
+  modGeneralMain.ShowSelectedFormMenu(mnustoragecode)
+
+  modGeneralMain.ShowSelectedFormMenu(mnubilling)
+  modGeneralMain.ShowSelectedFormMenu(mnustockDB)
+  modGeneralMain.ShowSelectedFormMenu(mnusercoll)
+  modGeneralMain.ShowSelectedFormMenu(mnusercollect)
+  modGeneralMain.ShowSelectedFormMenu(mnuarchived)
+
+  modGeneralMain.ShowSelectedFormMenu(mnupersonal)
 
 End
 
@@ -150,6 +180,24 @@ End
 
 Public Sub mnudisplist_Click()
 
+  Dim hForm As FmDispList
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmDispList("Dispensed", Workspace1)
+
+End
+
+Public Sub mnureqlist_Click()
+
+  Dim hForm As FmDispList
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmDispList("Requested", Workspace1)
+
 End
 
 Public Sub mnustoconsume_Click()
@@ -157,6 +205,13 @@ Public Sub mnustoconsume_Click()
 End
 
 Public Sub mnutransfer_Click()
+
+  Dim hForm As FmTransfer
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmTransfer(Workspace1)
 
 End
 

@@ -6,7 +6,7 @@
   Expand = True
   Arrangement = Arrange.Vertical
   Margin = True
-  Title = ("Administrator Panel")
+  Title = ("Dashboard Admin")
   { mnuentry WebMenu
     Text = ("Input")
     { mnupop WebMenu

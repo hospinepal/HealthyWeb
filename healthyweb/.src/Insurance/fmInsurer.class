@@ -121,22 +121,7 @@ End
 
 Public Sub mnuchange_Click()
 
-  Dim xpass As String
-  Dim hForm As FmChangeText
-  Dim sql As String
-  Dim res As Result
-
-  xpass = InputPassword("Provide your current password", "Change Password", "")
-  If xpass Then
-    sql = "select fldaccess from tbluseraccess where flduserid in(select flduserid from tbluser where flduserid=&1 and fldpass=&2)"
-    res = modDatabase.$myConn.Exec(sql, modBasic.$lbluser, modPassword.EncryptSimple(xpass))
-    If res.Available = False Then
-      Me.Exec("Toastify({text: 'Incorrect User or Password', duration: 3000}).showToast()")
-    Else If res.Available = True Then
-      hForm = New FmChangeText("Change Password", modBasic.$lbluser, xpass, "tbluser", "flduserid", "fldpass")
-      hForm.ShowModal
-    Endif
-  Endif
+  modGeneral.UpdateMainUserPassword(modBasic.$lbluser)
 
 End
 

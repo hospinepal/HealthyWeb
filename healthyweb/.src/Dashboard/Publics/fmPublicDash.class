@@ -30,7 +30,7 @@ Public Sub _new()
   modHelpVariable.ConnectionMain()
   modHelpVariable.CalenderConnection()
   modHelpVariable.ICDTablesConnection()
-  modBasic.EnableCollectionCache()
+  modGeneralMain.EnableCollectionCache()
   modPublicDash.$ProvName = modSettings.ShowSettingFromFIle("Dashboard/Province")
   If modDatabase.$myConn.Opened = True Then
     ' modBasic.LoadGeneralVariables()

@@ -79,6 +79,7 @@ End
 Public Sub btnadd_Click()
 
   Dim res As Result
+  Dim xIntVal As String
 
   If $dosno And If txtdose.Value And If cmbfreq.Text And If txtday.Value Then
     res = modDatabase.$myConn.Create("tbltaperdose")
@@ -86,6 +87,14 @@ Public Sub btnadd_Click()
     res["flddose"] = txtdose.Value
     res["fldfreq"] = cmbfreq.Text
     res["flddays"] = txtday.Value
+    If MMain.$WebEntry = True Then
+      xIntVal = modString.GetDateString(Now())
+      res["fldid"] = CLong(xIntVal)
+      res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+      res["fldrepodate"] = Now()
+      res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+      res["fldhospcode"] = modBasic.$HospCode
+    Endif
     res.Update
     TaperingGrid()
     ShowBlank()

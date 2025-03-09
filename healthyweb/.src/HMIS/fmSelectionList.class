@@ -20,8 +20,12 @@ Public Sub ListBox1_Select()
   ListBox2.Clear()
   If ListBox1.Text Then
 
-    If MMain.$WebEntry = True And If modBasic.$HospCode Then
-      res = modDatabase.$myConn.Exec("select fldvalue as col from tblhmissetting where fldtype=&1 and fldcategory=&2 and (fldhospcode like &3 or fldhospcode=&4)", $sType, ListBox1.Text, modBasic.$HospCode, "%")
+    If MMain.$WebEntry = True Then
+      If modBasic.$HospCode Then
+        res = modDatabase.$myConn.Exec("select fldvalue as col from tblhmissetting where fldtype=&1 and fldcategory=&2 and fldhospcode like &3", $sType, ListBox1.Text, modBasic.$HospCode)
+      Else
+        res = modDatabase.$myConn.Exec("select DISTINCT(fldvalue) as col from tblhmissetting where fldtype=&1 and fldcategory=&2", $sType, ListBox1.Text)
+      Endif
     Else
       res = modDatabase.$myConn.Exec("select fldvalue as col from tblhmissetting where fldtype=&1 and fldcategory=&2", $sType, ListBox1.Text)
     Endif
@@ -35,8 +39,10 @@ Public Sub mnudelete_Click()
 
   If ListBox1.Text Then
 
-    If MMain.$WebEntry = True And If modBasic.$HospCode Then
-      modDatabase.$myConn.Delete("tblhmissetting", "fldtype=&1 and fldcategory=&2 and fldvalue=&3 and fldhospcode like &4", $sType, ListBox1.Text, ListBox2.Text, modBasic.$HospCode)
+    If MMain.$WebEntry = True Then
+      If modBasic.$HospCode Then
+        modDatabase.$myConn.Delete("tblhmissetting", "fldtype=&1 and fldcategory=&2 and fldvalue=&3 and fldhospcode like &4", $sType, ListBox1.Text, ListBox2.Text, modBasic.$HospCode)
+      Endif
     Else
       modDatabase.$myConn.Delete("tblhmissetting", "fldtype=&1 and fldcategory=&2 and fldvalue=&3", $sType, ListBox1.Text, ListBox2.Text)
     Endif
@@ -55,14 +61,16 @@ Public Sub btnsave_Click()
 
   If ListBox1.Text Then
 
-    If MMain.$WebEntry = True And If modBasic.$HospCode Then
-      res1 = modDatabase.$myConn.Exec("select fldrepoid from tblhmissetting where fldtype=&1 and fldcategory=&2 and fldhospcode like &3", $sType, ListBox1.Text, modBasic.$HospCode)
+    If MMain.$WebEntry = True Then
+      If modBasic.$HospCode Then
+        res1 = modDatabase.$myConn.Exec("select fldrepoid from tblhmissetting where fldtype=&1 and fldcategory=&2 and fldhospcode like &3", $sType, ListBox1.Text, modBasic.$HospCode)
+      Endif
     Else
       res1 = modDatabase.$myConn.Exec("select fldid from tblhmissetting where fldtype=&1 and fldcategory=&2", $sType, ListBox1.Text)
     Endif
     If res1.Available Then
       For Each res1
-        If MMain.$WebEntry = True Then
+        If MMain.$WebEntry = True And If modBasic.$HospCode Then
           modDatabase.$myConn.Delete("tblhmissetting", "fldrepoid=&1", res1["fldrepoid"])
         Else
           modDatabase.$myConn.Delete("tblhmissetting", "fldid=&1", res1["fldid"])
@@ -136,8 +144,10 @@ Private Function GetItemList() As String[]
   xListAll = New String[]
   For Each xVaritem In ListBox1.List
 
-    If MMain.$WebEntry = True And If modBasic.$HospCode Then
-      res = modDatabase.$myConn.Exec("select fldvalue as col from tblhmissetting where fldtype=&1 and fldcategory=&2 and (fldhospcode like &3 or fldhospcode=&4)", $sType, xVaritem, modBasic.$HospCode, "%")
+    If MMain.$WebEntry = True Then
+      If modBasic.$HospCode Then
+        res = modDatabase.$myConn.Exec("select fldvalue as col from tblhmissetting where fldtype=&1 and fldcategory=&2 and fldhospcode like &3", $sType, xVaritem, modBasic.$HospCode)
+      Endif
     Else
       res = modDatabase.$myConn.Exec("select fldvalue as col from tblhmissetting where fldtype=&1 and fldcategory=&2", $sType, xVaritem)
     Endif

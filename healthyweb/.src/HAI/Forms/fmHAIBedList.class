@@ -167,6 +167,7 @@ Private Function ExecuteQuery(xFldList As String[]) As Result
   Dim sql As String
   Dim xencid As String
   Dim xcolor As String
+  Dim xdate As Date[]
 
   If ToolButton1.Background = Color.White Then
     xcolor = ""
@@ -186,8 +187,11 @@ Private Function ExecuteQuery(xFldList As String[]) As Result
     sql = "select " & xFldList.Join(",") & " from tblencounter where flddoa<=&1 and (flddod>=&2 or flddod IS NULL) and fldencounterval like &3 and fldencounterval in(select fldencounterval from tblpatevents where fldtype=&4 and fldfirsttime<=&5)" & xencid & xcolor & $RepoStr & " ORDER BY fldcurrlocat ASC"                       ''
     res = modDatabase.$myConn.Exec(sql, modDate.EndSqlDate(Now()), modDate.StartSqlDate(Now()), "%", "Devices", DateAdd(Now(), gb.Hour, -48))
   Else If cmbdept.Text = "Exited" Then
-    sql = "select " & xFldList.Join(",") & " from tblencounter where flddoa<=&1 and flddod<=&2 and fldencounterval like &3 and fldencounterval in(select fldencounterval from tblpatevents where fldtype=&4 and fldsecondtime IS NOT NULL)" & xencid & xcolor & $RepoStr & " ORDER BY fldcurrlocat ASC"                       ''
-    res = modDatabase.$myConn.Exec(sql, modDate.EndSqlDate(Now()), modDate.StartSqlDate(Now()), "%", "Devices")
+    xdate = DoubleDates("Select Discharge Dates", "Exited Patients", [DateAdd(Now(), gb.Month, -1), Now()])
+    If xdate Then
+      sql = "select " & xFldList.Join(",") & " from tblencounter where flddod>=&1 and flddod<=&2 and fldencounterval like &3 and fldencounterval in(select fldencounterval from tblpatevents where fldtype=&4 and fldsecondtime IS NOT NULL)" & xencid & xcolor & $RepoStr & " ORDER BY fldcurrlocat ASC"                       ''
+      res = modDatabase.$myConn.Exec(sql, modDate.StartSqlDate(xdate[0]), modDate.EndSqlDate(xdate[1]), "%", "Devices")
+    Endif
   Else
     sql = "select " & xFldList.Join(",") & " from tblencounter where flddoa<=&1 and (flddod>=&2 or flddod IS NULL) and fldencounterval like &3 and fldcurrlocat in(select fldbed from tbldepartmentbed where flddept=&4) and fldencounterval in(select fldencounterval from tblpatevents where fldtype=&5 and fldfirsttime<=&6)" & xencid & xcolor & $RepoStr & "ORDER BY fldcurrlocat ASC"                       ''
     res = modDatabase.$myConn.Exec(sql, modDate.EndSqlDate(Now()), modDate.StartSqlDate(Now()), "%", cmbdept.Text, "Devices", DateAdd(Now(), gb.Hour, -48))
@@ -541,7 +545,7 @@ Public Sub btnmobilediagno_Click()
 
   If GridView1.Selection.Count Then
     $rData.MoveTo(GridView1.Selection[0])
-    hForm = New FmAddDiagno("Disease", $rData["fldencounterval"], "")
+    hForm = New FmAddDiagno("Disease", $rData["fldencounterval"], "", modBasic.$DefaultDiagnoGroup)
     hForm.ShowModal
     FillBedGrid()
   Endif
@@ -620,8 +624,11 @@ Public Sub btnpharm_Click()
   If GridView1.Selection.Count Then
     $rData.MoveTo(GridView1.Selection[0])
     If modNonMedical.AllowEntryWithDeposit($rData["fldencounterval"], "Pharmacy") = True Then
-      hForm12 = New FmMedOrder($rData["fldencounterval"], "Admitted", modNonMedical.GetAutoIPBillingPack("Pharmacy", $rData["fldencounterval"]))
-      hForm12.ShowModal
+      If modBasic.$MedRequestForm = "Separate" Then
+      Else
+        hForm12 = New FmMedOrder($rData["fldencounterval"], "Admitted", modNonMedical.GetAutoIPBillingPack("Pharmacy", $rData["fldencounterval"]))
+        hForm12.ShowModal
+      Endif
       SHowPatIndicators($rData["fldencounterval"])
     Endif
   Endif
@@ -1578,7 +1585,7 @@ Public Sub mnuscanner_Click()
 
   If GridView1.Selection.Count Then
     $rData.MoveTo(GridView1.Selection[0])
-    hForm = New FmScanForm($rData["fldencounterval"], "Scanned Images")
+    hForm = New FmScanForm($rData["fldencounterval"], "Scanned Images", "")
     hForm.ShowModal
   Endif
 
