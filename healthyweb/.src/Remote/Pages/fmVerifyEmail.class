@@ -52,31 +52,35 @@ Public Sub btnOK_Click()
   If chkagree.Value = True Then
     If txtpassword.Text = txtrepassword.Text Then
       If AllowDataSave() = True Then
-        If txtemail.Text Then
-          res = modDatabase.$myConn.Exec("select fldemail from tblremoteusers where fldusrcode=&1", Trim(txtemail.Text))
-          If res.Available Then
-            Me.Exec("Toastify({text: 'E-Mail already used', duration: 3000}).showToast()")
-          Else
-            sPass = modPassword.GetRandomPassword()
 
-            If modRemote.$RemoteUserFormat = "email" Then
-              ymail = New String[]
-              ymail.Add(Trim(txtemail.Text))
-              xmail = New String[]
-              xcontent = GetVerifyLink(sPass)
-              modDevAll.SendSMTPEmail(ymail, xmail, xmail, "E-Mail Verification", xcontent, "")                               ''
-              Wait
-              SaveVerifyData(sPass)
-              Me.Exec("Toastify({text: 'E-Mail Sent to you.', duration: 3000}).showToast()")
-
-            Else If modRemote.$RemoteUserFormat = "phone" Then
-
+        If modRemote.$RemoteUserFormat = "email" Then
+          If txtemail.Text Then
+            If $URL Then
+              res = modDatabase.$myConn.Exec("select fldemail from tblremoteusers where fldusrcode=&1", Trim(txtemail.Text))
+              If res.Available Then
+                Me.Exec("Toastify({text: 'E-Mail already used', duration: 3000}).showToast()")
+              Else
+                sPass = modPassword.GetRandomPassword()
+                ymail = New String[]
+                ymail.Add(Trim(txtemail.Text))
+                xmail = New String[]
+                xcontent = GetVerifyLink(sPass)
+                modDevAll.SendSMTPEmail(ymail, xmail, xmail, "E-Mail Verification", xcontent, "")                               ''
+                Wait
+                SaveVerifyData(sPass)
+                Me.Exec("Toastify({text: 'E-Mail Sent to you.', duration: 3000}).showToast()")
+              Endif
+            Else
+              Me.Exec("Toastify({text: 'Verification URL not specified', duration: 3000}).showToast()")
             Endif
-
+          Else
+            Me.Exec("Toastify({text: 'E-Mail not provided', duration: 3000}).showToast()")
           Endif
-        Else
-          Me.Exec("Toastify({text: 'E-Mail not provided', duration: 3000}).showToast()")
+
+        Else If modRemote.$RemoteUserFormat = "phone" Then
+
         Endif
+
       Else
         Me.Exec("Toastify({text: 'Incomplete data', duration: 3000}).showToast()")
       Endif
@@ -118,12 +122,16 @@ Public Sub btnresend_Click()
         If res["fldstatus"] = "Active" Then
           Me.Exec("Toastify({text: 'Account already active', duration: 3000}).showToast()")
         Else
-          ymail = New String[]
-          ymail.Add(Trim(txtemail.Text))
-          xmail = New String[]
-          xcontent = GetVerifyLink(res["fldhashcode"])
-          modDevAll.SendSMTPEmail(ymail, xmail, xmail, "E-Mail Verification", xcontent, "")
-          Me.Exec("Toastify({text: 'E-Mail Sent to you.', duration: 3000}).showToast()")
+          If $URL Then
+            ymail = New String[]
+            ymail.Add(Trim(txtemail.Text))
+            xmail = New String[]
+            xcontent = GetVerifyLink(res["fldhashcode"])
+            modDevAll.SendSMTPEmail(ymail, xmail, xmail, "E-Mail Verification", xcontent, "")
+            Me.Exec("Toastify({text: 'E-Mail Sent to you.', duration: 3000}).showToast()")
+          Else
+            Me.Exec("Toastify({text: 'Verification URL not specified', duration: 3000}).showToast()")
+          Endif
         Endif
       Else
         Me.Exec("Toastify({text: 'Please create account', duration: 3000}).showToast()")

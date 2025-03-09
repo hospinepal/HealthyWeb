@@ -9,7 +9,7 @@ Public Sub _new()
   cmbageformat.List = ["Numerical", "AgeInYears", "YearMonth", "YearOnly"]
   cmbabnormal.List = ["Bold", "Italic", "UnderLine", "Bold+UnderLine", "Bold+Italic", "Red Color", "Superscript", "None"]
   cmbchapterlink.List = ["Yes", "No"]
-  cmbnameservice.List = ["Rank+Name", "Name+Category", "Rank+Name+Category"]
+  cmbnameservice.List = ["Rank+Name", "Name+Category", "Rank+Name+Category", "Rank+Name+Category+Scheme"]
   cmbsigpopup.List = ["Yes", "No"]
   cmbautouser.List = ["Yes", "No"]
   cmbshowunit.List = ["Enable", "Disable"]
@@ -56,7 +56,7 @@ Public Sub IconPanel1_Click()
     cmbageformat.List = ["Numerical", "AgeInYears", "YearMonth"]
     cmbabnormal.List = ["Bold", "Italic", "UnderLine", "Bold+UnderLine", "Bold+Italic", "Red Color", "Superscript", "None"]
     cmbchapterlink.List = ["Yes", "No"]
-    cmbnameservice.List = ["Rank+Name", "Name+Category", "Rank+Name+Category"]
+    cmbnameservice.List = ["Rank+Name", "Name+Category", "Rank+Name+Category", "Rank+Name+Category+Scheme"]
     cmbsigpopup.List = ["Yes", "No"]
     cmbshowunit.List = ["Enable", "Disable"]
 
@@ -660,6 +660,9 @@ Public Sub btnselectuser1_Click()
   If xMedUser And If xMedUser.Count Then
     txtuser1.Tag = xMedUser[0]
     txtuser1.Text = xMedUser[1]
+  Else
+    txtuser1.Tag = ""
+    txtuser1.Text = ""
   Endif
 
 End
@@ -672,6 +675,9 @@ Public Sub btnselectuser2_Click()
   If xMedUser And If xMedUser.Count Then
     txtuser2.Tag = xMedUser[0]
     txtuser2.Text = xMedUser[1]
+  Else
+    txtuser2.Tag = ""
+    txtuser2.Text = ""
   Endif
 
 End
@@ -684,6 +690,9 @@ Public Sub btnselectuser3_Click()
   If xMedUser And If xMedUser.Count Then
     txtuser3.Tag = xMedUser[0]
     txtuser3.Text = xMedUser[1]
+  Else
+    txtuser3.Tag = ""
+    txtuser3.Text = ""
   Endif
 
 End

@@ -350,9 +350,9 @@ Private Sub GetGridSizes()
     .Columns[2].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
     .Columns[3].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
     .Columns[4].Width = CStr(175 * modBasic.$AppWidthRatio) & "px"
-    .Columns[5].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
+    .Columns[5].Width = CStr(200 * modBasic.$AppWidthRatio) & "px"
     .Columns[6].Width = CStr(20 * modBasic.$AppWidthRatio) & "px"
-    .Columns[7].Width = CStr(175 * modBasic.$AppWidthRatio) & "px"
+    .Columns[7].Width = CStr(200 * modBasic.$AppWidthRatio) & "px"
     .Columns[8].Hidden = True
     .Columns[9].Hidden = True
     .Columns[10].Hidden = True
@@ -376,8 +376,6 @@ Public Sub GridView1_Data(Row As Integer, Column As Integer, Data As WebTableDat
     Data.Text = modPatient.GetPatientNameByEnc($rData[$aMyFields[Column]], modDatabase.$syConn)
   Else If Column = 6 Then
     Data.Control = btnopenfile
-    ' Data.Html = modString.GetImageForHTMLGrid(modGeneralMain.GetSystemIcon(GetSelectIcon($rData[$aMyFields[Column]])), "20px", "20px")
-    ' Data.Text = ""
   Else
     Data.Text = $rData[$aMyFields[Column]]
   Endif
@@ -629,7 +627,7 @@ Public Sub mnuscanfile_Click()
 
   Dim hForm As FmScanForm
 
-  hForm = New FmScanForm(Trim(txtencid.Text), "Scanned Images")
+  hForm = New FmScanForm(Trim(txtencid.Text), "Scanned Images", "")
   hForm.ShowModal
 
 End

@@ -1127,8 +1127,31 @@
         Image = "icon:/small/apply"
       }
     }
-    { WebContainer33 WebContainer
+    { WebContainer223 WebContainer
       #MoveScaled(1,33,82.75,4)
+      Arrangement = Arrange.Horizontal
+      { WebLabel176 WebLabel
+        #MoveScaled(1,1,6,2)
+        Width = "10em"
+        Text = ("Portal QR")
+        Border = True
+      }
+      { cmbportalqrform WebComboBox
+        #MoveScaled(7,1,12,2)
+        Width = "30%"
+        Height = "2em"
+        Tooltip = ("{PortalQRLogin} creates QR Code to Login Patportal")
+        ReadOnly = False
+      }
+      { btnportalqrform WebButton
+        #MoveScaled(19,1,4,2)
+        Width = "3em"
+        Height = "2em"
+        Image = "icon:/small/apply"
+      }
+    }
+    { WebContainer33 WebContainer
+      #MoveScaled(1,37,82.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel39 WebLabel
@@ -1162,7 +1185,7 @@
       }
     }
     { WebContainer159 WebContainer
-      #MoveScaled(1,37,82.75,4)
+      #MoveScaled(1,41,82.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel34 WebLabel

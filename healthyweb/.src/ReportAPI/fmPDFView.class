@@ -94,9 +94,9 @@ Public Sub btnsave_Click()
 
   If $sLink Then
     If $encid Then
-      hForm = New FmSaveFile($sLink, $encid)
+      hForm = New FmSaveFile($sLink, $encid, "")
     Else
-      hForm = New FmSaveFile($sLink, "")
+      hForm = New FmSaveFile($sLink, "", "")
     Endif
     hForm.ShowModal()
   Endif

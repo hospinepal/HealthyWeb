@@ -6,7 +6,7 @@
   Expand = True
   Arrangement = Arrange.Vertical
   Margin = True
-  Title = ("HealthyWeb HIS")
+  Title = ("Patient Portal")
   { WebContainer1 WebContainer
     #MoveScaled(1,1,95,9)
     Height = "10vh"
@@ -15,7 +15,7 @@
       #MoveScaled(1,1,23,7)
       Expand = True
       Image = "header.jpg"
-      Mode = WebImage.Contain
+      Mode = WebImage.Fill
     }
   }
   { WebContainer18 WebContainer
@@ -181,7 +181,7 @@
   }
   { WebVBox2 WebContainer
     #MoveScaled(1,81,95,5)
-    Expand = True
+    Height = "5vh"
     Arrangement = Arrange.Vertical
   }
 }

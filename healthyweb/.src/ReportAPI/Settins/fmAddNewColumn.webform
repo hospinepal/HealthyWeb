@@ -14,7 +14,7 @@
     Index = 0
     Text = ("Colm1")
     { WebContainer8 WebContainer
-      #MoveScaled(1,1,63.8667,4)
+      #MoveScaled(1,1,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel7 WebLabel
@@ -41,7 +41,7 @@
       }
     }
     { WebContainer7 WebContainer
-      #MoveScaled(1,5,63.8667,4)
+      #MoveScaled(1,5,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel8 WebLabel
@@ -50,7 +50,7 @@
         Text = ("Variable")
       }
       { cmbvariable1 WebComboBox
-        #MoveScaled(9,1,15,2.3333)
+        #MoveScaled(9,1,15,2)
         Height = "2em"
         Expand = True
         ReadOnly = False
@@ -69,9 +69,9 @@
       }
     }
     { WebContainer6 WebContainer
-      #MoveScaled(1,9,63.8667,21)
+      #MoveScaled(1,9,63.75,21)
       Class = "less-container-margin"
-      Expand = True
+      Height = "5em"
       Arrangement = Arrange.Horizontal
       { txtsql1 WebTextArea
         #MoveScaled(1,1,54,19)
@@ -80,7 +80,7 @@
       }
     }
     { WebContainer5 WebContainer
-      #MoveScaled(1,30,63.8667,4)
+      #MoveScaled(1,30,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel11 WebLabel
@@ -101,7 +101,7 @@
       }
     }
     { WebContainer4 WebContainer
-      #MoveScaled(1,34,63.8667,4)
+      #MoveScaled(1,34,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel1 WebLabel
@@ -116,7 +116,7 @@
       }
     }
     { WebContainer3 WebContainer
-      #MoveScaled(1,38,63.8667,4)
+      #MoveScaled(1,38,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel2 WebLabel
@@ -130,8 +130,24 @@
         Height = "2em"
       }
     }
+    { WebContainer51 WebContainer
+      #MoveScaled(1,42,63.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel31 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "5em"
+        Text = ("Format")
+      }
+      { cmbformat1 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "50%"
+        Height = "2em"
+        ReadOnly = False
+      }
+    }
     { WebContainer2 WebContainer
-      #MoveScaled(1,42,63.8667,4)
+      #MoveScaled(1,46,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel3 WebLabel
@@ -151,7 +167,7 @@
       }
     }
     { WebContainer1 WebContainer
-      #MoveScaled(1,46,63.8667,4)
+      #MoveScaled(1,50,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry1 WebCheckBox
@@ -182,7 +198,7 @@
     Index = 1
     Text = ("Colm2")
     { WebContainer11 WebContainer
-      #MoveScaled(1,1,63.8667,4)
+      #MoveScaled(1,1,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel4 WebLabel
@@ -209,7 +225,7 @@
       }
     }
     { WebContainer13 WebContainer
-      #MoveScaled(1,5,63.8667,4)
+      #MoveScaled(1,5,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel5 WebLabel
@@ -218,7 +234,7 @@
         Text = ("Variable")
       }
       { cmbvariable2 WebComboBox
-        #MoveScaled(9,1,15,2.3333)
+        #MoveScaled(9,1,15,2)
         Height = "2em"
         Expand = True
         ReadOnly = False
@@ -237,9 +253,9 @@
       }
     }
     { WebContainer14 WebContainer
-      #MoveScaled(1,9,63.8667,21)
+      #MoveScaled(1,9,63.75,21)
       Class = "less-container-margin"
-      Expand = True
+      Height = "5em"
       Arrangement = Arrange.Horizontal
       { txtsql2 WebTextArea
         #MoveScaled(1,1,54,19)
@@ -248,7 +264,7 @@
       }
     }
     { WebContainer15 WebContainer
-      #MoveScaled(1,30,63.8667,4)
+      #MoveScaled(1,30,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel6 WebLabel
@@ -269,7 +285,7 @@
       }
     }
     { WebContainer16 WebContainer
-      #MoveScaled(1,34,63.8667,4)
+      #MoveScaled(1,34,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel9 WebLabel
@@ -284,7 +300,7 @@
       }
     }
     { WebContainer17 WebContainer
-      #MoveScaled(1,38,63.8667,4)
+      #MoveScaled(1,38,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel10 WebLabel
@@ -298,8 +314,24 @@
         Height = "2em"
       }
     }
+    { WebContainer52 WebContainer
+      #MoveScaled(1,42,63.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel32 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "5em"
+        Text = ("Format")
+      }
+      { cmbformat2 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "50%"
+        Height = "2em"
+        ReadOnly = False
+      }
+    }
     { WebContainer18 WebContainer
-      #MoveScaled(1,42,63.8667,4)
+      #MoveScaled(1,46,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel12 WebLabel
@@ -319,7 +351,7 @@
       }
     }
     { WebContainer19 WebContainer
-      #MoveScaled(1,46,63.8667,4)
+      #MoveScaled(1,50,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry2 WebCheckBox
@@ -343,7 +375,7 @@
     Index = 2
     Text = ("Colm3")
     { WebContainer21 WebContainer
-      #MoveScaled(1,1,63.8667,4)
+      #MoveScaled(1,1,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel13 WebLabel
@@ -370,7 +402,7 @@
       }
     }
     { WebContainer23 WebContainer
-      #MoveScaled(1,5,63.8667,4)
+      #MoveScaled(1,5,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel14 WebLabel
@@ -379,7 +411,7 @@
         Text = ("Variable")
       }
       { cmbvariable3 WebComboBox
-        #MoveScaled(9,1,15,2.3333)
+        #MoveScaled(9,1,15,2)
         Height = "2em"
         Expand = True
         ReadOnly = False
@@ -398,9 +430,9 @@
       }
     }
     { WebContainer24 WebContainer
-      #MoveScaled(1,9,63.8667,21)
+      #MoveScaled(1,9,63.75,21)
       Class = "less-container-margin"
-      Expand = True
+      Height = "5em"
       Arrangement = Arrange.Horizontal
       { txtsql3 WebTextArea
         #MoveScaled(1,1,54,19)
@@ -409,7 +441,7 @@
       }
     }
     { WebContainer25 WebContainer
-      #MoveScaled(1,30,63.8667,4)
+      #MoveScaled(1,30,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel15 WebLabel
@@ -430,7 +462,7 @@
       }
     }
     { WebContainer26 WebContainer
-      #MoveScaled(1,34,63.8667,4)
+      #MoveScaled(1,34,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel16 WebLabel
@@ -445,7 +477,7 @@
       }
     }
     { WebContainer27 WebContainer
-      #MoveScaled(1,38,63.8667,4)
+      #MoveScaled(1,38,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel17 WebLabel
@@ -459,8 +491,24 @@
         Height = "2em"
       }
     }
+    { WebContainer53 WebContainer
+      #MoveScaled(1,42,63.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel33 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "5em"
+        Text = ("Format")
+      }
+      { cmbformat3 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "50%"
+        Height = "2em"
+        ReadOnly = False
+      }
+    }
     { WebContainer28 WebContainer
-      #MoveScaled(1,42,63.8667,4)
+      #MoveScaled(1,46,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel18 WebLabel
@@ -480,7 +528,7 @@
       }
     }
     { WebContainer29 WebContainer
-      #MoveScaled(1,46,63.8667,4)
+      #MoveScaled(1,50,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry3 WebCheckBox
@@ -504,7 +552,7 @@
     Index = 3
     Text = ("Colm4")
     { WebContainer31 WebContainer
-      #MoveScaled(1,1,63.8667,4)
+      #MoveScaled(1,1,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel19 WebLabel
@@ -531,7 +579,7 @@
       }
     }
     { WebContainer33 WebContainer
-      #MoveScaled(1,5,63.8667,4)
+      #MoveScaled(1,5,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel20 WebLabel
@@ -540,7 +588,7 @@
         Text = ("Variable")
       }
       { cmbvariable4 WebComboBox
-        #MoveScaled(9,1,15,2.3333)
+        #MoveScaled(9,1,15,2)
         Height = "2em"
         Expand = True
         ReadOnly = False
@@ -559,9 +607,9 @@
       }
     }
     { WebContainer34 WebContainer
-      #MoveScaled(1,9,63.8667,21)
+      #MoveScaled(1,9,63.75,21)
       Class = "less-container-margin"
-      Expand = True
+      Height = "5em"
       Arrangement = Arrange.Horizontal
       { txtsql4 WebTextArea
         #MoveScaled(1,1,54,19)
@@ -570,7 +618,7 @@
       }
     }
     { WebContainer35 WebContainer
-      #MoveScaled(1,30,63.8667,4)
+      #MoveScaled(1,30,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel21 WebLabel
@@ -591,7 +639,7 @@
       }
     }
     { WebContainer36 WebContainer
-      #MoveScaled(1,34,63.8667,4)
+      #MoveScaled(1,34,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel22 WebLabel
@@ -606,7 +654,7 @@
       }
     }
     { WebContainer37 WebContainer
-      #MoveScaled(1,38,63.8667,4)
+      #MoveScaled(1,38,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel23 WebLabel
@@ -620,8 +668,24 @@
         Height = "2em"
       }
     }
+    { WebContainer54 WebContainer
+      #MoveScaled(1,42,63.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel34 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "5em"
+        Text = ("Format")
+      }
+      { cmbformat4 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "50%"
+        Height = "2em"
+        ReadOnly = False
+      }
+    }
     { WebContainer38 WebContainer
-      #MoveScaled(1,42,63.8667,4)
+      #MoveScaled(1,46,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel24 WebLabel
@@ -641,7 +705,7 @@
       }
     }
     { WebContainer39 WebContainer
-      #MoveScaled(1,46,63.8667,4)
+      #MoveScaled(1,50,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry4 WebCheckBox
@@ -665,7 +729,7 @@
     Index = 4
     Text = ("Colm5")
     { WebContainer41 WebContainer
-      #MoveScaled(1,1,63.8667,4)
+      #MoveScaled(1,1,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel25 WebLabel
@@ -692,7 +756,7 @@
       }
     }
     { WebContainer43 WebContainer
-      #MoveScaled(1,5,63.8667,4)
+      #MoveScaled(1,5,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel26 WebLabel
@@ -701,7 +765,7 @@
         Text = ("Variable")
       }
       { cmbvariable5 WebComboBox
-        #MoveScaled(9,1,15,2.3333)
+        #MoveScaled(9,1,15,2)
         Height = "2em"
         Expand = True
         ReadOnly = False
@@ -720,9 +784,9 @@
       }
     }
     { WebContainer44 WebContainer
-      #MoveScaled(1,9,63.8667,21)
+      #MoveScaled(1,9,63.75,21)
       Class = "less-container-margin"
-      Expand = True
+      Height = "5em"
       Arrangement = Arrange.Horizontal
       { txtsql5 WebTextArea
         #MoveScaled(1,1,54,19)
@@ -731,7 +795,7 @@
       }
     }
     { WebContainer45 WebContainer
-      #MoveScaled(1,30,63.8667,4)
+      #MoveScaled(1,30,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel27 WebLabel
@@ -752,7 +816,7 @@
       }
     }
     { WebContainer46 WebContainer
-      #MoveScaled(1,34,63.8667,4)
+      #MoveScaled(1,34,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel28 WebLabel
@@ -767,7 +831,7 @@
       }
     }
     { WebContainer47 WebContainer
-      #MoveScaled(1,38,63.8667,4)
+      #MoveScaled(1,38,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel29 WebLabel
@@ -781,8 +845,24 @@
         Height = "2em"
       }
     }
+    { WebContainer55 WebContainer
+      #MoveScaled(1,42,63.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel35 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "5em"
+        Text = ("Format")
+      }
+      { cmbformat5 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "50%"
+        Height = "2em"
+        ReadOnly = False
+      }
+    }
     { WebContainer48 WebContainer
-      #MoveScaled(1,42,63.8667,4)
+      #MoveScaled(1,46,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel30 WebLabel
@@ -802,7 +882,7 @@
       }
     }
     { WebContainer49 WebContainer
-      #MoveScaled(1,46,63.8667,4)
+      #MoveScaled(1,50,63.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry5 WebCheckBox

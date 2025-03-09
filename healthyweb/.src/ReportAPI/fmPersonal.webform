@@ -15,7 +15,7 @@
   }
   { WebContainer1 WebContainer
     #MoveScaled(1,1,78,89)
-    Class = "show-widertablet  height-innertablet-left"
+    Class = "show-widertablet  height-innertablet-left-less"
     Arrangement = Arrange.Vertical
     Margin = True
     { WebContainer3 WebContainer
@@ -24,7 +24,7 @@
       Arrangement = Arrange.Horizontal
       { cmbcategory WebComboBox
         #MoveScaled(1,1,14,3)
-        Width = "8em"
+        Width = "12em"
         Height = "2em"
         ReadOnly = False
       }
@@ -53,7 +53,7 @@
       }
       { btnrefresh WebButton
         #MoveScaled(48,1,10,3)
-        Width = "5em"
+        Width = "6em"
         Height = "2em"
         Text = ("Refresh")
       }
@@ -148,7 +148,7 @@
   }
   { WebContainer2 WebContainer
     #MoveScaled(79,1,47,89)
-    Class = "show-tablet   height-innertablet-right"
+    Class = "show-tablet   height-innertablet-right-less"
     Arrangement = Arrange.Vertical
     Margin = True
     { WebLabel1 WebLabel
@@ -160,7 +160,7 @@
     }
     { txtmedia WebButtonBox
       #MoveScaled(1,5,45,4)
-      Height = "4em"
+      Height = "2em"
     }
     { WebContainer7 WebContainer
       #MoveScaled(1,9,45,4)
@@ -169,7 +169,9 @@
       Spacing = True
       { WebLabel6 WebLabel
         #MoveScaled(1,1,10,2)
+        Width = "3em"
         Text = ("Pass")
+        Border = True
       }
       { txtpass WebTextBox
         #MoveScaled(12,1,18,2)
@@ -185,7 +187,7 @@
     }
     { WebContainer8 WebContainer
       #MoveScaled(1,13,45,4)
-      Height = "2em"
+      Height = "1em"
     }
     { WebContainer9 WebContainer
       #MoveScaled(1,17,45,5)

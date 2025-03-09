@@ -2,14 +2,17 @@
 
 Private $sLink As String
 Private $encid As String
+Private $sType As String
+
 Private $exportPath As String
 
-Public Sub _new(sLink As String, sLock As Boolean, encid As String)
+Public Sub _new(sLink As String, sLock As Boolean, encid As String, sType As String)
 
   Dim xfile As String
 
   $sLink = sLink
   $encid = encid
+  $sType = sType
   If sLock = True Then
     WebContainerLock.Visible = False
     btnsavepdf.Visible = False
@@ -98,9 +101,9 @@ Public Sub btnsave_Click()
     Endif
 
     If $encid Then
-      hForm = New FmSaveFile(xpath, $encid)
+      hForm = New FmSaveFile(xpath, $encid, $sType)
     Else
-      hForm = New FmSaveFile(xpath, "")
+      hForm = New FmSaveFile(xpath, "", $sType)
     Endif
     hForm.ShowModal()
   Endif

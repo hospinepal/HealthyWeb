@@ -3260,7 +3260,7 @@
           #MoveScaled(42,1,20,2)
           Width = "33%"
           Height = "2em"
-          Tooltip = ("Include History and Discharge Notes Data as source of Report Data\nHistory Format:  {$Last_History:<Variable>$}\nNotes Format:  {$Last_Discharge:<Variable>$}")
+          Tooltip = ("Include History and Discharge Notes Data as source of Report Data\nHistory Format:  {$Last_History:<Variable>$}\nNotes Format:  {$Last_Discharge:<Variable>$}\n\nTo get value for Variable from Selection List use  {$ColumnTable:<Variable>$}")
           Text = ("History and Notes")
         }
       }

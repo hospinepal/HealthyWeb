@@ -18,7 +18,7 @@
         #MoveScaled(1,1,15,31)
         Expand = True
       }
-      { Button1 WebButton
+      { btngenerate WebButton
         #MoveScaled(1,32,15,4)
         Height = "2em"
         Text = ("Generate")

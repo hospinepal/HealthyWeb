@@ -84,6 +84,7 @@ Public Sub btnOK_Click()
   modHelpVariable.CreateUserCacheDir()
 
   modHelpVariable.ConnectionMain()
+  modGeneralMain.EnableCollectionCache()
   If modDatabase.$myConn.Opened = True Then
     modHelpVariable.$localIP = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
 
@@ -109,7 +110,7 @@ Public Sub btnCreate_Click()
   modHelpVariable.CreateUserCacheDir()
   modHelpVariable.ConnectionMain()
   modHelpVariable.CalenderConnection()
-  modBasic.EnableCollectionCache()
+  modGeneralMain.EnableCollectionCache()
   WebForm.Current = fmVerifyEmail
   ' WebForm.Current = fmVerifyStaff
 

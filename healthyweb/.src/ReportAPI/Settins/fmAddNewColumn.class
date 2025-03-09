@@ -5,12 +5,20 @@ Private $sTabList As String[] = ["NewColumn1", "NewColumn2", "NewColumn3", "NewC
 
 Public Sub _new(frm As String)
 
+  Dim formList As String[] = ["Date", "Boolean", "Currency", "Number"]
+
   $FormName = frm
   cmbvariable1.List = modLongVar.$RegistVar
   cmbvariable2.List = modLongVar.$RegistVar
   cmbvariable3.List = modLongVar.$RegistVar
   cmbvariable4.List = modLongVar.$RegistVar
   cmbvariable5.List = modLongVar.$RegistVar
+
+  cmbformat1.List = formList
+  cmbformat2.List = formList
+  cmbformat3.List = formList
+  cmbformat4.List = formList
+  cmbformat5.List = formList
   ShowFilecustom(0)
 
 End
@@ -22,7 +30,7 @@ Public Sub TabPanel1_Click()
 End
 
 ''======================================== Custom Columns ---------------------------------------------------------------
-Private Sub SaveCustCol(IconPanelx As WebTabPanel, cmbvariable As WebComboBox, txtsqlx As WebTextArea, txtoptx1 As WebTextBox, txtoptx2 As WebTextBox, txtoptx3 As WebTextBox, txttitlex As WebTextBox, chkarray As WebCheckBox, txtscript As WebButtonBox, txtshell As WebTextBox)                                    ''
+Private Sub SaveCustCol(IconPanelx As WebTabPanel, cmbvariable As WebComboBox, txtsqlx As WebTextArea, txtoptx1 As WebTextBox, txtoptx2 As WebTextBox, txtoptx3 As WebTextBox, txttitlex As WebTextBox, chkarray As WebCheckBox, txtscript As WebButtonBox, txtshell As WebTextBox, cmbformat As WebComboBox)                                    ''
 
   modSettings.SaveSettingsToFile($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "Title", txttitlex.Text)
   modSettings.SaveSettingsToFile($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "PatVariable", cmbvariable.Text)
@@ -30,6 +38,7 @@ Private Sub SaveCustCol(IconPanelx As WebTabPanel, cmbvariable As WebComboBox, t
   modSettings.SaveSettingsToFile($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "Option1", txtoptx1.Text)
   modSettings.SaveSettingsToFile($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "Option2", txtoptx2.Text)
   modSettings.SaveSettingsToFile($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "Option3", txtoptx3.Text)
+  modSettings.SaveSettingsToFile($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "Format", cmbformat.Text)
   modSettings.EnterCheckSetting(chkarray, $FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "ArrayOutput")
   modSettings.SaveSettingsToFile($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "FormatScript", txtscript.Text)
   modSettings.SaveSettingsToFile($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "FormatShell", txtshell.Text)
@@ -40,7 +49,7 @@ Private Sub SaveCustCol(IconPanelx As WebTabPanel, cmbvariable As WebComboBox, t
 
 End
 
-Private Sub ShowCustColumn(IconPanelx As WebTabPanel, cmbvariable As WebComboBox, txtsqlx As WebTextArea, txtoptx1 As WebTextBox, txtoptx2 As WebTextBox, txtoptx3 As WebTextBox, txttitlex As WebTextBox, chkarray As WebCheckBox, txtscript As WebButtonBox, txtshell As WebTextBox)
+Private Sub ShowCustColumn(IconPanelx As WebTabPanel, cmbvariable As WebComboBox, txtsqlx As WebTextArea, txtoptx1 As WebTextBox, txtoptx2 As WebTextBox, txtoptx3 As WebTextBox, txttitlex As WebTextBox, chkarray As WebCheckBox, txtscript As WebButtonBox, txtshell As WebTextBox, cmbformat As WebComboBox)
 
   txttitlex.Text = modSettings.ShowSettingFromFIle($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "Title")
   cmbvariable.Text = modSettings.ShowSettingFromFIle($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "PatVariable")
@@ -48,6 +57,7 @@ Private Sub ShowCustColumn(IconPanelx As WebTabPanel, cmbvariable As WebComboBox
   txtoptx1.Text = modSettings.ShowSettingFromFIle($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "Option1")
   txtoptx2.Text = modSettings.ShowSettingFromFIle($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "Option2")
   txtoptx3.Text = modSettings.ShowSettingFromFIle($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "Option3")
+  cmbformat.Text = modSettings.ShowSettingFromFIle($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "Format")
   modSettings.ShowCheckBox(chkarray, $FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "ArrayOutput")
   txtscript.Text = modSettings.ShowSettingFromFIle($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "FormatScript")
   txtshell.Text = modSettings.ShowSettingFromFIle($FormName & "_" & $sTabList[IconPanelx.Index] & "/" & "FormatShell")
@@ -56,7 +66,7 @@ End
 
 Public Sub btnsave1_Click()
 
-  SaveCustCol(TabPanel1, cmbvariable1, txtsql1, txtfiroption1, txtsecoption1, txtthirdoption1, txttitle1, chkarry1, txtscript1, txtshell1)
+  SaveCustCol(TabPanel1, cmbvariable1, txtsql1, txtfiroption1, txtsecoption1, txtthirdoption1, txttitle1, chkarry1, txtscript1, txtshell1, cmbformat1)
   Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
   ' Balloon.Delay = modBasic.$BalloonDelay
 
@@ -64,7 +74,7 @@ End
 
 Public Sub btnsave2_Click()
 
-  SaveCustCol(TabPanel1, cmbvariable2, txtsql2, txtfiroption2, txtsecoption2, txtthirdoption2, txttitle2, chkarry2, txtscript2, txtshell2)
+  SaveCustCol(TabPanel1, cmbvariable2, txtsql2, txtfiroption2, txtsecoption2, txtthirdoption2, txttitle2, chkarry2, txtscript2, txtshell2, cmbformat2)
   Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
   ' Balloon.Delay = modBasic.$BalloonDelay
 
@@ -72,7 +82,7 @@ End
 
 Public Sub btnsave3_Click()
 
-  SaveCustCol(TabPanel1, cmbvariable3, txtsql3, txtfiroption3, txtsecoption3, txtthirdoption3, txttitle3, chkarry3, txtscript3, txtshell3)
+  SaveCustCol(TabPanel1, cmbvariable3, txtsql3, txtfiroption3, txtsecoption3, txtthirdoption3, txttitle3, chkarry3, txtscript3, txtshell3, cmbformat3)
   Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
   ' Balloon.Delay = modBasic.$BalloonDelay
 
@@ -80,7 +90,7 @@ End
 
 Public Sub btnsave4_Click()
 
-  SaveCustCol(TabPanel1, cmbvariable4, txtsql4, txtfiroption4, txtsecoption4, txtthirdoption4, txttitle4, chkarry4, txtscript4, txtshell4)
+  SaveCustCol(TabPanel1, cmbvariable4, txtsql4, txtfiroption4, txtsecoption4, txtthirdoption4, txttitle4, chkarry4, txtscript4, txtshell4, cmbformat4)
   Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
   ' Balloon.Delay = modBasic.$BalloonDelay
 
@@ -88,7 +98,7 @@ End
 
 Public Sub btnsave5_Click()
 
-  SaveCustCol(TabPanel1, cmbvariable5, txtsql5, txtfiroption5, txtsecoption5, txtthirdoption5, txttitle5, chkarry5, txtscript5, txtshell5)
+  SaveCustCol(TabPanel1, cmbvariable5, txtsql5, txtfiroption5, txtsecoption5, txtthirdoption5, txttitle5, chkarry5, txtscript5, txtshell5, cmbformat5)
   Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
   ' Balloon.Delay = modBasic.$BalloonDelay
 
@@ -97,15 +107,15 @@ End
 Private Sub ShowFilecustom(sInt As Integer)
 
   If sInt = 0 Then
-    ShowCustColumn(TabPanel1, cmbvariable1, txtsql1, txtfiroption1, txtsecoption1, txtthirdoption1, txttitle1, chkarry1, txtscript1, txtshell1)
+    ShowCustColumn(TabPanel1, cmbvariable1, txtsql1, txtfiroption1, txtsecoption1, txtthirdoption1, txttitle1, chkarry1, txtscript1, txtshell1, cmbformat1)
   Else If sInt = 1 Then
-    ShowCustColumn(TabPanel1, cmbvariable2, txtsql2, txtfiroption2, txtsecoption2, txtthirdoption2, txttitle2, chkarry2, txtscript2, txtshell2)
+    ShowCustColumn(TabPanel1, cmbvariable2, txtsql2, txtfiroption2, txtsecoption2, txtthirdoption2, txttitle2, chkarry2, txtscript2, txtshell2, cmbformat2)
   Else If sInt = 2 Then
-    ShowCustColumn(TabPanel1, cmbvariable3, txtsql3, txtfiroption3, txtsecoption3, txtthirdoption3, txttitle3, chkarry3, txtscript3, txtshell3)
+    ShowCustColumn(TabPanel1, cmbvariable3, txtsql3, txtfiroption3, txtsecoption3, txtthirdoption3, txttitle3, chkarry3, txtscript3, txtshell3, cmbformat3)
   Else If sInt = 3 Then
-    ShowCustColumn(TabPanel1, cmbvariable4, txtsql4, txtfiroption4, txtsecoption4, txtthirdoption4, txttitle4, chkarry4, txtscript4, txtshell4)
+    ShowCustColumn(TabPanel1, cmbvariable4, txtsql4, txtfiroption4, txtsecoption4, txtthirdoption4, txttitle4, chkarry4, txtscript4, txtshell4, cmbformat4)
   Else If sInt = 4 Then
-    ShowCustColumn(TabPanel1, cmbvariable5, txtsql5, txtfiroption5, txtsecoption5, txtthirdoption5, txttitle5, chkarry5, txtscript5, txtshell5)
+    ShowCustColumn(TabPanel1, cmbvariable5, txtsql5, txtfiroption5, txtsecoption5, txtthirdoption5, txttitle5, chkarry5, txtscript5, txtshell5, cmbformat5)
   Endif
 
 End
@@ -140,7 +150,7 @@ End
 '
 ' End
 
-Private Sub ClearAll(cmbvariable As WebComboBox, txtsqlx As WebTextArea, txtoptx1 As WebTextBox, txtoptx2 As WebTextBox, txtoptx3 As WebTextBox, txttitlex As WebTextBox, chkarray As WebCheckBox, txtscript As WebButtonBox, txtshell As WebTextBox)
+Private Sub ClearAll(cmbvariable As WebComboBox, txtsqlx As WebTextArea, txtoptx1 As WebTextBox, txtoptx2 As WebTextBox, txtoptx3 As WebTextBox, txttitlex As WebTextBox, chkarray As WebCheckBox, txtscript As WebButtonBox, txtshell As WebTextBox, cmbformat As WebComboBox)
 
   cmbvariable.Text = ""
   txtsqlx.Text = ""
@@ -148,6 +158,7 @@ Private Sub ClearAll(cmbvariable As WebComboBox, txtsqlx As WebTextArea, txtoptx
   txtoptx2.Text = ""
   txtoptx3.Text = ""
   txttitlex.Text = ""
+  cmbformat.Text = ""
   chkarray.Value = False
   txtscript.Text = ""
   txtshell.Text = ""
@@ -156,31 +167,31 @@ End
 
 Public Sub btnclear1_Click()
 
-  ClearAll(cmbvariable1, txtsql1, txtfiroption1, txtsecoption1, txtthirdoption1, txttitle1, chkarry1, txtscript1, txtshell1)
+  ClearAll(cmbvariable1, txtsql1, txtfiroption1, txtsecoption1, txtthirdoption1, txttitle1, chkarry1, txtscript1, txtshell1, cmbformat1)
 
 End
 
 Public Sub btnclear2_Click()
 
-  ClearAll(cmbvariable2, txtsql2, txtfiroption2, txtsecoption2, txtthirdoption2, txttitle2, chkarry2, txtscript2, txtshell2)
+  ClearAll(cmbvariable2, txtsql2, txtfiroption2, txtsecoption2, txtthirdoption2, txttitle2, chkarry2, txtscript2, txtshell2, cmbformat2)
 
 End
 
 Public Sub btnclear3_Click()
 
-  ClearAll(cmbvariable3, txtsql3, txtfiroption3, txtsecoption3, txtthirdoption3, txttitle3, chkarry3, txtscript3, txtshell3)
+  ClearAll(cmbvariable3, txtsql3, txtfiroption3, txtsecoption3, txtthirdoption3, txttitle3, chkarry3, txtscript3, txtshell3, cmbformat3)
 
 End
 
 Public Sub btnclear4_Click()
 
-  ClearAll(cmbvariable4, txtsql4, txtfiroption4, txtsecoption4, txtthirdoption4, txttitle4, chkarry4, txtscript4, txtshell4)
+  ClearAll(cmbvariable4, txtsql4, txtfiroption4, txtsecoption4, txtthirdoption4, txttitle4, chkarry4, txtscript4, txtshell4, cmbformat4)
 
 End
 
 Public Sub btnclear5_Click()
 
-  ClearAll(cmbvariable5, txtsql5, txtfiroption5, txtsecoption5, txtthirdoption5, txttitle5, chkarry5, txtscript5, txtshell5)
+  ClearAll(cmbvariable5, txtsql5, txtfiroption5, txtsecoption5, txtthirdoption5, txttitle5, chkarry5, txtscript5, txtshell5, cmbformat5)
 
 End
 

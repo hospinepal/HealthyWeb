@@ -45,7 +45,7 @@ Private Sub GetListData()
 
 End
 
-Public Sub Button1_Click()
+Public Sub btngenerate_Click()
 
   Me.Close
 

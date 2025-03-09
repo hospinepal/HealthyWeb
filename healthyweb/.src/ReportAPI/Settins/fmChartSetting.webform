@@ -1849,7 +1849,7 @@
           Index = 1
           Text = ("Encounter Data")
           { WebContainer140 WebContainer
-            #MoveScaled(1,1,77.625,4)
+            #MoveScaled(1,1,76,4)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel138 WebLabel
@@ -1858,7 +1858,7 @@
               Text = ("Variable")
             }
             { cmbtimerow WebComboBox
-              #MoveScaled(9,1,15,2.375)
+              #MoveScaled(9,1,15,2)
               Height = "2em"
               Expand = True
               ReadOnly = False
@@ -1871,7 +1871,7 @@
             }
           }
           { WebContainer141 WebContainer
-            #MoveScaled(1,5,77.625,15)
+            #MoveScaled(1,5,76,15)
             Class = "less-container-margin"
             Expand = True
             Arrangement = Arrange.Horizontal
@@ -1887,7 +1887,7 @@
             }
           }
           { WebContainer142 WebContainer
-            #MoveScaled(1,20,77.625,5)
+            #MoveScaled(1,20,76,5)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel140 WebLabel
@@ -1902,7 +1902,7 @@
             }
           }
           { WebContainer143 WebContainer
-            #MoveScaled(1,25,77.625,5)
+            #MoveScaled(1,25,76,5)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel141 WebLabel
@@ -1917,7 +1917,7 @@
             }
           }
           { WebContainer144 WebContainer
-            #MoveScaled(1,30,77.625,5)
+            #MoveScaled(1,30,76,5)
             Arrangement = Arrange.Horizontal
             { WebLabel142 WebLabel
               #MoveScaled(1,1,8,3)

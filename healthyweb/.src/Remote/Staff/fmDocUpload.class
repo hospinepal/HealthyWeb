@@ -69,8 +69,10 @@ Public Sub btnupload_Click()
   Dim sLongID As Long
 
   If cmbcategory.Text And If txtfilepath.Text Then
-    sLongID = modImage.SavePatientFileGeneral($encid, $sType, cmbcategory.Text, txtfilepath.Text, False)    ''
-    Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
+    sLongID = modImage.SavePatientFileGeneral($encid, $sType, cmbcategory.Text, txtfilepath.Text)    ''
+    If sLongID Then
+      Me.Exec("Toastify({text: 'File saved', duration: 3000}).showToast()")
+    Endif
     ResizeGridView()
   Endif
 

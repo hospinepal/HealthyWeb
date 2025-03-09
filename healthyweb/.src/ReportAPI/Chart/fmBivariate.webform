@@ -22,9 +22,8 @@
       }
       { cmbcrossrowtype WebComboBox
         #MoveScaled(7,1,15,2)
-        Width = "25%"
+        Width = "12em"
         Height = "2em"
-        Expand = True
         ReadOnly = False
       }
       { WebContainer50 WebContainer
@@ -300,9 +299,8 @@
       }
       { cmbcrosscoltype WebComboBox
         #MoveScaled(7,1,15,2)
-        Width = "25%"
+        Width = "12em"
         Height = "2em"
-        Expand = True
         ReadOnly = False
       }
       { WebContainer21 WebContainer

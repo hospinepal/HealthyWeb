@@ -10,8 +10,9 @@
     Arrangement = Arrange.Horizontal
     { WebLabel166 WebLabel
       #MoveScaled(1,1,12,2)
-      Width = "7em"
+      Width = "10em"
       Text = ("Chapter Colm")
+      Border = True
     }
     { txtgridpartichapter WebSpinBox
       #MoveScaled(13,1,10,2)
@@ -24,7 +25,7 @@
     }
     { WebLabel192 WebLabel
       #MoveScaled(36,1,12,2)
-      Width = "5em"
+      Width = "6em"
       Text = ("Option1")
     }
     { txtsumchapteroptcol WebSpinBox
@@ -44,8 +45,9 @@
     Arrangement = Arrange.Horizontal
     { WebLabel168 WebLabel
       #MoveScaled(1,1,12,2)
-      Width = "7em"
+      Width = "10em"
       Text = ("Chap Format")
+      Border = True
     }
     { chksummchptrans WebCheckBox
       #MoveScaled(13,1,7,2)
@@ -64,14 +66,19 @@
       Height = "2em"
     }
   }
+  { WebContainer1 WebContainer
+    #MoveScaled(1,16,70,2)
+    Height = "0.5em"
+  }
   { WebContainer170 WebContainer
-    #MoveScaled(1,16,70,4)
+    #MoveScaled(1,18,70,4)
     Class = "less-container-margin"
     Arrangement = Arrange.Horizontal
     { WebLabel165 WebLabel
       #MoveScaled(1,1,12,2)
-      Width = "7em"
+      Width = "10em"
       Text = ("Group Colm")
+      Border = True
     }
     { txtgridparticol WebSpinBox
       #MoveScaled(13,1,10,2)
@@ -84,7 +91,7 @@
     }
     { WebLabel193 WebLabel
       #MoveScaled(36,1,12,2)
-      Width = "5em"
+      Width = "6em"
       Text = ("Option1")
     }
     { txtsumgroupoptioncol WebSpinBox
@@ -94,18 +101,19 @@
     }
   }
   { txtsumgroupsql WebTextArea
-    #MoveScaled(1,20,70,7)
+    #MoveScaled(1,22,70,7)
     Height = "15vh"
     Wrap = True
   }
   { WebContainer172 WebContainer
-    #MoveScaled(1,27,70,4)
+    #MoveScaled(1,29,70,4)
     Class = "less-container-margin"
     Arrangement = Arrange.Horizontal
     { WebLabel167 WebLabel
       #MoveScaled(1,1,12,2)
-      Width = "7em"
+      Width = "10em"
       Text = ("Group Format")
+      Border = True
     }
     { chksummtrans WebCheckBox
       #MoveScaled(13,1,7,2)
@@ -124,14 +132,19 @@
       Height = "2em"
     }
   }
+  { WebContainer2 WebContainer
+    #MoveScaled(1,33,70,2)
+    Height = "0.5em"
+  }
   { WebContainer174 WebContainer
-    #MoveScaled(1,31,70,4)
+    #MoveScaled(1,35,70,4)
     Class = "less-container-margin"
     Arrangement = Arrange.Horizontal
     { WebLabel170 WebLabel
       #MoveScaled(1,1,12,2)
-      Width = "7em"
+      Width = "10em"
       Text = ("Value Colm")
+      Border = True
     }
     { txtgridvalcol WebSpinBox
       #MoveScaled(13,1,10,2)
@@ -156,7 +169,7 @@
     }
   }
   { WebContainer176 WebContainer
-    #MoveScaled(1,35,70,4)
+    #MoveScaled(1,39,70,4)
     Class = "less-container-margin"
     Arrangement = Arrange.Horizontal
     { chksummnull WebCheckBox

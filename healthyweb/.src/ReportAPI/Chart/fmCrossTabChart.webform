@@ -34,6 +34,7 @@
       #MoveScaled(1,1,12,2)
       Width = "7em"
       Text = ("Row Column")
+      Border = True
     }
     { txtcrotabrow WebSpinBox
       #MoveScaled(13,1,10,2)
@@ -47,7 +48,9 @@
     }
     { WebLabel163 WebLabel
       #MoveScaled(34,1,12,2)
+      Width = "6em"
       Text = ("Exclude")
+      Border = True
     }
     { txtcrotabexclurow WebTextBox
       #MoveScaled(46,1,32,2)
@@ -63,6 +66,7 @@
       #MoveScaled(1,1,12,2)
       Width = "7em"
       Text = ("Row Format")
+      Border = True
     }
     { chkcrotabrowtrans WebCheckBox
       #MoveScaled(13,1,7,2)
@@ -81,14 +85,19 @@
       Height = "2em"
     }
   }
+  { WebContainer1 WebContainer
+    #MoveScaled(1,13,68,2)
+    Height = "0.5em"
+  }
   { WebContainer163 WebContainer
-    #MoveScaled(1,13,68,4)
+    #MoveScaled(1,15,68,4)
     Class = "less-container-margin"
     Arrangement = Arrange.Horizontal
     { WebLabel161 WebLabel
       #MoveScaled(1,1,12,2)
       Width = "7em"
       Text = ("Field Column")
+      Border = True
     }
     { txtcrotabfield WebSpinBox
       #MoveScaled(13,1,10,2)
@@ -102,7 +111,9 @@
     }
     { WebLabel164 WebLabel
       #MoveScaled(34,1,12,2)
+      Width = "6em"
       Text = ("Exclude")
+      Border = True
     }
     { txtcrotabexclufield WebTextBox
       #MoveScaled(46,1,32,2)
@@ -111,13 +122,14 @@
     }
   }
   { WebContainer162 WebContainer
-    #MoveScaled(1,17,68,4)
+    #MoveScaled(1,19,68,4)
     Class = "less-container-margin"
     Arrangement = Arrange.Horizontal
     { WebLabel162 WebLabel
       #MoveScaled(1,1,12,2)
       Width = "7em"
       Text = ("Field Format")
+      Border = True
     }
     { chkcrotabfieltrans WebCheckBox
       #MoveScaled(13,1,7,2)

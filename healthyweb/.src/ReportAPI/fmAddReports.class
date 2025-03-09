@@ -62,7 +62,7 @@ Public Sub mnuscanfile_Click()
   Dim hForm As FmScanForm
 
   If $encid Then
-    hForm = New FmScanForm($encid, "Scanned Images")
+    hForm = New FmScanForm($encid, "Scanned Images", "")
     hForm.ShowModal
     ShowDocuments()
   Endif
@@ -76,7 +76,10 @@ Public Sub mnucamera_Click()
 
   sPath = modImage.GetWebCamValue()
   If sPath Then
-    sLongID = modImage.SavePatientFileGeneral($encid, "Scanned Images", "Scanned Images:" & modString.GetDateString(Now()), sPath, False)
+    sLongID = modImage.SavePatientFileGeneral($encid, "Scanned Images", "Scanned Images:" & modString.GetDateString(Now()), sPath)
+    If sLongID Then
+      Me.Exec("Toastify({text: 'File saved', duration: 3000}).showToast()")
+    Endif
     ShowDocuments()
   Endif
 
@@ -261,7 +264,7 @@ Public Sub btnupload_Click()
   pathList = New String[]
   For Row = 0 To GridView1.Selection.Count - 1
     If GridView1.IsSelected(Row) Then
-      $rData.MoveTo(GridView1.Selection[0])
+      $rData.MoveTo(Row)
       xPath = modImage.GetBlobFileData($rData["fldid"], $tblpatreport)
       If Exist(xPath) Then
         pathList.Add(xPath)

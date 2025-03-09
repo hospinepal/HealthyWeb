@@ -269,6 +269,11 @@ Private Function SaveVerifyData(sPass As String) As String
     ' res["fldremark"] = txtremarks.Text
     res["fldtime"] = Now()
     res["xyz"] = False
+    If MMain.$WebEntry = True Then
+      res["fldrepodate"] = Now()
+      res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+      res["fldhospcode"] = modBasic.$HospCode
+    Endif
     res.Update
 
     res1 = modDatabase.$myConn.Create("tblremoteusers")

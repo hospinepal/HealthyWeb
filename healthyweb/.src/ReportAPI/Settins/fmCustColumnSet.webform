@@ -231,8 +231,29 @@
         Height = "2em"
       }
     }
-    { WebContainer2 WebContainer
+    { WebContainer142 WebContainer
       #MoveScaled(1,31,61.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel101 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "6em"
+        Text = ("Format")
+      }
+      { cmbformat1 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "30%"
+        Height = "2em"
+        ReadOnly = False
+      }
+      { WebContainer143 WebContainer
+        #MoveScaled(24,1,9,2)
+        Expand = True
+        Arrangement = Arrange.Vertical
+      }
+    }
+    { WebContainer2 WebContainer
+      #MoveScaled(1,35,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel3 WebLabel
@@ -252,7 +273,7 @@
       }
     }
     { WebContainer9 WebContainer
-      #MoveScaled(1,35,61.75,4)
+      #MoveScaled(1,39,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry1 WebCheckBox
@@ -441,8 +462,29 @@
         Height = "2em"
       }
     }
-    { WebContainer22 WebContainer
+    { WebContainer144 WebContainer
       #MoveScaled(1,31,61.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel102 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "6em"
+        Text = ("Format")
+      }
+      { cmbformat2 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "30%"
+        Height = "2em"
+        ReadOnly = False
+      }
+      { WebContainer145 WebContainer
+        #MoveScaled(24,1,9,2)
+        Expand = True
+        Arrangement = Arrange.Vertical
+      }
+    }
+    { WebContainer22 WebContainer
+      #MoveScaled(1,35,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel15 WebLabel
@@ -462,7 +504,7 @@
       }
     }
     { WebContainer23 WebContainer
-      #MoveScaled(1,35,61.75,4)
+      #MoveScaled(1,39,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry2 WebCheckBox
@@ -651,8 +693,29 @@
         Height = "2em"
       }
     }
-    { WebContainer35 WebContainer
+    { WebContainer146 WebContainer
       #MoveScaled(1,31,61.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel103 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "6em"
+        Text = ("Format")
+      }
+      { cmbformat3 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "30%"
+        Height = "2em"
+        ReadOnly = False
+      }
+      { WebContainer147 WebContainer
+        #MoveScaled(24,1,9,2)
+        Expand = True
+        Arrangement = Arrange.Vertical
+      }
+    }
+    { WebContainer35 WebContainer
+      #MoveScaled(1,35,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel24 WebLabel
@@ -672,7 +735,7 @@
       }
     }
     { WebContainer36 WebContainer
-      #MoveScaled(1,35,61.75,4)
+      #MoveScaled(1,39,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry3 WebCheckBox
@@ -861,8 +924,29 @@
         Height = "2em"
       }
     }
-    { WebContainer48 WebContainer
+    { WebContainer148 WebContainer
       #MoveScaled(1,31,61.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel104 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "6em"
+        Text = ("Format")
+      }
+      { cmbformat4 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "30%"
+        Height = "2em"
+        ReadOnly = False
+      }
+      { WebContainer149 WebContainer
+        #MoveScaled(24,1,9,2)
+        Expand = True
+        Arrangement = Arrange.Vertical
+      }
+    }
+    { WebContainer48 WebContainer
+      #MoveScaled(1,35,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel36 WebLabel
@@ -882,7 +966,7 @@
       }
     }
     { WebContainer49 WebContainer
-      #MoveScaled(1,35,61.75,4)
+      #MoveScaled(1,39,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry4 WebCheckBox
@@ -1071,8 +1155,29 @@
         Height = "2em"
       }
     }
-    { WebContainer64 WebContainer
+    { WebContainer150 WebContainer
       #MoveScaled(1,31,61.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel105 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "6em"
+        Text = ("Format")
+      }
+      { cmbformat5 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "30%"
+        Height = "2em"
+        ReadOnly = False
+      }
+      { WebContainer151 WebContainer
+        #MoveScaled(24,1,9,2)
+        Expand = True
+        Arrangement = Arrange.Vertical
+      }
+    }
+    { WebContainer64 WebContainer
+      #MoveScaled(1,35,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel45 WebLabel
@@ -1092,7 +1197,7 @@
       }
     }
     { WebContainer65 WebContainer
-      #MoveScaled(1,35,61.75,4)
+      #MoveScaled(1,39,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry5 WebCheckBox
@@ -1281,8 +1386,29 @@
         Height = "2em"
       }
     }
-    { WebContainer77 WebContainer
+    { WebContainer152 WebContainer
       #MoveScaled(1,31,61.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel106 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "6em"
+        Text = ("Format")
+      }
+      { cmbformat6 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "30%"
+        Height = "2em"
+        ReadOnly = False
+      }
+      { WebContainer153 WebContainer
+        #MoveScaled(24,1,9,2)
+        Expand = True
+        Arrangement = Arrange.Vertical
+      }
+    }
+    { WebContainer77 WebContainer
+      #MoveScaled(1,35,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel54 WebLabel
@@ -1302,7 +1428,7 @@
       }
     }
     { WebContainer78 WebContainer
-      #MoveScaled(1,35,61.75,4)
+      #MoveScaled(1,39,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry6 WebCheckBox
@@ -1491,8 +1617,29 @@
         Height = "2em"
       }
     }
-    { WebContainer90 WebContainer
+    { WebContainer154 WebContainer
       #MoveScaled(1,31,61.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel107 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "6em"
+        Text = ("Format")
+      }
+      { cmbformat7 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "30%"
+        Height = "2em"
+        ReadOnly = False
+      }
+      { WebContainer155 WebContainer
+        #MoveScaled(24,1,9,2)
+        Expand = True
+        Arrangement = Arrange.Vertical
+      }
+    }
+    { WebContainer90 WebContainer
+      #MoveScaled(1,35,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel63 WebLabel
@@ -1512,7 +1659,7 @@
       }
     }
     { WebContainer91 WebContainer
-      #MoveScaled(1,35,61.75,4)
+      #MoveScaled(1,39,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry7 WebCheckBox
@@ -1701,8 +1848,29 @@
         Height = "2em"
       }
     }
-    { WebContainer103 WebContainer
+    { WebContainer156 WebContainer
       #MoveScaled(1,31,61.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel108 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "6em"
+        Text = ("Format")
+      }
+      { cmbformat8 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "30%"
+        Height = "2em"
+        ReadOnly = False
+      }
+      { WebContainer157 WebContainer
+        #MoveScaled(24,1,9,2)
+        Expand = True
+        Arrangement = Arrange.Vertical
+      }
+    }
+    { WebContainer103 WebContainer
+      #MoveScaled(1,35,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel72 WebLabel
@@ -1722,7 +1890,7 @@
       }
     }
     { WebContainer104 WebContainer
-      #MoveScaled(1,35,61.75,4)
+      #MoveScaled(1,39,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry8 WebCheckBox
@@ -1911,8 +2079,29 @@
         Height = "2em"
       }
     }
-    { WebContainer116 WebContainer
+    { WebContainer158 WebContainer
       #MoveScaled(1,31,61.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel109 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "6em"
+        Text = ("Format")
+      }
+      { cmbformat9 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "30%"
+        Height = "2em"
+        ReadOnly = False
+      }
+      { WebContainer159 WebContainer
+        #MoveScaled(24,1,9,2)
+        Expand = True
+        Arrangement = Arrange.Vertical
+      }
+    }
+    { WebContainer116 WebContainer
+      #MoveScaled(1,35,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel81 WebLabel
@@ -1932,7 +2121,7 @@
       }
     }
     { WebContainer117 WebContainer
-      #MoveScaled(1,35,61.75,4)
+      #MoveScaled(1,39,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry9 WebCheckBox
@@ -2121,8 +2310,29 @@
         Height = "2em"
       }
     }
-    { WebContainer129 WebContainer
+    { WebContainer160 WebContainer
       #MoveScaled(1,31,61.75,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel110 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "6em"
+        Text = ("Format")
+      }
+      { cmbformat10 WebComboBox
+        #MoveScaled(9,1,15,2)
+        Width = "30%"
+        Height = "2em"
+        ReadOnly = False
+      }
+      { WebContainer161 WebContainer
+        #MoveScaled(24,1,9,2)
+        Expand = True
+        Arrangement = Arrange.Vertical
+      }
+    }
+    { WebContainer129 WebContainer
+      #MoveScaled(1,35,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel90 WebLabel
@@ -2142,7 +2352,7 @@
       }
     }
     { WebContainer130 WebContainer
-      #MoveScaled(1,35,61.75,4)
+      #MoveScaled(1,39,61.75,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkarry10 WebCheckBox

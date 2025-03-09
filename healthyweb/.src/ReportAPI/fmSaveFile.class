@@ -2,13 +2,16 @@
 
 Private $sFIle As String
 Private $encid As String
+Private $sType As String
 
-Public Sub _new(sPath As String, encid As String)
+Public Sub _new(sPath As String, encid As String, sType As String)
 
   $sFIle = sPath
   $encid = encid
+  $sType = sType
 
   txtfile.ProgressControl = WebProgressBar1
+  WebLabel3.Text = $sType
   txtfile.Text = File.Name($sFIle)
   If $encid Then
     rbarchive.Value = True
@@ -42,8 +45,17 @@ End
 Private Sub SaveToArchive()
 
   Dim sLongID As Long
+  Dim sTitle As String
 
-  sLongID = modImage.SavePatientFileGeneral($encid, "General Reports", txtdetail.Text, $sFIle, False, modReportVar.$ReportHash)                  ''
+  If $sType Then
+    sTitle = $sType
+  Else
+    sTitle = "General Reports"
+  Endif
+  sLongID = modImage.SavePatientFileGeneral($encid, sTitle, txtdetail.Text, $sFIle, modReportVar.$ReportHash)                  ''
+  If sLongID Then
+    Me.Exec("Toastify({text: 'File saved', duration: 3000}).showToast()")
+  Endif
 
 End
 
