@@ -49,6 +49,7 @@ Public Function GetExtraTextArea(sHead As String, sText As String) As String
 
   xx = GetTextArea(sHead, sText)
   ' xx = GetRichTextArea(sHead, sText)
+  xx = modString.TextToHTML(xx)
   Return xx
 
 End

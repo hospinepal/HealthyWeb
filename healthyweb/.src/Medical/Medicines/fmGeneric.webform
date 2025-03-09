@@ -8,6 +8,7 @@
   Margin = True
   Title = ("Generic Info")
   { mnuhide WebMenu
+    Visible = False
     { mnudosing WebMenu
       Text = ("Dosing Limits")
     }
@@ -38,7 +39,7 @@
   }
   { WebContainer1 WebContainer
     #MoveScaled(1,1,32,90)
-    Class = "show-tablet  height-innertablet-left"
+    Class = "show-tablet  height-innertablet-left-less"
     Arrangement = Arrange.Vertical
     Spacing = True
     { btnmenu WebButton
@@ -66,7 +67,7 @@
   }
   { WebContainer2 WebContainer
     #MoveScaled(33,1,95,90)
-    Class = "show-widertablet  height-innertablet-right"
+    Class = "show-widertablet  height-innertablet-right-less"
     Arrangement = Arrange.Vertical
     { WebContainer5 WebContainer
       #MoveScaled(1,1,93,4)
@@ -458,10 +459,10 @@
         Width = "7em"
         Height = "2em"
         Text = ("Mech of Action")
+        Border = True
       }
       { txtmechanism WebTextArea
         #MoveScaled(16,1,33,5)
-        Height = "4em"
         Expand = True
         Wrap = True
       }
@@ -472,7 +473,7 @@
       Arrangement = Arrange.Horizontal
       { btnhelp WebButton
         #MoveScaled(1,1,18,2)
-        Width = "8em"
+        Width = "7em"
         Height = "2em"
         Text = ("Help")
         Image = "icon:/small/find"
@@ -492,10 +493,10 @@
         Width = "7em"
         Height = "2em"
         Text = ("Description")
+        Border = True
       }
       { txtdrugdetail WebTextArea
         #MoveScaled(16,1,33,5)
-        Height = "5em"
         Expand = True
         Wrap = True
       }

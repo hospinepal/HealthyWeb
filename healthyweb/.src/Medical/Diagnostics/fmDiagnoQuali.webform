@@ -131,6 +131,7 @@
   { txtdetail WebTextHTML
     #MoveScaled(1,26,62,15)
     Height = "10em"
+    Tooltip = ("Sets Default Value of the variable\nFor Dual Columns and Triple Columns Set Column Headings as:\nColumns:<firstcol>;<Secondcol>\nColumns:<firstcol>;<Secondcol>;<thirdcol>")
   }
   { GridView1 WebTable
     #MoveScaled(1,41,62,21)

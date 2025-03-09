@@ -30,6 +30,7 @@ End
 Public Sub InsertLabTestOrder(encid As String, strTest As String, strType As String, strMethod As String, grpid As Long, sRefer As String, sBillNo As String, sComment As String)
 
   Dim res As Result
+  Dim xIntVal As String
 
   res = modDatabase.$myConn.Create("tblpatlabtest")
   res["fldencounterval"] = encid
@@ -83,6 +84,14 @@ Public Sub InsertLabTestOrder(encid As String, strTest As String, strType As Str
   res["flduptime_verify"] = ""
   res["fldupuser_verify"] = ""
 
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update()
   'don't catch error
 
@@ -138,6 +147,7 @@ Public Sub InsertLabSubTest(encid As String, pttestid As Long, testname As Strin
 
   Dim res2 As Result
   Dim xx As String
+  Dim xIntVal As String
 
   For Each xx In subtestList
     If sTable Then
@@ -158,6 +168,14 @@ Public Sub InsertLabSubTest(encid As String, pttestid As Long, testname As Strin
     res2["fldorder"] = 0
     res2["fldfilepath"] = ""
     res2["xyz"] = True
+    If MMain.$WebEntry = True Then
+      xIntVal = modString.GetDateString(Now())
+      res2["fldid"] = CLong(xIntVal)
+      res2["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+      res2["fldrepodate"] = Now()
+      res2["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+      res2["fldhospcode"] = modBasic.$HospCode
+    Endif
     res2.Update()
   Next
   'don't catch error
@@ -515,10 +533,10 @@ Public Function FillQuantiTestChart(sCanvas As String, encid As String, strHead 
 
   If sHour Then
     firDate = DateAdd(Now(), gb.Hour, 0 - sHour)
-    sql = "select fldid,fldencounterval,fldtime_sample,fldtestid,fldreportquanti,fldtestunit,fldmethod from tblpatlabtest where fldencounterval=&1 and fldtestid=&2 and fldtest_type=&3 and (fldstatus=&4 or fldstatus=&5) and fldtime_sample>=&6"               ''
+    sql = "select fldid,fldencounterval,fldtime_sample,fldtestid,fldreportquanti,fldtestunit,fldmethod from tblpatlabtest where fldencounterval=&1 and fldtestid=&2 and fldtest_type=&3 and (fldstatus=&4 or fldstatus=&5) and fldtime_sample>=&6 ORDER BY fldtime_sample"               ''
     res = modDatabase.$myConn.Exec(sql, encid, strHead, "Quantitative", "Reported", "Verified", firDate)
   Else
-    sql = "select fldid,fldencounterval,fldtime_sample,fldtestid,fldreportquanti,fldtestunit,fldmethod from tblpatlabtest where fldencounterval=&1 and fldtestid=&2 and fldtest_type=&3 and (fldstatus=&4 or fldstatus=&5)"
+    sql = "select fldid,fldencounterval,fldtime_sample,fldtestid,fldreportquanti,fldtestunit,fldmethod from tblpatlabtest where fldencounterval=&1 and fldtestid=&2 and fldtest_type=&3 and (fldstatus=&4 or fldstatus=&5) ORDER BY fldtime_sample"
     res = modDatabase.$myConn.Exec(sql, encid, strHead, "Quantitative", "Reported", "Verified")
   Endif
   If res.Available Then
@@ -565,7 +583,7 @@ Public Function GetLabExtraColumnName(sItem As String) As String
 
 End
 
-Public Sub PrintBarCodeSampling(encid As String, sampleNo As String, specimen As String, xSection As String, xVariable As String)
+Public Sub PrintBarCodeSampling(encid As String, sampleNo As String, specimen As String, xSection As String, xVariable As String, Optional sColl As Collection)
 
   Dim hBarPage As CBarCode
   Dim xpath As String
@@ -602,6 +620,9 @@ Public Sub PrintBarCodeSampling(encid As String, sampleNo As String, specimen As
       xpath = modDevAll.GetBarCodeSample(encid)
     Endif
     hBarPage = New CBarCode(encid, sampleNo, specimen, xSection, xpath, xVariable)
+    If sColl And If sColl.Count Then
+      hBarPage.UserData = sColl
+    Endif
     sPath = modPrint.ConvertHTMLToPDFString(hBarPage.LabelPath(), "LabelSize")
 
     If xcount = 1 Then

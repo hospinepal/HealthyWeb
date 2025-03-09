@@ -18,6 +18,7 @@ Public Sub _new()
   Endif
 
   txtcodename.List = modMedicine.GetGenericMedList()
+  cmbdoseunit.List = ["mg", "IU", "mL"]
   cmbdosageform.List = modMedicine.GetDosageFormsList()
   cmbmanufacture.List = modMedicine.GetManufacturerList()
   ' txtpatientinfo.DictionaryPath = modBasic.$dictPathList
@@ -64,7 +65,11 @@ Private Function TotalRecordNo() As Integer
   Dim totalrec As Integer
 
   res = modDatabase.$medConn.Exec("select distinct(fldcodename) as fldparent from tbldrug")
-  totalrec = res.Count
+  If res.Available Then
+    totalrec = res.Count
+  Else
+    totalrec = 0
+  Endif
   Return totalrec
 
 End
@@ -73,9 +78,11 @@ Public Sub btnload_Click()
 
   TabStrip1.Enabled = True
   $totalrec = TotalRecordNo()
-  txtspinval.MaxValue = CInt(Floor($totalrec / 100))
   CompleteMedicineTree(TreeView1, 100 * txtspinval.Value)
-  lbltotal.Text = modMisc.RecordNumberLabel(100 * txtspinval.Value, 100, $totalrec)  '
+  If $totalrec Then
+    txtspinval.MaxValue = Ceil($totalrec / 100)
+    lbltotal.Text = modMisc.RecordNumberLabel(100 * txtspinval.Value, 100, $totalrec)  '
+  Endif
 
 End
 
@@ -155,6 +162,7 @@ Private Sub BlankMedStrength()
   txtmedminage.Value = 0
   txtmedref.Text = ""
   txtmedhelpPage.Text = ""
+  cmbdoseunit.Text = ""
 
 End
 
@@ -193,7 +201,7 @@ Private Sub FillMedStrInfo()
   Dim sql As String
   Dim res As Result
 
-  sql = "select flddrug,fldcodename,fldstrength,fldstrunit,fldroute,fldhelppage,fldciyear,fldreference from tbldrug where flddrug=&1"
+  sql = "select flddrug,fldcodename,fldstrength,fldstrunit,fldroute,fldhelppage,fldciyear,fldreference,flddoseunit from tbldrug where flddrug=&1"
   res = modDatabase.$medConn.Exec(sql, TreeView1.Current.Text)
   If res.Available Then
     txtdrug.Text = TreeView1.Current.Text
@@ -206,6 +214,7 @@ Private Sub FillMedStrInfo()
     Else
       txtmedminage.Value = 0
     Endif
+    cmbdoseunit.Text = res["flddoseunit"]
     txtmedref.Text = res["fldreference"]
     txtmedhelpPage.Text = res["fldhelppage"]
     btnmedOK.Text = "Add"
@@ -235,6 +244,7 @@ Public Sub btnmedOK_Click()
       res["fldroute"] = cmbmedform.Text
       res["fldhelppage"] = Trim(txtmedhelpPage.Text)
       res["fldciyear"] = txtmedminage.Value
+      res["flddoseunit"] = cmbdoseunit.Text
       res["fldreference"] = Trim(txtmedref.Text)
       If MMain.$IsDrugInfo = True Then
         res["flduserid"] = modBasic.$lbluser
@@ -295,6 +305,7 @@ Public Sub btnmedChange_Click()
         res["fldroute"] = cmbmedform.Text
         res["fldhelppage"] = Trim(txtmedhelpPage.Text)
         res["fldciyear"] = txtmedminage.Value
+        res["flddoseunit"] = cmbdoseunit.Text
         res["fldreference"] = Trim(txtmedref.Text)
         If MMain.$IsDrugInfo = True Then
           res["flduserid"] = modBasic.$lbluser

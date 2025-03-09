@@ -33,13 +33,13 @@ Public $ApplKey As Integer
 
 ''--------------------------
 Public $CryptValue As String = "123" ''for password/encryption
-Public $CryptDBVal As String = "123"  ''for database
-Public $CryptZip As String = "123"  ''only for 7z archiving for non-repository
-Public $CryptPDF As String = "123"    ''only for PDFencryption
+Public $CryptDBVal As String = "23qP53Xxszqytppz6uRIr9"  ''for database
+Public $CryptZip As String = "23qP53Xxszqytppz6uRIr9"  ''only for 7z archiving for non-repository
+Public $CryptPDF As String = "23qP53Xszqppz6uIr9"    ''only for PDFencryption
 
-Public $CryptRepo As String = "123"   ''only for patient encryption (including repository)
-Public $CryptRepoZip As String = "123"  ''only for 7z archiving for repository
-Public $SaltValue As String = "\x01"
+Public $CryptRepo As String = "23qP53Xxszqytppz6uRIr9"   ''only for patient encryption (including repository)
+Public $CryptRepoZip As String = "23qP53Xxrtftppz6uRIr9"  ''only for 7z archiving for repository
+Public $SaltValue As String = "\x01\x23\x45\x67\x89\xab\xcd\xef"
 Public $SysConfigPath As String
 
 Public $HospitalName As String

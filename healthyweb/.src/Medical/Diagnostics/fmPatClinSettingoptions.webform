@@ -42,7 +42,7 @@
     }
     { btnclose WebButton
       #MoveScaled(41,1,11,3)
-      Width = "5em"
+      Width = "7em"
       Height = "2em"
       Text = ("Close")
     }

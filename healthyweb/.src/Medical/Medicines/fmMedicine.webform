@@ -9,7 +9,7 @@
   Title = ("Medicine Info")
   { WebContainer1 WebContainer
     #MoveScaled(1,1,32,89)
-    Class = "show-tablet  height-innertablet-left"
+    Class = "show-tablet  height-innertablet-left-less"
     Arrangement = Arrange.Vertical
     { WebContainer3 WebContainer
       #MoveScaled(1,1,30,5)
@@ -72,7 +72,7 @@
   }
   { WebContainer2 WebContainer
     #MoveScaled(33,1,95,92)
-    Class = "show-widertablet  height-innertablet-right"
+    Class = "show-widertablet  height-innertablet-right-less"
     Arrangement = Arrange.Vertical
     Margin = True
     { TabStrip1 WebTabPanel
@@ -188,8 +188,20 @@
             #MoveScaled(1,13,38,4)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
+            { btnmedhelp WebButton
+              #MoveScaled(1,1,7,2)
+              Width = "6em"
+              Height = "2em"
+              Text = ("Help")
+              Image = "icon:/small/find"
+            }
+            { txtmedhelpPage WebTextBox
+              #MoveScaled(8,1,20,2)
+              Height = "2em"
+              Expand = True
+            }
             { txtdrug WebTextBox
-              #MoveScaled(1,1,11,2)
+              #MoveScaled(28,1,7,2)
               Height = "2em"
               Visible = False
               Expand = True
@@ -228,8 +240,25 @@
               Image = "icon:/small/edit"
             }
           }
-          { WebContainer21 WebContainer
+          { WebContainer22 WebContainer
             #MoveScaled(1,5,46,4)
+            Class = "less-container-margin"
+            Arrangement = Arrange.Horizontal
+            { WebLabel34 WebLabel
+              #MoveScaled(1,1,12,2)
+              Width = "6em"
+              Height = "2em"
+              Text = ("Dose Unit")
+              Border = True
+            }
+            { cmbdoseunit WebComboBox
+              #MoveScaled(13,1,12,2)
+              Width = "8em"
+              Height = "2em"
+            }
+          }
+          { WebContainer21 WebContainer
+            #MoveScaled(1,9,46,4)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel5 WebLabel
@@ -241,23 +270,6 @@
             }
             { txtmedref WebTextBox
               #MoveScaled(13,1,10,2)
-              Height = "2em"
-              Expand = True
-            }
-          }
-          { WebContainer22 WebContainer
-            #MoveScaled(1,9,46,4)
-            Class = "less-container-margin"
-            Arrangement = Arrange.Horizontal
-            { btnmedhelp WebButton
-              #MoveScaled(1,1,11,2)
-              Width = "6em"
-              Height = "2em"
-              Text = ("Help")
-              Image = "icon:/small/find"
-            }
-            { txtmedhelpPage WebTextBox
-              #MoveScaled(12,1,20,2)
               Height = "2em"
               Expand = True
             }

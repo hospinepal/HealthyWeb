@@ -27,7 +27,7 @@ Public Sub AddPatientFindings(sType As String, encid As String, txtname As Strin
     res["fldid"] = CLong(xIntVal)
     res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
     res["fldrepodate"] = Now()
-    res["fldrepomac"] = modHelpVariable.$MACAddress
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
     res["fldhospcode"] = modBasic.$HospCode
   Endif
   res.Update()
@@ -36,7 +36,7 @@ Public Sub AddPatientFindings(sType As String, encid As String, txtname As Strin
 End
 
 ''-----------------------------------INSERT/UPDATE tblpatevents--------------------------------------------------------------------
-Public Sub AddPatientEventsFirstTime(encid As String, txtcateg As String, txtitem As String, sDetail As String, sComment As String, Optional lstDate As Date)
+Public Function AddPatientEventsFirstTime(encid As String, txtcateg As String, txtitem As String, sDetail As String, sComment As String, Optional lstDate As Date) As Long
 
   Dim res As Result
   Dim xIntVal As String
@@ -74,11 +74,12 @@ Public Sub AddPatientEventsFirstTime(encid As String, txtcateg As String, txtite
     res["fldid"] = CLong(xIntVal)
     res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
     res["fldrepodate"] = Now()
-    res["fldrepomac"] = modHelpVariable.$MACAddress
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
     res["fldhospcode"] = modBasic.$HospCode
   Endif
-
   res.Update
+
+  Return modDatabase.$myConn.LastInsertId
   'don't catch error
 
 End
@@ -102,23 +103,8 @@ Public Sub UpdatePatientEventSecondTime(id As Long, Optional sDate As Date)
 
 End
 
-Public Sub UpdatePatientEventEndTime(encid As String, txtcateg As String, txtitem As String)
-
-  Dim res As Result
-
-  res = modDatabase.$myConn.Edit("tblpatevents", "fldencounterval=&1 and fldtype=&2 and flditem=&3 and fldfirstsave=&4", encid, txtcateg, txtitem, True)
-  res["fldseconduserid"] = modBasic.$lbluser
-  res["fldsecondtime"] = Now()
-  res["fldsecondcomp"] = modBasic.$compID
-  res["fldsecondsave"] = True
-  res["xyz"] = False
-  res.Update
-  'dont catch error. used with billing
-
-End
-
 ''-----------------------------------INSERT/UPDATE tblpattiming--------------------------------------------------------------------
-Public Sub AddPatientTableFirstTime(encid As String, txtcateg As String, sDiscType As String, txtitem As String, txtval As String, sDate As Date, Optional lstDate As Date)
+Public Function AddPatientTableFirstTime(encid As String, txtcateg As String, sDiscType As String, txtitem As String, txtval As String, sDate As Date, Optional lstDate As Date) As Long
 
   Dim res As Result
   Dim xIntVal As String
@@ -161,8 +147,9 @@ Public Sub AddPatientTableFirstTime(encid As String, txtcateg As String, sDiscTy
     res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
     res["fldhospcode"] = modBasic.$HospCode
   Endif
-
   res.Update
+
+  Return modDatabase.$myConn.LastInsertId
   'don't catch error
 
 End
@@ -469,6 +456,7 @@ End
 Public Sub AddClinicalSharingUser(sCategory As String, sBillID As Long, encid As String, sUserType As String, sUserCode As String, sReport As String, sStatus As String, sMixPer As Float)
 
   Dim res As Result
+  Dim xIntVal As String
 
   res = modDatabase.$myConn.Create("tblpatgenshare")
   res["fldencounterval"] = encid
@@ -491,6 +479,14 @@ Public Sub AddClinicalSharingUser(sCategory As String, sBillID As Long, encid As
   res["fldsave"] = True
   res["flduptime"] = ""
   res["xyz"] = False
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update
   'don't catch error
 
@@ -500,6 +496,7 @@ End
 Public Sub AddSubGeneralQualiData(sID As Long, encid As String, sCategory As String, sValue As String, sDetail As String)
 
   Dim res As Result
+  Dim xIntVal As String
 
   res = modDatabase.$myConn.Create("tblpatsubgeneral")
   res["flditemid"] = sID
@@ -514,6 +511,14 @@ Public Sub AddSubGeneralQualiData(sID As Long, encid As String, sCategory As Str
   res["fldsave"] = True
   res["flduptime"] = ""
   res["xyz"] = False
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update
   'don't catch error
 
@@ -522,6 +527,7 @@ End
 Public Sub AddSubGeneralQuantiData(sID As Long, encid As String, sCategory As String, sValue As Float, sDetail As String)
 
   Dim res As Result
+  Dim xIntVal As String
 
   res = modDatabase.$myConn.Create("tblpatsubgeneral")
   res["flditemid"] = sID
@@ -536,6 +542,14 @@ Public Sub AddSubGeneralQuantiData(sID As Long, encid As String, sCategory As St
   res["fldsave"] = True
   res["flduptime"] = ""
   res["xyz"] = False
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update
   'don't catch error
 
@@ -563,6 +577,7 @@ End
 Public Sub AddMonitoringData(encid As String, sCategory As String, sItem As String, sEvery As Integer, sUnit As String, sType As String)
 
   Dim res As Result
+  Dim xIntVal As String
 
   res = modDatabase.$myConn.Create("tblmonitor")
   res["fldencounterval"] = encid
@@ -577,6 +592,14 @@ Public Sub AddMonitoringData(encid As String, sCategory As String, sItem As Stri
   res["fldcomp"] = modBasic.$compID
   res["fldsave"] = True
   res["xyz"] = False
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update
 
 End

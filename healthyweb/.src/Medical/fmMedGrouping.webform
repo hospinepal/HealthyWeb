@@ -12,9 +12,10 @@
     Arrangement = Arrange.Horizontal
     { WebLabel2 WebLabel
       #MoveScaled(1,1,10,3)
-      Width = "5em"
+      Width = "6em"
       Height = "2em"
       Text = ("Group")
+      Border = True
     }
     { cmbgroup WebComboBox
       #MoveScaled(11,1,30,3)
@@ -55,9 +56,10 @@
     Arrangement = Arrange.Horizontal
     { WebLabel1 WebLabel
       #MoveScaled(1,1,10,3)
-      Width = "5em"
+      Width = "6em"
       Height = "2em"
-      Text = ("Item Name")
+      Text = ("ICD Name")
+      Border = True
     }
     { txtitemname WebTextBox
       #MoveScaled(11,1,29,3)
@@ -77,9 +79,10 @@
     Arrangement = Arrange.Horizontal
     { WebLabel3 WebLabel
       #MoveScaled(1,1,10,3)
-      Width = "5em"
+      Width = "6em"
       Height = "2em"
-      Text = ("Item Code")
+      Text = ("ICD Code")
+      Border = True
     }
     { txtitemcode WebTextBox
       #MoveScaled(11,1,9,3)
@@ -92,9 +95,10 @@
     }
     { WebLabel4 WebLabel
       #MoveScaled(26,1,10,3)
-      Width = "5em"
+      Width = "6em"
       Height = "2em"
       Text = ("New Code")
+      Border = True
     }
     { txtnewcode WebTextBox
       #MoveScaled(36,1,9,3)

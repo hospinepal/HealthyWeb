@@ -139,7 +139,7 @@ Public Sub OpenHTMLViewBill(encid As String, sPath As String, sSize As String)
   Dim hForm As FmWebView
 
   If Exist(sPath) Then
-    hForm = New FmWebView(sPath, True, encid)
+    hForm = New FmWebView(sPath, True, encid, "")
     hForm.ShowModal
   Endif
 
@@ -160,7 +160,7 @@ Public Sub OpenPDFPreview(encid As String, sPath As String, sSize As String)
 
 End
 
-Public Sub OpenHTMLPreview(encid As String, sPath As String, sSize As String)
+Public Sub OpenHTMLPreview(encid As String, sPath As String, sSize As String, Optional sType As String)
 
   Dim hForm1 As FmWebView
   Dim xextra As String
@@ -176,10 +176,14 @@ Public Sub OpenHTMLPreview(encid As String, sPath As String, sSize As String)
   ' Flush
   If sPath Then
     If sSize = "InvoiceSize" Then
-      hForm1 = New FmWebView(sPath, True, encid)  ''PDF locked
+      hForm1 = New FmWebView(sPath, True, encid, "")  ''PDF locked
       hForm1.ShowModal
     Else
-      hForm1 = New FmWebView(PrePrintFormatting(sPath, sSize), False, encid)  ''PDF not locked
+      If sType Then
+        hForm1 = New FmWebView(PrePrintFormatting(sPath, sSize), False, encid, sType)  ''PDF not locked
+      Else
+        hForm1 = New FmWebView(PrePrintFormatting(sPath, sSize), False, encid, "")  ''PDF not locked
+      Endif
       hForm1.ShowModal
     Endif
   Endif
@@ -210,7 +214,7 @@ Public Sub DisplayReportExport(sPath As String) As String
         hForm.ShowModal
       Endif
     Else
-      hForm1 = New FmWebView(PrePrintFormatting(sPath, "ReportSize"), True, "")  ''PDF locked
+      hForm1 = New FmWebView(PrePrintFormatting(sPath, "ReportSize"), True, "", "")  ''PDF locked
       hForm1.ShowModal
       ' modAppSupport.FindWorSpace(modHelpVariable.$LogInCategory).Add(hForm)
     Endif
@@ -237,9 +241,9 @@ Public Sub OpenBrowser(sPath As String)
   Endif
 
   If modBasic.$ExpoRepoUser = True Then
-    hForm = New FmWebView(newPath, False, "")
+    hForm = New FmWebView(newPath, False, "", "")
   Else
-    hForm = New FmWebView(newPath, True, "")  ''PDF locked
+    hForm = New FmWebView(newPath, True, "", "")  ''PDF locked
   Endif
   hForm.ShowModal
 

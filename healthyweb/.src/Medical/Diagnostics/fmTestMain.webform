@@ -9,7 +9,7 @@
   Title = ("Diagnostic Tests")
   { WebContainer1 WebContainer
     #MoveScaled(1,1,32,90)
-    Class = "show-tablet  height-innertablet-left"
+    Class = "show-tablet  height-innertablet-left-less"
     Arrangement = Arrange.Vertical
     Spacing = True
     { txtfind WebTextBox
@@ -23,7 +23,7 @@
   }
   { WebContainer2 WebContainer
     #MoveScaled(33,1,66,90)
-    Class = "show-widertablet  height-innertablet-right"
+    Class = "show-widertablet  height-innertablet-right-less"
     Arrangement = Arrange.Vertical
     { WebContainer13 WebContainer
       #MoveScaled(1,1,64,5)

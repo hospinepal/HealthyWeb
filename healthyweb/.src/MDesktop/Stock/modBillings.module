@@ -5,6 +5,7 @@
 Public Sub InsertBillLog($con As Connection, encid As String, billno As String, itemAmt As Float, taxAmt As Float, discountAmt As Float)
 
   Dim res As Result
+  Dim xIntVal As String
 
   res = $con.Create("tblfiscal")
   res["fldfiscal"] = modDate.GetNepaliFiscalYear(Now())
@@ -24,6 +25,14 @@ Public Sub InsertBillLog($con As Connection, encid As String, billno As String, 
   res["fldpunch"] = modBasic.$lbluser
   res["fldprint"] = modBasic.$lbluser
   res["xyz"] = False
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update
 
 End
@@ -52,7 +61,7 @@ Public Sub AddPaymentCashSource(encid As String, sInvoice As String, sVendor As 
       res["fldid"] = CLong(xIntVal)
       res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
       res["fldrepodate"] = Now()
-      res["fldrepomac"] = modHelpVariable.$MACAddress
+      res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
       res["fldhospcode"] = modBasic.$HospCode
     Endif
     res.Update()
@@ -60,10 +69,42 @@ Public Sub AddPaymentCashSource(encid As String, sInvoice As String, sVendor As 
 
 End
 
+Public Sub AddCreditLimits($con As Connection, encid As String, sDiscType As String, sValidDate As Date, sCredit As Float, sCharity As Float)
+
+  Dim res As Result
+  Dim xIntVal As String
+
+  res = $con.Create("tblcreditlimit")
+  res["fldencounterval"] = encid
+  res["flddisctype"] = sDiscType
+  res["fldcashcredit"] = sCredit
+  res["fldcharity"] = sCharity
+  res["fldvalidity"] = sValidDate
+  res["fldstatus"] = "Active"
+
+  res["flduserid"] = modBasic.$lbluser
+  res["fldtime"] = Now()
+  res["fldcomp"] = modBasic.$compID
+  res["fldsave"] = True
+  res["xyz"] = False
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
+  res.Update()
+  'dont catch error. Error will rollback
+
+End
+
 Public Sub InsertAdvRecptDetail($con As Connection, encid As String, billno As String, biltype As String, itemAmt As Float, taxAmt As Float, discountAmt As Float, chargedAmt As Float, receivedAmt As Float, sReference As String, sLedger As String, xState As String, xPayer As String, xOutput As String, Optional xInvoice As String)
 
   Dim res As Result
   Dim xpay As String
+  Dim xIntVal As String
 
   If xPayer Then
     xpay = xPayer
@@ -102,6 +143,14 @@ Public Sub InsertAdvRecptDetail($con As Connection, encid As String, billno As S
     res["fldinvoice"] = ""
   Endif
   res["xyz"] = False
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update()
   'dont catch error. Error will rollback
 
@@ -124,6 +173,7 @@ Public Sub InsertTempraryDetail($con As Connection, encid As String, billno As S
   Dim res As Result
   Dim taxcateg As String
   Dim dsccateg As String
+  Dim xIntVal As String
 
   If taxgroup Then
     taxcateg = taxgroup
@@ -158,6 +208,14 @@ Public Sub InsertTempraryDetail($con As Connection, encid As String, billno As S
   res["fldsave"] = True
   res["fldhostmac"] = ""
   res["xyz"] = False
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update()
   'dont catch error. Error will rollback
 
@@ -166,6 +224,7 @@ End
 Public Sub InsertDepositDetail($con As Connection, encid As String, billno As String, biltyp As String, receivedAmt As Float, sReference As String, sLedger As String, xState As Integer)
 
   Dim res As Result
+  Dim xIntVal As String
 
   res = $con.Create("tbltempbilldetail")
   res["fldbillno"] = billno
@@ -189,6 +248,14 @@ Public Sub InsertDepositDetail($con As Connection, encid As String, billno As St
   res["fldsave"] = True
   res["fldhostmac"] = "" ''modHelpVariable.$MACAddress
   res["xyz"] = False
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update()
   'dont catch error. Error will rollback
 
@@ -197,6 +264,7 @@ End
 Public Sub InsertDepositAdjustment($con As Connection, encid As String, billno As String, biltyp As String, adjustAmt As Float, sReference As String, sLedger As String, xState As Integer)
 
   Dim res As Result
+  Dim xIntVal As String
 
   res = $con.Create("tbltempbilldetail")
   res["fldbillno"] = billno
@@ -220,6 +288,14 @@ Public Sub InsertDepositAdjustment($con As Connection, encid As String, billno A
   res["fldsave"] = True
   res["fldhostmac"] = "" ''modHelpVariable.$MACAddress
   res["xyz"] = False
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update()
   'dont catch error. Error will rollback
 
@@ -233,6 +309,7 @@ Public Sub InsertBillingDetail($con As Connection, encid As String, billno As St
   Dim res As Result
   Dim taxcateg As String
   Dim dsccateg As String
+  Dim xIntVal As String
 
   If taxgroup Then
     taxcateg = taxgroup
@@ -266,6 +343,14 @@ Public Sub InsertBillingDetail($con As Connection, encid As String, billno As St
   res["fldsave"] = True
   res["fldhostmac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
   res["xyz"] = False
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update()
   'dont catch error. Error will rollback
 
@@ -281,6 +366,7 @@ Public Sub InsertBlankBillItemNewApp(encid As String, sBilType As String, sBillM
   Dim sReas As String
   Dim sRetBill As String
   Dim sLocation As String
+  Dim xIntVal As String
 
   Dim xtaxamt As Float
   Dim xdscamt As Float
@@ -375,6 +461,14 @@ Public Sub InsertBlankBillItemNewApp(encid As String, sBilType As String, sBillM
   res["fldextracol"] = ""
   res["fldextrarow"] = ""
 
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update()
   'dont catch error. Error will rollback
 
@@ -383,6 +477,7 @@ End
 Public Sub InsertBlankBillClearance($con As Connection, encid As String, sBilType As String, sLedgerAC As String, itemtyp As String, itemname As String, itemAMT As Float, status As String, sav As Boolean, prt As Boolean)
 
   Dim res As Result
+  Dim xIntVal As String
 
   res = $con.Create("tblduebilling")
   res["fldencounterval"] = encid
@@ -422,6 +517,14 @@ Public Sub InsertBlankBillClearance($con As Connection, encid As String, sBilTyp
   res["fldextracol"] = ""
   res["fldextrarow"] = ""
 
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update()
   'dont catch error. Error will rollback
 

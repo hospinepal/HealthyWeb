@@ -10,10 +10,10 @@ Public Function FindWorkProgressBar(LogInType As String) As WebProgressBar
 
   If MMain.$SISHAppMode = "REP" Then
     xx = fmRepository.ProgressBar1
-  Else If MMain.$SISHAppMode = "AMIS" Then
-    xx = fmAyurveda.ProgressBar1
   Else If MMain.$SISHAppMode = "HMIS" Then
     xx = fmHMISMatNeo.ProgressBar1
+  Else If MMain.$SISHAppMode = "Registry" Then
+    xx = fmRegistryMain.ProgressBar1
   Else If MMain.$SISHAppMode = "Portal" Then
     xx = fmPatientWeb.ProgressBar1
   Else If MMain.$SISHAppMode = "Dashboard" Then
@@ -81,38 +81,40 @@ Public Sub RecordSystemLog()
   Dim res As Result
   Dim xird As String
 
-  modBasic.DebugString("Inserting Application usage log")
-  If MMain.$RepoReportMode = True Then
-  Else
-    modDatabase.$myConn.Delete("tblsystemlog", "fldindex=&1", Session.Id)
-  Endif
+  If modDatabase.$myConn.Tables.Exist("tblsystemlog") Then
+    modBasic.DebugString("Inserting Application usage log")
+    If MMain.$RepoReportMode = True Then
+    Else
+      modDatabase.$myConn.Delete("tblsystemlog", "fldindex=&1", Session.Id)
+    Endif
 
-  If modHelpVariable.$IRDLevel = "Yes" Then
-    xird = "IRD"
-  Else
-    xird = ""
+    If modHelpVariable.$IRDLevel = "Yes" Then
+      xird = "IRD"
+    Else
+      xird = ""
+    Endif
+    res = modDatabase.$myConn.Create("tblsystemlog")
+    res["fldindex"] = Session.Id  ''modHelpVariable.$MACAddress
+    res["flduser"] = modBasic.$lbluser
+    res["fldcomp"] = modBasic.$compID
+    If MMain.$SISHAppMode = "HIS" Then
+      res["fldlogin"] = modHelpVariable.$LogInCategory
+    Else
+      res["fldlogin"] = MMain.$SISHAppMode
+    Endif
+    res["fldentrytime"] = Now()
+    res["fldhostuser"] = CGI["HTTP_USER_AGENT"]  ''System.User.Name
+    res["fldhostip"] = modHelpVariable.$MACAddress
+    res["fldhostname"] = CGI["SERVER_SOFTWARE"] & ":" & Application.Name & "-" & Application.Version
+    res["fldhostmac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["flddevicepath"] = Application.Name & " : " & Application.Version & " : " & xird
+    res["fldversion"] = modHelpVariable.$GeoCoordinate
+    res["fldmainserver"] = modHelpVariable.$SysMainHost
+    res["fldreadserver"] = modHelpVariable.$SysExtHost
+    res["fldfallserver"] = modHelpVariable.$SysFallHost
+    res["fldftpserver"] = modHelpVariable.$SysFTPHost
+    Try res.Update()
   Endif
-  res = modDatabase.$myConn.Create("tblsystemlog")
-  res["fldindex"] = Session.Id  ''modHelpVariable.$MACAddress
-  res["flduser"] = modBasic.$lbluser
-  res["fldcomp"] = modBasic.$compID
-  If MMain.$SISHAppMode = "HIS" Then
-    res["fldlogin"] = modHelpVariable.$LogInCategory
-  Else
-    res["fldlogin"] = MMain.$SISHAppMode
-  Endif
-  res["fldentrytime"] = Now()
-  res["fldhostuser"] = CGI["HTTP_USER_AGENT"]  ''System.User.Name
-  res["fldhostip"] = modHelpVariable.$MACAddress
-  res["fldhostname"] = CGI["SERVER_SOFTWARE"] & ":" & Application.Name & "-" & Application.Version
-  res["fldhostmac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
-  res["flddevicepath"] = Application.Name & " : " & Application.Version & " : " & xird
-  res["fldversion"] = modHelpVariable.$GeoCoordinate
-  res["fldmainserver"] = modHelpVariable.$SysMainHost
-  res["fldreadserver"] = modHelpVariable.$SysExtHost
-  res["fldfallserver"] = modHelpVariable.$SysFallHost
-  res["fldftpserver"] = modHelpVariable.$SysFTPHost
-  Try res.Update()
 
 End
 
@@ -120,19 +122,21 @@ Public Sub SaveMessageLog(sTarget As String, sText As String, sType As String)
 
   Dim res As Result
 
-  modBasic.DebugString("Inserting Message Log")
-  res = modDatabase.$myConn.Create("tblmessagelog")
-  res["fldwindow"] = sType
-  res["fldtarget"] = sTarget
-  res["fldmesstext"] = sText
-  res["flduserid"] = modBasic.$lbluser
-  res["fldtime"] = Now()
-  res["fldcomp"] = modBasic.$compID
-  res["fldhostmac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
-  res["fldhostuser"] = CGI["HTTP_USER_AGENT"]
-  res["fldhostip"] = modHelpVariable.$MACAddress
-  res["fldhostname"] = CGI["SERVER_SOFTWARE"] & ":" & Application.Name & "-" & Application.Version
-  res.Update
+  If modDatabase.$myConn.Tables.Exist("tblmessagelog") Then
+    modBasic.DebugString("Inserting Message Log")
+    res = modDatabase.$myConn.Create("tblmessagelog")
+    res["fldwindow"] = sType
+    res["fldtarget"] = sTarget
+    res["fldmesstext"] = sText
+    res["flduserid"] = modBasic.$lbluser
+    res["fldtime"] = Now()
+    res["fldcomp"] = modBasic.$compID
+    res["fldhostmac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhostuser"] = CGI["HTTP_USER_AGENT"]
+    res["fldhostip"] = modHelpVariable.$MACAddress
+    res["fldhostname"] = CGI["SERVER_SOFTWARE"] & ":" & Application.Name & "-" & Application.Version
+    res.Update
+  Endif
 
 End
 
@@ -140,28 +144,30 @@ Public Sub SaveSMSEntry(sTarget As String, sText As String, xStatus As String, x
 
   Dim res As Result
 
-  res = modDatabase.$myConn.Create("tblsmslog")
-  res["fldwindow"] = modHelpVariable.$LogInCategory
-  res["fldtarget"] = sTarget
-  res["fldsmstext"] = sText
-  res["flduserid"] = modBasic.$lbluser
-  res["fldtime"] = Now()
-  res["fldcomp"] = modBasic.$compID
-  If xStatus = "Waiting" Then
-    res["fldstatus"] = "Waiting"
-    res["fldcomment"] = ""
-    res["fldsmsdate"] = ""
-  Else If xStatus = "Sent" Then
-    res["fldcomment"] = xOutput
-    res["fldstatus"] = "Sent"
-    res["fldsmsdate"] = Now()
-  Endif
+  If modDatabase.$myConn.Tables.Exist("tblsmslog") Then
+    res = modDatabase.$myConn.Create("tblsmslog")
+    res["fldwindow"] = modHelpVariable.$LogInCategory
+    res["fldtarget"] = sTarget
+    res["fldsmstext"] = sText
+    res["flduserid"] = modBasic.$lbluser
+    res["fldtime"] = Now()
+    res["fldcomp"] = modBasic.$compID
+    If xStatus = "Waiting" Then
+      res["fldstatus"] = "Waiting"
+      res["fldcomment"] = ""
+      res["fldsmsdate"] = ""
+    Else If xStatus = "Sent" Then
+      res["fldcomment"] = xOutput
+      res["fldstatus"] = "Sent"
+      res["fldsmsdate"] = Now()
+    Endif
 
-  res["fldhostmac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
-  res["fldhostuser"] = CGI["HTTP_USER_AGENT"]
-  res["fldhostip"] = modHelpVariable.$MACAddress
-  res["fldhostname"] = CGI["SERVER_SOFTWARE"] & ":" & Application.Name & "-" & Application.Version
-  res.Update
+    res["fldhostmac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhostuser"] = CGI["HTTP_USER_AGENT"]
+    res["fldhostip"] = modHelpVariable.$MACAddress
+    res["fldhostname"] = CGI["SERVER_SOFTWARE"] & ":" & Application.Name & "-" & Application.Version
+    res.Update
+  Endif
 
 End
 

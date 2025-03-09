@@ -9,7 +9,7 @@
   Title = ("Clinical Examination")
   { WebContainer1 WebContainer
     #MoveScaled(1,1,32,75)
-    Class = "show-tablet  height-innertablet-left"
+    Class = "show-tablet  height-innertablet-left-less"
     Arrangement = Arrange.Vertical
     Spacing = True
     { WebContainer8 WebContainer
@@ -48,7 +48,7 @@
   }
   { WebContainer2 WebContainer
     #MoveScaled(33,1,66,75)
-    Class = "show-widertablet  height-innertablet-right"
+    Class = "show-widertablet  height-innertablet-right-less"
     Arrangement = Arrange.Vertical
     { WebContainer13 WebContainer
       #MoveScaled(1,1,64,5)

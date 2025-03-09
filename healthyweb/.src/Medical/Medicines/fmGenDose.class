@@ -14,9 +14,9 @@ Public Sub _new(strCode As String)
   Endif
   cmbgender.List = ["Male", "Female", "Both Sex"]
   cmbagegroup.List = modMedicine.AgeGroupListShortAll()
-  cmbMaxUnDoseUnit.List = ["mg", "mg/Kg", "mg/sqm"]
-  cmbMaxDalAdDoseUnit.List = ["mg", "mg/Kg", "mg/sqm"]
-  cmbMinDalAdDoseUnit.List = ["mg", "mg/Kg", "mg/sqm"]
+  cmbMaxUnDoseUnit.List = modMedicine.$MedicineUnitList
+  cmbMaxDalAdDoseUnit.List = modMedicine.$MedicineUnitList
+  cmbMinDalAdDoseUnit.List = modMedicine.$MedicineUnitList
 
   SHowDoseGrid()
 

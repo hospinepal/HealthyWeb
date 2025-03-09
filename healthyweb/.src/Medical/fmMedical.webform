@@ -10,9 +10,11 @@
   { mnumedlist WebMenu
     Text = ("Medicines")
     { mnugeneric WebMenu
+      Tag = "Generic Info"
       Text = ("Generic Information")
     }
     { mnucode WebMenu
+      Tag = "Medicine Info"
       Text = ("Medicine Information")
     }
     { mnumedformulary WebMenu
@@ -22,30 +24,38 @@
   { mnufood WebMenu
     Text = ("Nutrition")
     { mnudiet WebMenu
+      Tag = "Dietary Info"
       Text = ("Nutritional Info")
     }
     { mnumixture WebMenu
+      Tag = "Food Mixtures"
       Text = ("Food Mixtures")
     }
     { mnurequire WebMenu
+      Tag = "Diet Requirements"
       Text = ("Requirements")
     }
   }
   { mnudiagnostic WebMenu
     Text = ("Diagnostic")
     { mnuexam WebMenu
+      Tag = "Clinical Examinations"
       Text = ("Examination")
     }
     { mnulabel WebMenu
+      Tag = "Diagnostic Tests"
       Text = ("Laboratory")
     }
     { mnusensitivity WebMenu
+      Tag = "Antibiotics Panel"
       Text = ("Sensitivity")
     }
     { mnuradio WebMenu
+      Tag = "Radio Diagnostics"
       Text = ("Radiology")
     }
     { mnustructexam WebMenu
+      Tag = "Structured Examinations"
       Text = ("Structured")
     }
     { mnudiagnoformul WebMenu
@@ -55,12 +65,18 @@
   { mnupathology WebMenu
     Text = ("Pathology")
     { mnusymptom WebMenu
+      Tag = "Symptom List"
       Text = ("Symptoms")
     }
     { mnusyndromes WebMenu
+      Tag = "Syndrome List"
       Text = ("Syndromes")
     }
+    { mnucreditbill WebMenu
+      Text = ("Credit Billing")
+    }
     { mnusurveil WebMenu
+      Tag = "Surveillance List"
       Text = ("Surveillance")
     }
     { mnugrouppatho WebMenu
@@ -90,6 +106,10 @@
         Text = ("Geriatric Disease")
       }
     }
+    { mnutreatguide WebMenu
+      Tag = "Treatment Guidelines"
+      Text = ("Guidelines")
+    }
     { mnupathoformul WebMenu
       Text = ("Formulary")
     }
@@ -101,6 +121,7 @@
       Image = "icon:/small/user"
     }
     { mnupersonal WebMenu
+      Tag = "Personal Page"
       Text = ("Personal Page")
     }
     { mnuclearcache WebMenu

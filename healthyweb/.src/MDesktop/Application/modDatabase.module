@@ -56,16 +56,6 @@ Public Function GetRepositoryTables($con As Connection) As String[]
 
 End
 
-Public Sub AlterTableMaternalRegister($con As Connection)
-
-  Dim res As Result
-  Dim res1 As Result
-
-  Try res = $con.Exec("ALTER TABLE tblconfinement ADD flddelassist VARCHAR( 250 ) NULL")
-  Try res1 = $con.Exec("ALTER TABLE tblconfinement ADD flddelspot VARCHAR( 250 ) NULL")
-
-End
-
 Public Sub AlterTableHAIParam($con As Connection, sAction As String)
 
   Dim tabLst As String[]
@@ -335,7 +325,7 @@ Public Function BackUpCurrentDB(Optional aFolder As String) As String
             If xPass Then
               If System.Exist("7z") = True Then
                 sTargFile = sFolder &/ DBName & "_backup-" & modString.GetDateString(Now()) & ".sql.7z"
-                xx = "mysqldump --quick --single-transaction" & " -B " & DBName & " --host " & DBHost & " -u " & DBUser & " -p" & DBPass & " --tables " & sTable & " | 7z a -mx=1 -mhe=on -p" & xPass & " -si " & sTargFile                    ''
+                xx = "mysqldump --quick --single-transaction --complete-insert --skip-extended-insert --skip-triggers" & " -B " & DBName & " --host " & DBHost & " -u " & DBUser & " -p" & DBPass & " --tables " & sTable & " | 7z a -mx=1 -mhe=on -p" & xPass & " -si " & sTargFile                    ''
                 modBasic.DebugString("Execute " & Replace(xx, DBPass, "***"))
                 Shell xx Wait
               Else
@@ -344,12 +334,12 @@ Public Function BackUpCurrentDB(Optional aFolder As String) As String
             Else   ''if no password
               If System.Exist("gzip") = True Then
                 sTargFile = sFolder &/ DBName & "_backup-" & modString.GetDateString(Now()) & ".sql.gz"
-                xx = "mysqldump --quick --single-transaction" & " -B " & DBName & " --host " & DBHost & " -u " & DBUser & " -p" & DBPass & " --tables " & sTable & " | gzip > " & sTargFile                    ''
+                xx = "mysqldump --quick --single-transaction --complete-insert --skip-extended-insert --skip-triggers" & " -B " & DBName & " --host " & DBHost & " -u " & DBUser & " -p" & DBPass & " --tables " & sTable & " | gzip > " & sTargFile                    ''
                 modBasic.DebugString("Execute " & Replace(xx, DBPass, "***"))
                 Shell xx Wait
               Else If System.Exist("7z") = True Then
                 sTargFile = sFolder &/ DBName & "_backup-" & modString.GetDateString(Now()) & ".sql.7z"
-                xx = "mysqldump --quick --single-transaction" & " -B " & DBName & " --host " & DBHost & " -u " & DBUser & " -p" & DBPass & " --tables " & sTable & " | 7z a -mx=1 -si " & sTargFile                    ''
+                xx = "mysqldump --quick --single-transaction --complete-insert --skip-extended-insert --skip-triggers" & " -B " & DBName & " --host " & DBHost & " -u " & DBUser & " -p" & DBPass & " --tables " & sTable & " | 7z a -mx=1 -si " & sTargFile                    ''
                 modBasic.DebugString("Execute " & Replace(xx, DBPass, "***"))
                 Shell xx Wait
               Else
@@ -358,7 +348,7 @@ Public Function BackUpCurrentDB(Optional aFolder As String) As String
             Endif  ''password
           Else ''if no compression
             sTargFile = sFolder &/ DBName & "_backup-" & modString.GetDateString(Now()) & ".sql"
-            xx = "mysqldump --quick --single-transaction" & " -B " & DBName & " --host " & DBHost & " -u " & DBUser & " -p" & DBPass & " --tables " & sTable & " > " & sTargFile
+            xx = "mysqldump --quick --single-transaction --complete-insert --skip-extended-insert --skip-triggers" & " -B " & DBName & " --host " & DBHost & " -u " & DBUser & " -p" & DBPass & " --tables " & sTable & " > " & sTargFile
             modBasic.DebugString("Execute " & Replace(xx, DBPass, "***"))
             Shell xx Wait
           Endif  ''compression
@@ -417,13 +407,13 @@ Private Function GetBackUpMultiTable(sTable As String, sCompress As Boolean) As 
         If sCompress = True Then
           If System.Exist("gzip") = True Then
             sPath = Temp() & ".sql.gz"
-            xx = "mysqldump --quick --single-transaction" & " -B " & DBName & " --host " & DBHost & " -u " & DBUser & " -p" & DBPass & " --tables " & sTable & " | gzip > " & sPath
+            xx = "mysqldump --quick --single-transaction --complete-insert --skip-extended-insert --skip-triggers" & " -B " & DBName & " --host " & DBHost & " -u " & DBUser & " -p" & DBPass & " --tables " & sTable & " | gzip > " & sPath
           Else
             modApplSub.InstallSelectedApplication(["gzip"])
           Endif
         Else
           sPath = Temp() & ".sql"
-          xx = "mysqldump --quick --single-transaction" & " -B " & DBName & " --host " & DBHost & " -u " & DBUser & " -p" & DBPass & " --tables " & sTable & " > " & sPath
+          xx = "mysqldump --quick --single-transaction --complete-insert --skip-extended-insert --skip-triggers" & " -B " & DBName & " --host " & DBHost & " -u " & DBUser & " -p" & DBPass & " --tables " & sTable & " > " & sPath
         Endif
         Shell xx Wait
       Else
@@ -598,5 +588,27 @@ Public Function UpdateTableDrugInformation($con As Connection, sTable As String)
   Try res4 = $con.Exec(Subst("ALTER TABLE &1 ADD fldverifyid VARCHAR ( 25 ) NULL", sTable))
   Try res5 = $con.Exec(Subst("ALTER TABLE &1 ADD fldverifytime DATETIME NULL", sTable))
   Try res6 = $con.Exec(Subst("ALTER TABLE &1 ADD fldnote VARCHAR( 250 ) NULL", sTable))
+
+End
+
+Public Sub AlterDBTablesAdmin()
+
+  Dim sLine As String
+  Dim xx As String
+  Dim sQuery As String[]
+
+  xx = GetTextArea("SQL Query", "")
+  If xx Then
+    If Message.Question(("Do you really want to update Database structure at your own risk?"), ("No"), ("Yes")) = 2 Then
+      sQuery = Split(xx, gb.NewLine)
+      For Each sLine In sQuery
+        If Left(sLine, 1) = "#" Then
+        Else
+          Try modDatabase.$myConn.Exec(sLine)
+        Endif
+      Next
+      WebForm.Exec("Toastify({text: 'Tables Alteration completed', duration: 3000}).showToast()")
+    Endif
+  Endif
 
 End
