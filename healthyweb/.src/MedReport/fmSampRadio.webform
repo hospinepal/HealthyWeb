@@ -189,28 +189,8 @@
         }
       }
     }
-    { WebContainer19 WebContainer
-      #MoveScaled(1,12,28,4)
-      Class = "less-container-margin"
-      Arrangement = Arrange.Horizontal
-      { WebLabel8 WebLabel
-        #MoveScaled(1,1,8,2)
-        Width = "4em"
-        Text = ("Status")
-      }
-      { cmbstatus WebComboBox
-        #MoveScaled(9,1,12,2)
-        Height = "2em"
-        Expand = True
-        ReadOnly = False
-      }
-      { WebContainer45 WebContainer
-        #MoveScaled(21,1,4,2)
-        Width = "2em"
-      }
-    }
     { WebContainer20 WebContainer
-      #MoveScaled(1,16,28,4)
+      #MoveScaled(1,12,28,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel11 WebLabel
@@ -225,6 +205,26 @@
         ReadOnly = False
       }
       { WebContainer46 WebContainer
+        #MoveScaled(21,1,4,2)
+        Width = "2em"
+      }
+    }
+    { WebContainer19 WebContainer
+      #MoveScaled(1,16,28,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel8 WebLabel
+        #MoveScaled(1,1,8,2)
+        Width = "4em"
+        Text = ("Status")
+      }
+      { cmbstatus WebComboBox
+        #MoveScaled(9,1,12,2)
+        Height = "2em"
+        Expand = True
+        ReadOnly = False
+      }
+      { WebContainer45 WebContainer
         #MoveScaled(21,1,4,2)
         Width = "2em"
       }

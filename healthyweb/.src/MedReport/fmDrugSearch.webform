@@ -92,8 +92,18 @@
         }
       }
     }
-    { WebContainer37 WebContainer
+    { WebContainer38 WebContainer
       #MoveScaled(1,12,33,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { cmbcategory WebComboBox
+        #MoveScaled(1,1,16,2)
+        Height = "2em"
+        Expand = True
+      }
+    }
+    { WebContainer37 WebContainer
+      #MoveScaled(1,16,33,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { rbnarco WebRadioButton
@@ -110,13 +120,13 @@
       }
     }
     { btnrefresh WebButton
-      #MoveScaled(1,16,33,3)
+      #MoveScaled(1,20,33,3)
       Height = "2em"
       Text = ("Load Data")
       Image = "icon:/small/cdrom"
     }
     { WebContainer7 WebContainer
-      #MoveScaled(1,19,33,4)
+      #MoveScaled(1,23,33,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { rbsel WebRadioButton
@@ -133,11 +143,11 @@
       }
     }
     { ListBox1 WebListBox
-      #MoveScaled(1,23,33,28)
+      #MoveScaled(1,27,33,28)
       Expand = True
     }
     { WebContainer23 WebContainer
-      #MoveScaled(1,51,33,4)
+      #MoveScaled(1,55,33,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { txtcustom WebTextBox
@@ -153,7 +163,7 @@
       }
     }
     { WebContainer8 WebContainer
-      #MoveScaled(1,55,33,4)
+      #MoveScaled(1,59,33,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { btnfilldata WebButton

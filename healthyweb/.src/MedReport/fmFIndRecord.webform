@@ -425,20 +425,36 @@
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       Spacing = True
+      { chkgroup WebCheckBox
+        #MoveScaled(1,1,13,3)
+        Height = "2em"
+        Text = ("ORDER BY")
+      }
+      { cmbgroupfield WebComboBox
+        #MoveScaled(15,1,18,3)
+        Width = "12em"
+        Height = "2em"
+        Enabled = False
+        ReadOnly = False
+      }
+      { WebContainer27 WebContainer
+        #MoveScaled(34,1,5,3)
+        Expand = True
+      }
       { chksort WebCheckBox
-        #MoveScaled(1,1,15,3)
+        #MoveScaled(40,1,13,3)
         Height = "2em"
         Text = ("ORDER BY")
       }
       { cmbsortfield WebComboBox
-        #MoveScaled(17,1,30,3)
+        #MoveScaled(54,1,18,3)
+        Width = "12em"
         Height = "2em"
         Enabled = False
-        Expand = True
         ReadOnly = False
       }
       { cmbsortype WebComboBox
-        #MoveScaled(48,1,30,3)
+        #MoveScaled(73,1,18,3)
         Width = "6em"
         Height = "2em"
         ReadOnly = False

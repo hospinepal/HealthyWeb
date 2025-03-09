@@ -314,13 +314,13 @@
               Image = "icon:/small/refresh"
             }
             { btnexport WebButton
-              #MoveScaled(8,1,9,2)
+              #MoveScaled(8,1,4,2)
+              Width = "2em"
               Height = "2em"
-              Expand = True
-              Text = ("Export")
+              Image = "icon:/32/html"
             }
             { btnexpoexcel WebButton
-              #MoveScaled(17,1,4,2)
+              #MoveScaled(12,1,4,2)
               Width = "2em"
               Height = "2em"
               Image = "icons/excel.png"

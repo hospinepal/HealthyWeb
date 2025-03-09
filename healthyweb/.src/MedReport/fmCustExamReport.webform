@@ -9,6 +9,9 @@
   Title = ("Structured Examination")
   { mnufile WebMenu
     Text = ("File")
+    { mnuaddcolm WebMenu
+      Text = ("Add Columns")
+    }
     { mnufullexpo WebMenu
       Text = ("Full Export")
     }
@@ -50,7 +53,7 @@
         Arrangement = Arrange.Horizontal
         { WebContainer2 WebContainer
           #MoveScaled(1,1,32,13)
-          Width = "55%"
+          Width = "50%"
           Arrangement = Arrange.Vertical
           { WebContainer3 WebContainer
             #MoveScaled(1,1,30,5)
@@ -107,7 +110,7 @@
         }
         { WebContainer17 WebContainer
           #MoveScaled(33,1,33,13)
-          Width = "45%"
+          Width = "50%"
           Arrangement = Arrange.Vertical
           { WebContainer6 WebContainer
             #MoveScaled(1,1,31,4)
@@ -157,7 +160,7 @@
         Arrangement = Arrange.Horizontal
         { pnlocat WebContainer
           #MoveScaled(1,1,28,13)
-          Width = "45%"
+          Width = "50%"
           Arrangement = Arrange.Vertical
           { WebContainer41 WebContainer
             #MoveScaled(1,1,26,4)
@@ -203,7 +206,7 @@
         { WebContainer11 WebContainer
           #MoveScaled(29,1,29,13)
           Class = "size-tritablet"
-          Width = "55%"
+          Width = "50%"
           Arrangement = Arrange.Vertical
           { WebContainer18 WebContainer
             #MoveScaled(1,1,27,4)

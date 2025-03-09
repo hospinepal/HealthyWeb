@@ -9,6 +9,9 @@
   Title = ("PACS Report")
   { mnufile WebMenu
     Text = ("File")
+    { mnuextcolum WebMenu
+      Text = ("Add Columns")
+    }
     { mnuencoun WebMenu
       Text = ("Search (EncID)")
     }
