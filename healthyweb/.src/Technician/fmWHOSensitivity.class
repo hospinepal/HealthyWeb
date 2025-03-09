@@ -386,6 +386,9 @@ Public Sub btnadd_Click()
   Dim j As Integer
   Dim k As Integer
   Dim res As Result
+  Dim res2 As Result
+  Dim res3 As Result
+  Dim xIntVal As String
 
   For i = 1 To $res1.Count
     If i < 100 Then
@@ -401,6 +404,14 @@ Public Sub btnadd_Click()
         res["fldcolm3"] = CStr(aValueBox1[i].Value)
         res["fldcolm4"] = ""
         res["xyz"] = False
+        If MMain.$WebEntry = True Then
+          xIntVal = modString.GetDateString(Now())
+          res["fldid"] = CLong(xIntVal)
+          res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+          res["fldrepodate"] = Now()
+          res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+          res["fldhospcode"] = modBasic.$HospCode
+        Endif
         res.Update
       Endif
     Endif
@@ -409,18 +420,26 @@ Public Sub btnadd_Click()
   For j = 1 To $res2.Count
     If j < 100 Then
       If aCheckBox2[j].Value = True And If aTextBox2[j].Text Then
-        res = modDatabase.$myConn.Create("tblpatlabsubtable")
-        res["fldtestid"] = $testID
-        res["fldsubtestid"] = $subtestID
-        res["fldindex"] = $sIndex
-        res["fldtype"] = "WHO Sensitivity"
-        res["fldvariable"] = aNaleLabel2[j].Text
-        res["fldvalue"] = aTextBox2[j].Text
-        res["fldcolm2"] = "MIC"
-        res["fldcolm3"] = CStr(aValueBox2[j].Value)
-        res["fldcolm4"] = ""
-        res["xyz"] = False
-        res.Update
+        res2 = modDatabase.$myConn.Create("tblpatlabsubtable")
+        res2["fldtestid"] = $testID
+        res2["fldsubtestid"] = $subtestID
+        res2["fldindex"] = $sIndex
+        res2["fldtype"] = "WHO Sensitivity"
+        res2["fldvariable"] = aNaleLabel2[j].Text
+        res2["fldvalue"] = aTextBox2[j].Text
+        res2["fldcolm2"] = "MIC"
+        res2["fldcolm3"] = CStr(aValueBox2[j].Value)
+        res2["fldcolm4"] = ""
+        res2["xyz"] = False
+        If MMain.$WebEntry = True Then
+          xIntVal = modString.GetDateString(Now())
+          res2["fldid"] = CLong(xIntVal)
+          res2["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+          res2["fldrepodate"] = Now()
+          res2["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+          res2["fldhospcode"] = modBasic.$HospCode
+        Endif
+        res2.Update
       Endif
     Endif
   Next
@@ -428,17 +447,25 @@ Public Sub btnadd_Click()
   For k = 1 To $res3.Count
     If k < 100 Then
       If aCheckBox3[k].Value = True And If aTextBox3[k].Text Then
-        res = modDatabase.$myConn.Create("tblpatlabsubtable")
-        res["fldtestid"] = $testID
-        res["fldsubtestid"] = $subtestID
-        res["fldindex"] = $sIndex
-        res["fldtype"] = "WHO Sensitivity"
-        res["fldvariable"] = aNaleLabel3[k].Text
-        res["fldvalue"] = aTextBox3[k].Text
-        res["fldcolm2"] = "E-Test"
-        res["fldcolm3"] = CStr(aValueBox3[k].Value)
-        res["fldcolm4"] = ""
-        res["xyz"] = False
+        res3 = modDatabase.$myConn.Create("tblpatlabsubtable")
+        res3["fldtestid"] = $testID
+        res3["fldsubtestid"] = $subtestID
+        res3["fldindex"] = $sIndex
+        res3["fldtype"] = "WHO Sensitivity"
+        res3["fldvariable"] = aNaleLabel3[k].Text
+        res3["fldvalue"] = aTextBox3[k].Text
+        res3["fldcolm2"] = "E-Test"
+        res3["fldcolm3"] = CStr(aValueBox3[k].Value)
+        res3["fldcolm4"] = ""
+        res3["xyz"] = False
+        If MMain.$WebEntry = True Then
+          xIntVal = modString.GetDateString(Now())
+          res3["fldid"] = CLong(xIntVal)
+          res3["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+          res3["fldrepodate"] = Now()
+          res3["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+          res3["fldhospcode"] = modBasic.$HospCode
+        Endif
         res.Update
       Endif
     Endif
@@ -474,6 +501,7 @@ Private Sub EditSensiTableValue(sID As Long, subID As Long, sIndex As String, sT
 
   Dim res As Result
   Dim rsx As Result
+  Dim xIntVal As String
 
   If sIndex Then
     rsx = modDatabase.$myConn.Edit("tblpatlabsubtable", "fldtestid=&1 and fldsubtestid=&2 and fldindex=&3 and fldvariable=&4", sID, subID, sIndex, sType)
@@ -497,6 +525,14 @@ Private Sub EditSensiTableValue(sID As Long, subID As Long, sIndex As String, sT
     res["fldcolm3"] = ""
     res["fldcolm4"] = ""
     res["xyz"] = False
+    If MMain.$WebEntry = True Then
+      xIntVal = modString.GetDateString(Now())
+      res["fldid"] = CLong(xIntVal)
+      res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+      res["fldrepodate"] = Now()
+      res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+      res["fldhospcode"] = modBasic.$HospCode
+    Endif
     res.Update
 
   Endif

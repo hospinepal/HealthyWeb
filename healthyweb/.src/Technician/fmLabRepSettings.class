@@ -687,6 +687,7 @@ Public Sub btnorder_Click()
   categ = New String[]
   For i = 0 To GridView1.Count - 1
     If GridView1.IsSelected(i) = True Then
+      $rData.MoveTo(i)
       categ.Add(modFixLab.GetLabTestCategory($rData["fldtestid"]))
     Endif
   Next
@@ -1009,13 +1010,16 @@ Private Sub EnterTextData()
   Dim yqualival As Variant[]
   Dim hForm2 As FmLabQuantiVal
   Dim hForm3 As FmEnterMultiple
+  Dim hFormTwo As FmEnterMultipleTwo
   Dim res As Result
   Dim sql As String
   Dim xData As Variant[]
   Dim xunit As String
   Dim xobs As String
+  Dim xType As String
 
   If $rData["fldtest_type"] = "Qualitative" Then
+    xType = modFixLab.GetLabTestOptionType($rData["fldtestid"])
     xobs = modLabTest.GetLabTestValueString($rData["fldid"], modLabSub.GetTestUnitFromButton(rbsi, rbmetric), False, $encid, $tblpatlabtest)
     sql = "select fldid,fldsubtest,fldtanswertype,fldreport,fldabnormal,fldindex from " & $tblpatlabsubtest & " where fldtestid=&1"
     res = modDatabase.$myConn.Exec(sql, $rData["fldid"])
@@ -1030,8 +1034,13 @@ Private Sub EnterTextData()
         xData.Add([res["fldsubtest"], res["fldreport"], res["fldid"], res["fldtanswertype"], res["fldabnormal"], res["fldindex"]])
       Next
       xData.Add(["Final Impression", xobs, 0, "RichText Area", False, ""])
-      hForm3 = New FmEnterMultiple($rData["fldid"], "Test", $rData["fldtestid"], xData, $rData["fldsampletype"], cmbfiscal.Text)
-      hForm3.ShowModal
+      If xType = "Left/Right Components" Then
+        hFormTwo = New FmEnterMultipleTwo($rData["fldid"], "Test", $rData["fldtestid"], xData, $rData["fldsampletype"], cmbfiscal.Text)
+        hFormTwo.ShowModal
+      Else
+        hForm3 = New FmEnterMultiple($rData["fldid"], "Test", $rData["fldtestid"], xData, $rData["fldsampletype"], cmbfiscal.Text)
+        hForm3.ShowModal
+      Endif
     Endif
 
   Else If $rData["fldtest_type"] = "Quantitative" Then
@@ -1076,7 +1085,7 @@ Private Sub BlankSubGrid()
 
   GridView2.Clear
   GridView2.Columns.Count = 6
-  GridView2.Rows.Count = 0
+  GridView2.Count = 0
   ResizeSubGrid()
 
 End
@@ -1284,6 +1293,7 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
   Dim i As Integer
   Dim sTitles As String[]
   Dim aColl As Collection
+  Dim xType As String
 
   Dim categ As String[]
   Dim newCateg As String[]
@@ -1469,6 +1479,10 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
 
       dtcont = modSettings.ShowSettingFromFIle("Laboratory/DateContent")
       For i = 0 To GridView1.Count - 1
+        aa = ""
+        bb = ""
+        cc = ""
+        dd = ""
         $rData.MoveTo(i)
         If $rData["fldchk"] = True And If modFixLab.GetLabTestCategory($rData["fldtestid"]) = xx Then
           $reportedBy.Add($rData["flduserid_report"])
@@ -1697,35 +1711,90 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
 
           If $rData["fldtest_type"] = "Qualitative" Then
 
+            xType = modFixLab.GetLabTestOptionType($rData["fldtestid"])
+            If xType = "Left/Right Components" Then
+              With asx
+                If rbform1.Value = True Then
+                  .Add("")
+                  If xspecolm = "Specimen" Then
+                    .Add("")
+                  Else If xspecolm = "Invoice" Then
+                    .Add("")
+                  Endif
+                  .Add(modString.GetLeftRightTableHeader())
+                  If xspecolm = "Comment" Then
+                    .Add("")
+                  Endif
+                Else If rbform3.Value = True Then
+                  .Add(modString.GetFormatTextFontString(bb, col2Font))
+                Else If rbform4.Value = True Then
+                  .Add("")
+                  If xspecolm = "Specimen" Then
+                    .Add("")
+                  Else If xspecolm = "Invoice" Then
+                    .Add("")
+                  Endif
+                  .Add(modString.GetLeftRightTableHeader())
+                  If xspecolm = "Comment" Then
+                    .Add("")
+                  Else If xspecolm = "TestUnit" Then
+                    .Add("")
+                  Endif
+                  .Add("")
+                  .Add("")
+                Else
+                  .Add("")
+                  If xspecolm = "Specimen" Then
+                    .Add("")
+                  Else If xspecolm = "Invoice" Then
+                    .Add("")
+                  Endif
+                  .Add(modString.GetLeftRightTableHeader())
+                  If xspecolm = "Comment" Then
+                    .Add("")
+                  Else If xspecolm = "TestUnit" Then
+                    .Add("")
+                  Endif
+                  .Add("")
+                Endif
+              End With
+              $BillingReport.Add(asx)
+              asx.Clear()
+            Endif
+
             res = modDatabase.$myConn.Exec("select fldsubtest,fldabnormal,fldreport,fldid,fldtestid,fldtanswertype,fldindex from " & $tblpatlabsubtest & " where fldtestid=&1 and fldchk=&2 and fldsave=&3" & modLabSub.GetLabRepoOrder("SubTest"), $rData["fldid"], True, True)
             If res.Available = True Then
               For Each res
-                If res["fldtanswertype"] = "Multiple Selection" Then
-                  xquali = modLabTest.GetSubTestTableReportString(res["fldtestid"], res["fldid"], False, res["fldindex"])
-                Else If res["fldtanswertype"] = "Text Table" Then
-                  xquali = modLabTest.GetSubTestTableReportString(res["fldtestid"], res["fldid"], True, res["fldindex"])
-                Else If res["fldtanswertype"] = "Dual Columns" Then
-                  xquali = modLabTest.GetSubTestDualTableString(res["fldtestid"], res["fldid"], True, res["fldindex"])
-                Else If res["fldtanswertype"] = "Triple Columns" Then
-                  xquali = modLabTest.GetSubTestTriTableString(res["fldtestid"], res["fldid"], True, res["fldindex"])
-                Else If res["fldtanswertype"] = "Single Column" Then
-                  xquali = modLabTest.GetSubTestTableReportString(res["fldtestid"], res["fldid"], True, res["fldindex"])
-                Else If res["fldtanswertype"] = "Drug Sensitivity" Or If res["fldtanswertype"] = "WHO Sensitivity" Then
-                  xquali = modLabTest.GetSubSensiTableReportString(res["fldtanswertype"], res["fldtestid"], res["fldid"], res["fldindex"], True)
-                Else If res["fldtanswertype"] = "Left and Right" Then
-                  xquali = modString.GetJSONToDualHTMLTable(res["fldreport"])
+                If xType = "Left/Right Components" Then
+                  xquali = modString.GetLeftRightTableValue(res["fldreport"])
                 Else
-                  If res["fldabnormal"] = True And If modBasic.$AbnFormat Then
-                    xquali = modString.GetAbnormalFormattedString(res["fldreport"])
+                  If res["fldtanswertype"] = "Multiple Selection" Then
+                    xquali = modLabTest.GetSubTestTableReportString(res["fldtestid"], res["fldid"], False, res["fldindex"])
+                  Else If res["fldtanswertype"] = "Text Table" Then
+                    xquali = modLabTest.GetSubTestTableReportString(res["fldtestid"], res["fldid"], True, res["fldindex"])
+                  Else If res["fldtanswertype"] = "Dual Columns" Then
+                    xquali = modLabTest.GetSubTestDualTableString(res["fldtestid"], res["fldid"], True, res["fldindex"])
+                  Else If res["fldtanswertype"] = "Triple Columns" Then
+                    xquali = modLabTest.GetSubTestTriTableString(res["fldtestid"], res["fldid"], True, res["fldindex"])
+                  Else If res["fldtanswertype"] = "Single Column" Then
+                    xquali = modLabTest.GetSubTestTableReportString(res["fldtestid"], res["fldid"], True, res["fldindex"])
+                  Else If res["fldtanswertype"] = "Drug Sensitivity" Or If res["fldtanswertype"] = "WHO Sensitivity" Then
+                    xquali = modLabTest.GetSubSensiTableReportString(res["fldtanswertype"], res["fldtestid"], res["fldid"], res["fldindex"], True)
+                  Else If res["fldtanswertype"] = "Left and Right" Then
+                    xquali = modString.GetJSONToDualHTMLTable(res["fldreport"])
                   Else
-                    xquali = res["fldreport"]
+                    If res["fldabnormal"] = True And If modBasic.$AbnFormat Then
+                      xquali = modString.GetAbnormalFormattedString(res["fldreport"])
+                    Else
+                      xquali = res["fldreport"]
+                    Endif
                   Endif
                 Endif
 
                 If xquali Then
                   If rbform1.Value = True Then
-                    aa = modString.HTMLBlankSpace(4) & res!fldsubtest
-                    yrefstr = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res!fldsubtest)
+                    aa = modString.HTMLBlankSpace(4) & res["fldsubtest"]
+                    yrefstr = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res["fldsubtest"])
                     If yrefstr Then
                       bb = xquali & gb.NewLine & " [" & yrefstr & " ]"
                     Else
@@ -1747,8 +1816,8 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
                     asx.Clear()
 
                   Else If rbform3.Value = True Then
-                    aa = res!fldsubtest
-                    yrefstr = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res!fldsubtest)
+                    aa = res["fldsubtest"]
+                    yrefstr = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res["fldsubtest"])
                     If yrefstr Then
                       bb = xquali & gb.NewLine & " [" & yrefstr & " ]"
                     Else
@@ -1761,9 +1830,9 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
                     asx.Clear()
 
                   Else If rbform4.Value = True Then
-                    aa = modString.HTMLBlankSpace(4) & res!fldsubtest
+                    aa = modString.HTMLBlankSpace(4) & res["fldsubtest"]
                     bb = xquali
-                    cc = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res!fldsubtest)
+                    cc = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res["fldsubtest"])
                     dd = ""
                     With asx
                       .Add(aa)
@@ -1785,9 +1854,9 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
                     asx.Clear()
 
                   Else
-                    aa = modString.HTMLBlankSpace(4) & res!fldsubtest
+                    aa = modString.HTMLBlankSpace(4) & res["fldsubtest"]
                     bb = xquali
-                    cc = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res!fldsubtest)
+                    cc = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res["fldsubtest"])
                     With asx
                       .Add(aa)
                       If xspecolm = "Specimen" Then
@@ -1979,7 +2048,7 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
 
       ''final print
       If sType = "Report" Then
-        modControlSub.OpenHTMLPreview($encid, $BillingReport.NewHTMLPath(), "ReportSize")
+        modControlSub.OpenHTMLPreview($encid, $BillingReport.NewHTMLPath(), "ReportSize", "Diagnostic Tests")
       Else If sType = "FTP" Then
         SendFTPSMS($BillingReport.NewHTMLPath())
       Else If sType = "Save" Then
@@ -2022,6 +2091,10 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
       $BillingReport.AddSection(xx, True)
 
       For i = 0 To GridView1.Count - 1
+        aa = ""
+        bb = ""
+        cc = ""
+        dd = ""
         $rData.MoveTo(i)
         If $rData["fldchk"] = True And If modFixLab.GetLabTestCategory($rData["fldtestid"]) = xx Then
           $reportedBy.Add($rData["flduserid_report"])
@@ -2250,41 +2323,96 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
               $SensTable.Add(modLabTest.GetSensitivityTable($encid, $rData["fldid"], $tblpatlabsubtest))
             Endif
 
+            xType = modFixLab.GetLabTestOptionType($rData["fldtestid"])
+            If xType = "Left/Right Components" Then
+              With asx
+                If rbform1.Value = True Then
+                  .Add("")
+                  If xspecolm = "Specimen" Then
+                    .Add("")
+                  Else If xspecolm = "Invoice" Then
+                    .Add("")
+                  Endif
+                  .Add(modString.GetLeftRightTableHeader())
+                  If xspecolm = "Comment" Then
+                    .Add("")
+                  Endif
+                Else If rbform3.Value = True Then
+                  .Add(modString.GetFormatTextFontString(bb, col2Font))
+                Else If rbform4.Value = True Then
+                  .Add("")
+                  If xspecolm = "Specimen" Then
+                    .Add("")
+                  Else If xspecolm = "Invoice" Then
+                    .Add("")
+                  Endif
+                  .Add(modString.GetLeftRightTableHeader())
+                  If xspecolm = "Comment" Then
+                    .Add("")
+                  Else If xspecolm = "TestUnit" Then
+                    .Add("")
+                  Endif
+                  .Add("")
+                  .Add("")
+                Else
+                  .Add("")
+                  If xspecolm = "Specimen" Then
+                    .Add("")
+                  Else If xspecolm = "Invoice" Then
+                    .Add("")
+                  Endif
+                  .Add(modString.GetLeftRightTableHeader())
+                  If xspecolm = "Comment" Then
+                    .Add("")
+                  Else If xspecolm = "TestUnit" Then
+                    .Add("")
+                  Endif
+                  .Add("")
+                Endif
+              End With
+              $BillingReport.Add(asx)
+              asx.Clear()
+            Endif
+
             res = modDatabase.$myConn.Exec("select fldsubtest,fldabnormal,fldreport,fldid,fldtestid,fldtanswertype,fldindex from " & $tblpatlabsubtest & " where fldtestid=&1 and fldchk=&2 and fldsave=&3" & modLabSub.GetLabRepoOrder("SubTest"), $rData["fldid"], True, True)
             If res.Available = True Then
               For Each res
-                If res["fldtanswertype"] = "Multiple Selection" Then
-                  xquali = modLabTest.GetSubTestTableReportString(res["fldtestid"], res["fldid"], False, res["fldindex"])
-                Else If res["fldtanswertype"] = "Text Table" Then
-                  xquali = modLabTest.GetSubTestTableReportString(res["fldtestid"], res["fldid"], True, res["fldindex"])
-                Else If res["fldtanswertype"] = "Dual Columns" Then
-                  xquali = modLabTest.GetSubTestDualTableString(res["fldtestid"], res["fldid"], True, res["fldindex"])
-                Else If res["fldtanswertype"] = "Triple Columns" Then
-                  xquali = modLabTest.GetSubTestTriTableString(res["fldtestid"], res["fldid"], True, res["fldindex"])
-                Else If res["fldtanswertype"] = "Single Column" Then
-                  xquali = modLabTest.GetSubTestTableReportString(res["fldtestid"], res["fldid"], True, res["fldindex"])
-                Else If res["fldtanswertype"] = "Drug Sensitivity" Or If res["fldtanswertype"] = "WHO Sensitivity" Then
-                  If SensiFormat() = "Table" Then
-                    xquali = modLabTest.GetSubSensiTableReportString(res["fldtanswertype"], res["fldtestid"], res["fldid"], res["fldindex"], True)
-                  Endif
-                Else If res["fldtanswertype"] = "Left and Right" Then
-                  xquali = modString.GetJSONToDualHTMLTable(res["fldreport"])
+                If xType = "Left/Right Components" Then
+                  xquali = modString.GetLeftRightTableValue(res["fldreport"])
                 Else
-                  If res["fldabnormal"] = True And If modBasic.$AbnFormat Then
-                    xquali = modString.GetAbnormalFormattedString(res["fldreport"])
+                  If res["fldtanswertype"] = "Multiple Selection" Then
+                    xquali = modLabTest.GetSubTestTableReportString(res["fldtestid"], res["fldid"], False, res["fldindex"])
+                  Else If res["fldtanswertype"] = "Text Table" Then
+                    xquali = modLabTest.GetSubTestTableReportString(res["fldtestid"], res["fldid"], True, res["fldindex"])
+                  Else If res["fldtanswertype"] = "Dual Columns" Then
+                    xquali = modLabTest.GetSubTestDualTableString(res["fldtestid"], res["fldid"], True, res["fldindex"])
+                  Else If res["fldtanswertype"] = "Triple Columns" Then
+                    xquali = modLabTest.GetSubTestTriTableString(res["fldtestid"], res["fldid"], True, res["fldindex"])
+                  Else If res["fldtanswertype"] = "Single Column" Then
+                    xquali = modLabTest.GetSubTestTableReportString(res["fldtestid"], res["fldid"], True, res["fldindex"])
+                  Else If res["fldtanswertype"] = "Drug Sensitivity" Or If res["fldtanswertype"] = "WHO Sensitivity" Then
+                    If SensiFormat() = "Table" Then
+                      xquali = modLabTest.GetSubSensiTableReportString(res["fldtanswertype"], res["fldtestid"], res["fldid"], res["fldindex"], True)
+                    Endif
+                  Else If res["fldtanswertype"] = "Left and Right" Then
+                    xquali = modString.GetJSONToDualHTMLTable(res["fldreport"])
                   Else
-                    xquali = res["fldreport"]
+                    If res["fldabnormal"] = True And If modBasic.$AbnFormat Then
+                      xquali = modString.GetAbnormalFormattedString(res["fldreport"])
+                    Else
+                      xquali = res["fldreport"]
+                    Endif
                   Endif
                 Endif
 
-                If res!fldtanswertype = "Label Only" Then
-                  aa = modString.HTMLBlankSpace(3) & res!fldsubtest
+                If res["fldtanswertype"] = "Label Only" Then
+                  aa = modString.HTMLBlankSpace(3) & res["fldsubtest"]
                   With asx
                     If rbform1.Value = True Then
                       .Add(aa)
                       .Add("")
                     Else If rbform3.Value = True Then
-                      .Add(res!fldsubtest)
+                      .Add(res["fldsubtest"])
                     Else If rbform4.Value = True Then
                       .Add(aa)
                       .Add("")
@@ -2302,8 +2430,8 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
                 Else
                   If xquali Then
                     If rbform1.Value = True Then
-                      aa = modString.HTMLBlankSpace(5) & res!fldsubtest
-                      yrefstr = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res!fldsubtest)
+                      aa = modString.HTMLBlankSpace(5) & res["fldsubtest"]
+                      yrefstr = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res["fldsubtest"])
                       If yrefstr Then
                         bb = xquali & gb.NewLine & " [" & yrefstr & " ]"
                       Else
@@ -2325,8 +2453,8 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
                       asx.Clear()
 
                     Else If rbform3.Value = True Then
-                      aa = res!fldsubtest
-                      yrefstr = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res!fldsubtest)
+                      aa = res["fldsubtest"]
+                      yrefstr = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res["fldsubtest"])
                       If yrefstr Then
                         bb = xquali & gb.NewLine & " [" & yrefstr & " ]"
                       Else
@@ -2339,9 +2467,9 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
                       asx.Clear()
 
                     Else If rbform4.Value = True Then
-                      aa = modString.HTMLBlankSpace(5) & res!fldsubtest
+                      aa = modString.HTMLBlankSpace(5) & res["fldsubtest"]
                       bb = xquali
-                      cc = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res!fldsubtest)
+                      cc = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res["fldsubtest"])
                       dd = ""
                       With asx
                         .Add(aa)
@@ -2363,9 +2491,9 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
                       asx.Clear()
 
                     Else
-                      aa = modString.HTMLBlankSpace(5) & res!fldsubtest
+                      aa = modString.HTMLBlankSpace(5) & res["fldsubtest"]
                       bb = xquali
-                      cc = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res!fldsubtest)
+                      cc = modFixLab.GetSubLatTestQualiReference(modLabTest.GetTestnameFromTestID($rData["fldid"], $tblpatlabtest), res["fldsubtest"])
                       With asx
                         .Add(aa)
                         If xspecolm = "Specimen" Then
@@ -2565,7 +2693,7 @@ Private Sub ShowPatLaboratoryReport(sType As String, sHide As Boolean)
 
     ''final print
     If sType = "Report" Then
-      modControlSub.OpenHTMLPreview($encid, $BillingReport.NewHTMLPath(), "ReportSize")
+      modControlSub.OpenHTMLPreview($encid, $BillingReport.NewHTMLPath(), "ReportSize", "Diagnostic Tests")
     Else If sType = "FTP" Then
       SendFTPSMS($BillingReport.NewHTMLPath())
     Else If sType = "Save" Then
@@ -2612,7 +2740,10 @@ Private Sub SaveReportAsHTML(sHTML As String, sTitle As String)
   Else
     xx = InputBox(("Title of Report for Archive"), "Diagnostic Tests", cmbcategory.Text)
   Endif
-  sLongID = modImage.SavePatientFileGeneral($encid, "Diagnostic Tests", xx, sPath, False, $HashCode)
+  sLongID = modImage.SavePatientFileGeneral($encid, "Diagnostic Tests", xx, sPath, $HashCode)
+  If sLongID Then
+    Me.Exec("Toastify({text: 'File saved', duration: 3000}).showToast()")
+  Endif
 
 End
 
@@ -2630,7 +2761,10 @@ Private Sub SaveReportLogAsHTML(sHTML As String, sTitle As String)
   Else
     xx = InputBox(("Title of Report for Log"), "Diagnostic Tests", cmbcategory.Text)
   Endif
-  sLongID = modImage.SavePatientFileGeneral($encid, "Diagnostic Tests Log", xx, sPath, False)
+  sLongID = modImage.SavePatientFileGeneral($encid, "Diagnostic Tests Log", xx, sPath)
+  If sLongID Then
+    Me.Exec("Toastify({text: 'File saved', duration: 3000}).showToast()")
+  Endif
 
 End
 
@@ -2645,7 +2779,7 @@ Private Sub SendFTPSMS(sHTML As String)
   sInt = modString.GetNowString()
   sPath = modPrint.ConvertHTMLToPDFString(sHTML, "ReportSize", sInt)
 
-  sLongID = modImage.SavePatientFileGeneral($encid, "Diagnostic Tests", "SMS Sent", sPath, True, $HashCode)
+  sLongID = modImage.SavePatientFileGeneral($encid, "Diagnostic Tests", "SMS Sent", sPath, $HashCode)
   xmode = modSettings.ShowSettingFromFIle("Laboratory/Messaging_Format")
   If xmode = "EMail" Then
     modDevice.SendEMailLabPatient($encid, sPath)
@@ -2662,6 +2796,9 @@ Private Sub SendFTPSMS(sHTML As String)
     modRepository.UploadSingleToRepository("tblencounter", $encid)
   Endif
 
+  If sLongID Then
+    Me.Exec("Toastify({text: 'File saved', duration: 3000}).showToast()")
+  Endif
   If xmsg Then
     Message.Info(xmsg, ("OK"))
   Endif

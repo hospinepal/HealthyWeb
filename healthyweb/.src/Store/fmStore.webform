@@ -10,21 +10,42 @@
   { mnupur WebMenu
     Text = ("Inventory")
     { mnupurentry WebMenu
+      Tag = "Purchase Entry"
       Text = ("Purchase Entry")
     }
     { mnustcretrn WebMenu
+      Tag = "Stock Return"
       Text = ("Stock Return")
     }
     { mnutransfer WebMenu
+      Tag = "Stock Transfer"
       Text = ("Stock Transfer")
     }
     { mnustoconsume WebMenu
+      Tag = "Stock Consume"
       Text = ("Stock Consume")
     }
     { mnuadjust WebMenu
+      Tag = "Stock Adjustment"
       Text = ("Adjustment")
     }
+  }
+  { mnuactivity WebMenu
+    Text = ("Activity")
+    { mnupurchrequest WebMenu
+      Tag = "Purchase Request"
+      Text = ("Purchase Request")
+    }
+    { mnupurchsupport WebMenu
+      Tag = "Purchase Support"
+      Text = ("Pirchase Support")
+    }
+    { mnuinventory WebMenu
+      Tag = "Product Activation"
+      Text = ("Activate Product")
+    }
     { mnustorecode WebMenu
+      Tag = "Storage Coding"
       Text = ("Storage Code")
     }
   }
@@ -33,19 +54,21 @@
     { mnuexpiry WebMenu
       Text = ("Expiry Items")
     }
+    { mnunonexpiry WebMenu
+      Text = ("Non-Expiry")
+    }
     { mnuundermin WebMenu
       Text = ("Under Stock")
     }
     { WebMenu2 WebMenu
     }
     { mnusttrnsf WebMenu
+      Tag = "Transfer Report"
       Text = ("Stock Transfer")
     }
     { mnustockDB WebMenu
+      Tag = "Inventory Database"
       Text = ("Inventory DB")
-    }
-    { mnuinventory WebMenu
-      Text = ("Activate Product")
     }
   }
   { mnuhelp WebMenu
@@ -55,6 +78,7 @@
       Image = "icon:/small/user"
     }
     { mnupersonal WebMenu
+      Tag = "Personal Page"
       Text = ("Personal Page")
     }
     { mnuclearcache WebMenu

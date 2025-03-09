@@ -31,8 +31,16 @@ Public Sub WebForm_Open()
   Dim xalert As String
   ' Dim hForm As FmStoreAlert
 
+  If MMain.$WebEntry = True Then
+    modDataRepo.$RepositoryMode = MMain.$AppLogCategory
+    modBasic.$HospCode = MMain.$AppLogString
+  Endif
   modHelpVariable.SetApplicationGUI()
   MMain.GetApplVersionType()
+
+  modBasic.LoadInvoicingSetting()
+  modBasic.InventorySettings()
+  modBasic.InventoryUserAccessList()
 
   xalert = modSettings.ShowSettingFromFIle("InventorySetting/InventoryAlert")
   If xalert Then
@@ -43,6 +51,28 @@ Public Sub WebForm_Open()
       modDashBoard.GetAutoExpiryAlert(xalert)
     Endif
   Endif
+
+  SetFormAccess()
+
+End
+
+Private Sub SetFormAccess()
+
+  modGeneralMain.ShowSelectedFormMenu(mnupurentry)
+  modGeneralMain.ShowSelectedFormMenu(mnustcretrn)
+  modGeneralMain.ShowSelectedFormMenu(mnutransfer)
+  modGeneralMain.ShowSelectedFormMenu(mnustoconsume)
+  modGeneralMain.ShowSelectedFormMenu(mnuadjust)
+
+  modGeneralMain.ShowSelectedFormMenu(mnupurchrequest)
+  modGeneralMain.ShowSelectedFormMenu(mnupurchsupport)
+  modGeneralMain.ShowSelectedFormMenu(mnuinventory)
+  modGeneralMain.ShowSelectedFormMenu(mnustorecode)
+
+  modGeneralMain.ShowSelectedFormMenu(mnusttrnsf)
+  modGeneralMain.ShowSelectedFormMenu(mnustockDB)
+
+  modGeneralMain.ShowSelectedFormMenu(mnupersonal)
 
 End
 
@@ -129,6 +159,17 @@ Public Sub mnupurentry_Click()
 
 End
 
+Public Sub mnutransfer_Click()
+
+  Dim hForm As FmTransfer
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmTransfer(Workspace1)
+
+End
+
 Public Sub mnupersonal_Click()
 
   Dim hForm As FmPersonal
@@ -161,5 +202,52 @@ End
 Public Sub mnudarkmode_Click()
 
   Me.Exec("changeScreenMode();")
+
+End
+
+Public Sub mnuexpiry_Click()
+
+  Dim xdate As Date
+
+  xdate = GetDateValue("Select Date", "Expiry", Date())
+  modDashBoard.AutoDashboardExpiry(xdate)
+
+End
+
+Public Sub mnunonexpiry_Click()
+
+  Dim xList As String[] = ["1 Month", "2 Month", "3 Month", "6 Month", "9 Month", "12 Month", "15 Month"]
+  Dim xmonth As String
+
+  xmonth = InputCombo("Select Near-Expiry Month", "Near Expiry", xList, "3 Month", True)
+  If xmonth Then
+    modDashBoard.AutoDashboardNearExpiry(xmonth)
+  Endif
+
+End
+
+Public Sub mnuundermin_Click()
+
+  Dim xPath As String
+
+  xPath = modHTMLStock.ShowUnderStockItemReport()
+  modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
+
+End
+
+Public Sub mnustockDB_Click()
+
+  fmStockDB.ShowModal
+
+End
+
+Public Sub mnusttrnsf_Click()
+
+  Dim hForm As FmmedTransfer
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmmedTransfer(Workspace1)
 
 End

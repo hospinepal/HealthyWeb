@@ -30,8 +30,13 @@ End
 
 Public Sub WebForm_Open()
 
+  If MMain.$WebEntry = True Then
+    modDataRepo.$RepositoryMode = MMain.$AppLogCategory
+    modBasic.$HospCode = MMain.$AppLogString
+  Endif
   modHelpVariable.SetApplicationGUI()
   MMain.GetApplVersionType()
+  DiaplayCustMenu()
 
   modLinkDB.LoadExtraDBSettings()
   modBasic.LoadLabRadioList()
@@ -50,6 +55,7 @@ Public Sub WebForm_Open()
 
   modBasic.InventoryUserAccessList()
   modBasic.ChartSettingsAll()
+  modBasic.CloudAISettings()
   modBillLock.GetInvoicePrefixEnc("Counter Sales")
   modBasic.$ClinicTelemed = modGlobalSetting.ShowSettingFromDB("IPClinic/TelemedicineRequest")
 
@@ -74,21 +80,23 @@ Private Sub SetFormAccess()
 
   modGeneralMain.ShowSelectedFormMenu(mnuradioreport)
   modGeneralMain.ShowSelectedFormMenu(mnuradioreprint)
-  modGeneralMain.ShowSelectedFormMenu(mnupacs)
+  modGeneralMain.ShowSelectedFormMenu(mnusharing)
 
-  modGeneralMain.ShowSelectedFormMenu(mnulabshare)
-  modGeneralMain.ShowSelectedFormMenu(mnuradioshare)
-  modGeneralMain.ShowSelectedFormMenu(mnugenshare)
-
-  modGeneralMain.ShowSelectedFormMenu(mnusamplingrep)
-  modGeneralMain.ShowSelectedFormMenu(mnusampradio)
   modGeneralMain.ShowSelectedFormMenu(mnupatprofile)
+  modGeneralMain.ShowSelectedFormMenu(mnusamplingrep)
+  modGeneralMain.ShowSelectedFormMenu(mnusensitivity)
+  modGeneralMain.ShowSelectedFormMenu(mnusampradio)
+  modGeneralMain.ShowSelectedFormMenu(mnupacs)
   modGeneralMain.ShowSelectedFormMenu(mnusavedrepo)
 
   modGeneralMain.ShowSelectedFormMenu(mnubloodinventory)
-  modGeneralMain.ShowSelectedFormMenu(mnuinvdb)
   modGeneralMain.ShowSelectedFormMenu(mnustoconsume)
   modGeneralMain.ShowSelectedFormMenu(mnutransfer)
+  modGeneralMain.ShowSelectedFormMenu(mnutransreport)
+  modGeneralMain.ShowSelectedFormMenu(mnuinvdb)
+
+  modGeneralMain.ShowSelectedFormMenu(mnucustquery)
+  modGeneralMain.ShowSelectedFormMenu(mnupersonal)
 
 End
 
@@ -160,6 +168,102 @@ Public Sub btnfullscreen_Click()
     Me.Exec("closeFullscreen()")
 
   Endif
+
+End
+
+''---------------------------------------- CustomAccount Reports -------------------------------------
+Private Sub DiaplayCustMenu()
+
+  If modSettings.ShowSettingForReport("Technician.CustomQuery1/Name") Then
+    mnucust1.Text = modSettings.ShowSettingForReport("Technician.CustomQuery1/Name")
+    mnucust1.Tag = "Technician.CustomQuery1"
+    mnucust1.Visible = True
+  Endif
+
+  If modSettings.ShowSettingForReport("Technician.CustomQuery2/Name") Then
+    mnucust2.Text = modSettings.ShowSettingForReport("Technician.CustomQuery2/Name")
+    mnucust2.Tag = "Technician.CustomQuery2"
+    mnucust2.Visible = True
+  Endif
+
+  If modSettings.ShowSettingForReport("Technician.CustomQuery3/Name") Then
+    mnucust3.Text = modSettings.ShowSettingForReport("Technician.CustomQuery3/Name")
+    mnucust3.Tag = "Technician.CustomQuery3"
+    mnucust3.Visible = True
+  Endif
+
+  If modSettings.ShowSettingForReport("Technician.CustomQuery4/Name") Then
+    mnucust4.Text = modSettings.ShowSettingForReport("Technician.CustomQuery4/Name")
+    mnucust4.Tag = "Technician.CustomQuery4"
+    mnucust4.Visible = True
+  Endif
+
+  If modSettings.ShowSettingForReport("Technician.CustomQuery5/Name") Then
+    mnucust5.Text = modSettings.ShowSettingForReport("Technician.CustomQuery5/Name")
+    mnucust5.Tag = "Technician.CustomQuery5"
+    mnucust5.Visible = True
+  Endif
+
+End
+
+Public Sub mnucust1_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust1.Tag, Workspace1)
+
+End
+
+Public Sub mnucust2_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust2.Tag, Workspace1)
+
+End
+
+Public Sub mnucust3_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust3.Tag, Workspace1)
+
+End
+
+Public Sub mnucust4_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust4.Tag, Workspace1)
+
+End
+
+Public Sub mnucust5_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust5.Tag, Workspace1)
+
+End
+
+Public Sub mnuaccrepset_Click()
+
+  fmCusAccReport.ShowModal
 
 End
 
@@ -393,6 +497,17 @@ Public Sub mnucuruserid_Click()
     hForm = New FmReportUsers(modBasic.$lbluser)
     hForm.ShowModal
   Endif
+
+End
+
+Public Sub mnutransfer_Click()
+
+  Dim hForm As FmTransfer
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmTransfer(Workspace1)
 
 End
 

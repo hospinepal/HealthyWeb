@@ -8,6 +8,7 @@
   Margin = True
   Title = ("Laboratory Printing")
   { mnuhide WebMenu
+    Visible = False
     { mnuverify WebMenu
       Text = ("Verify")
     }
@@ -23,7 +24,7 @@
   }
   { WebContainer46 WebContainer
     #MoveScaled(1,1,130,81)
-    Class = "height-tablet-full"
+    Class = "height-tablet-full-less"
     Arrangement = Arrange.Vertical
     { WebContainer36 WebContainer
       #MoveScaled(1,1,128,8)

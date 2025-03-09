@@ -111,7 +111,7 @@ Private Function GetPurchaseReferenceList() As Result
   If modBasic.$ViewLockInventory = "Location" Then
     res = modDatabase.$myConn.Exec("select fldreference,fldpurdate from tblpurchasebill where fldreference in(select fldreference from tblpurchase where fldcomp=&1) and fldreference like &2 ORDER BY fldpurdate DESC", modBasic.$compID, Trim(txtname.Text) & "%")
   Else If modBasic.$ViewLockInventory = "User" Then
-    res = modDatabase.$myConn.Exec("select fldreference,fldpurdate from tblpurchasebill where flduser=&1 and fldreference like &2 ORDER BY fldpurdate DESC", modBasic.$lbluser, Trim(txtname.Text) & "%")
+    res = modDatabase.$myConn.Exec("select fldreference,fldpurdate from tblpurchasebill where flduserid=&1 and fldreference like &2 ORDER BY fldpurdate DESC", modBasic.$lbluser, Trim(txtname.Text) & "%")
   Else
     res = modDatabase.$myConn.Exec("select fldreference,fldpurdate from tblpurchasebill where fldreference like &1 ORDER BY fldpurdate DESC", Trim(txtname.Text) & "%")
   Endif

@@ -16,6 +16,12 @@ Public Sub _new(encid As String, sMode As String)
   $encid = encid
   $sMode = sMode
 
+  If modBasic.$ClinConsultTelemed = "Remote" Then
+    btnshowexpert.Visible = True
+  Else
+    btnshowexpert.Visible = False
+  Endif
+
   $PatientNum = modPatient.GetPatientNoByEnc($encid)
   txtpatientname.Text = modPatient.GetPatientNameByEnc($encid)
   txtgender.Text = modPatient.GetPatientSex($encid)

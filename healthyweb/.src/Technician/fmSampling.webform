@@ -18,6 +18,7 @@
     }
   }
   { mnumain WebMenu
+    Visible = False
     { mnugoenc WebMenu
       Text = ("Enc")
       Shortcut = "F1"
@@ -33,7 +34,7 @@
   }
   { WebContainer2 WebContainer
     #MoveScaled(1,1,30,70.375)
-    Class = "show-tablet-spacing  height-innertablet-left"
+    Class = "show-tablet-spacing  height-innertablet-right-less"
     Arrangement = Arrange.Vertical
     { WebContainer34 WebContainer
       #MoveScaled(1,1,28,4)
@@ -117,8 +118,24 @@
         }
       }
     }
-    { Panel11 WebContainer
+    { WebContainer27 WebContainer
       #MoveScaled(1,15,28,4)
+      Class = "less-container-margin"
+      Arrangement = Arrange.Horizontal
+      { WebLabel4 WebLabel
+        #MoveScaled(1,1,5,2)
+        Width = "5em"
+        Text = ("Depart")
+      }
+      { cmbsourcedept WebComboBox
+        #MoveScaled(6,1,10,2)
+        Height = "2em"
+        Expand = True
+        ReadOnly = False
+      }
+    }
+    { Panel11 WebContainer
+      #MoveScaled(1,19,28,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       Spacing = True
@@ -142,19 +159,19 @@
       }
     }
     { GridView2 WebTable
-      #MoveScaled(1,19,28,19)
+      #MoveScaled(1,23,28,19)
       Expand = True
       Mode = Select.Single
       ShowCheck = False
     }
     { GridView3 WebTable
-      #MoveScaled(1,38,28,17)
+      #MoveScaled(1,42,28,17)
       Expand = True
       Mode = Select.Single
       ShowCheck = False
     }
     { WebContainer5 WebContainer
-      #MoveScaled(1,55,28,4)
+      #MoveScaled(1,59,28,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { WebLabel16 WebLabel
@@ -181,7 +198,7 @@
       }
     }
     { WebContainer3 WebContainer
-      #MoveScaled(1,59,28,4)
+      #MoveScaled(1,63,28,4)
       Class = "less-container-margin"
       Arrangement = Arrange.Horizontal
       { chkselall WebCheckBox
@@ -207,7 +224,7 @@
   }
   { WebContainer7 WebContainer
     #MoveScaled(32,1,85,70)
-    Class = "show-widertablet-spacing  height-innertablet-right"
+    Class = "show-widertablet-spacing  height-tablet-prefull-less"
     Arrangement = Arrange.Vertical
     { WebContainer1 WebContainer
       #MoveScaled(1,1,83,6)
@@ -495,6 +512,7 @@
             #MoveScaled(12,1,8,2)
             Height = "2em"
             Expand = True
+            ReadOnly = False
           }
           { btnclrspec WebButton
             #MoveScaled(20,1,4,2)

@@ -102,6 +102,11 @@ Private Sub AddNewEntry(StockNo As Long, sItem As String, ItemCategory As String
     res["fldcomp"] = modBasic.$compID
     res["fldcode"] = 0
     res["xyz"] = True
+    If MMain.$WebEntry = True Then
+      res["fldrepodate"] = Now()
+      res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+      res["fldhospcode"] = modBasic.$HospCode
+    Endif
     res.Update()
   Endif
 
@@ -111,6 +116,7 @@ Private Sub AddPurchaseEntry(StockNo As Long, sItem As String, ItemCategory As S
 
   Dim res As Result
   Dim rs As Result
+  Dim xIntVal As String
 
   rs = modDatabase.$myConn.Exec("select fldstockid,fldbatch from tblentry where fldstockno=&1", StockNo)
   If rs.Available = True Then
@@ -143,6 +149,14 @@ Private Sub AddPurchaseEntry(StockNo As Long, sItem As String, ItemCategory As S
       res["fldreference"] = ""
       res["fldchk"] = False
       res["xyz"] = True
+      If MMain.$WebEntry = True Then
+        xIntVal = modString.GetDateString(Now())
+        res["fldid"] = CLong(xIntVal)
+        res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+        res["fldrepodate"] = Now()
+        res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+        res["fldhospcode"] = modBasic.$HospCode
+      Endif
       res.Update()
     Endif
   Endif

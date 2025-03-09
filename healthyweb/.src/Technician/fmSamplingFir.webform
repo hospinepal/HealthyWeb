@@ -547,6 +547,7 @@
           #MoveScaled(8,1,13,2)
           Height = "2em"
           Expand = True
+          ReadOnly = False
         }
         { btnclrspec WebButton
           #MoveScaled(21,1,4,2)

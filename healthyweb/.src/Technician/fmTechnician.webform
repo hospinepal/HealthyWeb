@@ -39,21 +39,18 @@
     }
   }
   { mnusharing WebMenu
+    Tag = "Group Sharing"
     Text = ("Share")
     { mnulabshare WebMenu
-      Tag = "Group Sharing"
       Text = ("Laboratory")
     }
     { mnuradioshare WebMenu
-      Tag = "Group Sharing"
       Text = ("Radiology")
     }
     { mnugenshare WebMenu
-      Tag = "Group Sharing"
       Text = ("Gen Services")
     }
     { mnusavedata WebMenu
-      Tag = "Group Sharing"
       Text = ("Saved Data")
       { mnulabsaved WebMenu
         Text = ("Laboratory")
@@ -77,6 +74,7 @@
       Text = ("Laboratory")
     }
     { mnusensitivity WebMenu
+      Tag = "Sensitivity Report"
       Text = ("Sensitivity")
     }
     { mnusampradio WebMenu
@@ -92,21 +90,53 @@
       Text = ("Saved Reports")
     }
   }
+  { mnucustquery WebMenu
+    Tag = "Query Report"
+    Text = ("CustQuery")
+    { mnucust1 WebMenu
+      Visible = False
+      Text = ("AccountReport1")
+    }
+    { mnucust2 WebMenu
+      Visible = False
+      Text = ("AccountReport2")
+    }
+    { mnucust3 WebMenu
+      Visible = False
+      Text = ("AccountReport3")
+    }
+    { mnucust4 WebMenu
+      Visible = False
+      Text = ("AccountReport4")
+    }
+    { mnucust5 WebMenu
+      Visible = False
+      Text = ("AccountReport5")
+    }
+    { mnuaccrepset WebMenu
+      Text = ("Custom Setting")
+    }
+  }
   { unustock WebMenu
     Text = ("Inventory")
     { mnubloodinventory WebMenu
+      Tag = "Medical Product Inventory"
       Text = ("Blood Bank")
     }
     { mnutransfer WebMenu
+      Tag = "Stock Transfer"
       Text = ("Stock Transfer")
     }
     { mnustoconsume WebMenu
+      Tag = "Stock Consume"
       Text = ("Stock Consume")
     }
     { mnutransreport WebMenu
+      Tag = "Transfer Report"
       Text = ("Transfer Report")
     }
     { mnuinvdb WebMenu
+      Tag = "Inventory Database"
       Text = ("Inventory DB")
     }
   }
@@ -132,6 +162,7 @@
       Image = "icon:/small/user"
     }
     { mnupersonal WebMenu
+      Tag = "Personal Page"
       Text = ("Personal Page")
     }
     { mnuclearcache WebMenu

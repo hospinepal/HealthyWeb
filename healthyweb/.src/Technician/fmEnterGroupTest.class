@@ -217,7 +217,7 @@ Private Sub DIsplayTextForm()
       With aNameLabel[i]
         .Expand = True
         .Font = "bold"
-        .Text = $xData[i][1]
+        .Text = "<p>" & $xData[i][1] & "</p>"
         .Tag = i
       End With
 
