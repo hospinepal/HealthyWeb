@@ -29,10 +29,10 @@ Public $PatDOFollData As Collection
 
 ''------------------ Master collection -----------------
 Public Sub GetPatientDataColl(encid As String)
-
+  
   Dim res As Result
   Dim xaddr As String[]
-
+  
   res = modDatabase.$myConn.Exec("select fldpatientval,fldptnamefir,fldptnamelast,fldethniccode,fldptsex,fldptaddvill,fldptaddward,fldptadddist,fldptcontact,fldemail,fldptbirday,fldptguardian,fldrelation,fldptcode,fldencrypt from tblpatientinfo where fldpatientval in(select fldpatientval from tblencounter where fldencounterval=&1)", encid)                     ''
   If res.Available Then
     $PatNumData.Add(res["fldpatientval"], encid)
@@ -43,7 +43,7 @@ Public Sub GetPatientDataColl(encid As String)
     $PatDOBData.Add(res["fldptbirday"], encid)
     $PatDistrictData.Add(res["fldptadddist"], encid)
     $PatEncryptData.Add(res["fldencrypt"], encid)
-
+    
     If res["fldptaddward"] Then
       $PatWardData.Add(res["fldptaddward"], encid)
       $PatAddressData.Add(res["fldptaddvill"], encid)
@@ -64,23 +64,23 @@ Public Sub GetPatientDataColl(encid As String)
         Endif
       Endif
     Endif
-
+    
     $PatCodeData.Add(res["fldptcode"], encid)
     $PatRelationData.Add(res["fldrelation"], encid)
     $PatGuardData.Add(res["fldptguardian"], encid)
     $PatContactData.Add(res["fldptcontact"], encid)
     $PatEMailData.Add(res["fldemail"], encid)
   Endif
-
+  
 End
 
 'NOTE: ----------------------- General --------------------------
 ''fet patient locked to user
 Public Function GetPatientLockMacAdd(encid As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldhostmac from tblactivity where fldcategory=&1 and fldactivity=&2 and fldcomment=&3", "Patient Lock", "EncounterID", encid)
   If res.Available Then
     If res["fldhostmac"] Then
@@ -92,16 +92,16 @@ Public Function GetPatientLockMacAdd(encid As String) As String
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 ''====================== Patient number ===================================
 Public Function SearchPatNo(ptno As String, Optional sCon As Connection) As Boolean
-
+  
   Dim res As Result
   Dim xx As Boolean
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
@@ -110,14 +110,14 @@ Public Function SearchPatNo(ptno As String, Optional sCon As Connection) As Bool
   res = $con.Exec("select fldpatientval from tblpatientinfo where fldpatientval=&1", ptno)
   xx = res.Available
   Return xx
-
+  
 End
 
 Public Function GetPatientFileCount(sFileNo As String) As Integer
-
+  
   Dim res As Result
   Dim xval As Integer
-
+  
   res = modDatabase.$myConn.Exec("select COUNT(fldpatientval) as xcnt from tblpatientinfo where fldadmitfile=&1", sFileNo)
   If res.Available Then
     xval = res["xcnt"]
@@ -125,14 +125,14 @@ Public Function GetPatientFileCount(sFileNo As String) As Integer
     xval = 0
   Endif
   Return xval
-
+  
 End
 
 Public Function GetPatientFileByPatNo(patno As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldadmitfile from tblpatientinfo where fldpatientval=&1", patno)
   If res.Available Then
     If res["fldadmitfile"] Then
@@ -144,14 +144,14 @@ Public Function GetPatientFileByPatNo(patno As String) As String
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 Public Function GetPatientNoByHospCode(hospcode As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldpatientval from tblpatientinfo where fldptcode=&1 ORDER BY fldptadmindate", hospcode)
   If res.Available Then
     res.MoveFirst
@@ -164,14 +164,14 @@ Public Function GetPatientNoByHospCode(hospcode As String) As String
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 Public Function GetInfantPatNoByHospCode(hospcode As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldpatientval from tblpatientinfo where fldptcode=&1 and fldptnamefir like &2", hospcode, "I/O" & "%")
   If res.Available Then
     res.MoveFirst
@@ -184,14 +184,14 @@ Public Function GetInfantPatNoByHospCode(hospcode As String) As String
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 Public Function GetPatientNoByFileNo(fileno As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldpatientval from tblpatientinfo where fldadmitfile=&1", fileno)
   If res.Available Then
     res.MoveFirst
@@ -204,15 +204,15 @@ Public Function GetPatientNoByFileNo(fileno As String) As String
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 ''Last Encounter
 Public Function GetLastEncoutnerFromPatNo(ptno As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldencounterval from tblencounter where fldpatientval=&1 ORDER BY fldregdate DESC", ptno)
   If res.Available Then
     res.MoveFirst
@@ -221,15 +221,15 @@ Public Function GetLastEncoutnerFromPatNo(ptno As String) As String
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 Public Function GetEncListFromPatNo(ptno As String, Optional sCon As Connection) As String[]
-
+  
   Dim $con As Connection
   Dim res As Result
   Dim xx As String[]
-
+  
   If sCon Then
     $con = sCon
   Else
@@ -238,15 +238,15 @@ Public Function GetEncListFromPatNo(ptno As String, Optional sCon As Connection)
   res = $con.Exec("select fldencounterval as col from tblencounter where fldpatientval=&1 ORDER BY fldregdate DESC", ptno)
   xx = modControlSub.GetDirectFillresult(res)
   Return xx
-
+  
 End
 
 Public Function GetEncListFromEncSetting(encid As String, Optional sCon As Connection) As String[]
-
+  
   Dim xx As String[]
   Dim patno As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
@@ -261,31 +261,31 @@ Public Function GetEncListFromEncSetting(encid As String, Optional sCon As Conne
       xx = modPatient.GetEncListFromPatNo(patno, $con)
     Endif
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetLastEncoutnerFromPatCode(ptcode As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldencounterval as col from tblencounter where fldpatientval in(select fldpatientval from tblpatientinfo where fldptcode=&1) ORDER BY fldregdate DESC", ptcode)
   If res.Available Then
     res.MoveFirst
     xx = res["col"]
   Endif
   Return xx
-
+  
 End
 
 Public Function GetEncListFromPatCode(ptcode As String, Optional sCon As Connection) As String[]
-
+  
   Dim $con As Connection
   Dim res As Result
   Dim xx As String[]
-
+  
   If sCon Then
     $con = sCon
   Else
@@ -294,14 +294,14 @@ Public Function GetEncListFromPatCode(ptcode As String, Optional sCon As Connect
   res = $con.Exec("select fldencounterval as col from tblencounter where fldpatientval in(select fldpatientval from tblpatientinfo where fldptcode=&1) ORDER BY fldregdate DESC", ptcode)
   xx = modControlSub.GetDirectFillresult(res)
   Return xx
-
+  
 End
 
 Public Function GetEncoutnerCountFromPatNo(ptno As String) As Integer
-
+  
   Dim res As Result
   Dim xx As Integer
-
+  
   res = modDatabase.$myConn.Exec("select COUNT(fldencounterval) as col from tblencounter where fldpatientval=&1", ptno)
   If res.Available Then
     If res["col"] Then
@@ -313,14 +313,14 @@ Public Function GetEncoutnerCountFromPatNo(ptno As String) As Integer
     xx = 0
   Endif
   Return xx
-
+  
 End
 
 Public Function GetPatientVisitStatus(ptno As String) As String
-
+  
   Dim xval As Integer
   Dim xx As String
-
+  
   xval = GetEncoutnerCountFromPatNo(ptno)
   If xval Then
     xx = "OLD"
@@ -328,14 +328,14 @@ Public Function GetPatientVisitStatus(ptno As String) As String
     xx = "NEW"
   Endif
   Return xx
-
+  
 End
 
 Public Function GetPatientFixDisc(patno As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select flddiscount from tblpatientinfo where fldpatientval=&1", patno)
   If res.Available Then
     res.MoveFirst
@@ -348,21 +348,21 @@ Public Function GetPatientFixDisc(patno As String) As String
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 ''-------------------- patient profile tblpatientinfo ----------------
 Public Function PatientFullNameByPatID(patno As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim firname As String
   Dim lstname As String
-
+  
   Dim xrank As String
   Dim xservice As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
@@ -374,7 +374,7 @@ Public Function PatientFullNameByPatID(patno As String, Optional sCon As Connect
     res = $con.Exec("select fldptnamefir,fldptnamelast,fldencrypt from tblpatientinfo where fldpatientval=&1", patno)
   Endif
   If res.Available Then
-
+    
     If res["fldptnamefir"] Then
       If modBasic.$PatNameFormat = "***SurName" Then
         firname = "***"
@@ -392,7 +392,7 @@ Public Function PatientFullNameByPatID(patno As String, Optional sCon As Connect
     Else
       firname = ""
     Endif
-
+    
     If res["fldptnamelast"] Then
       If MMain.$RepoReportMode = True Then
         lstname = modPassword.DecryptPatData(res["fldptnamelast"], res["fldencrypt"])
@@ -406,7 +406,7 @@ Public Function PatientFullNameByPatID(patno As String, Optional sCon As Connect
     Else
       lstname = ""
     Endif
-
+    
     If modBasic.$PatNameFormat = "FirstName+SurName" Then
       xx = firname & Space(1) & lstname
     Else If modBasic.$PatNameFormat = "SurName+FirstName" Then
@@ -422,7 +422,7 @@ Public Function PatientFullNameByPatID(patno As String, Optional sCon As Connect
     Else
       xx = firname & Space(1) & lstname
     Endif
-
+    
     If modBasic.$PatNameModification Then
       If res["fldrank"] Then
         xrank = res["fldrank"]
@@ -440,36 +440,38 @@ Public Function PatientFullNameByPatID(patno As String, Optional sCon As Connect
         xx = xx & Space(1) & "(" & xservice & ")"
       Else If modBasic.$PatNameModification = "Rank+Name+Category" Then
         xx = xrank & Space(1) & xx & Space(1) & "(" & xservice & ")"
+      Else If modBasic.$PatNameModification = "Rank+Name+Category+Scheme" Then
+        xx = xrank & Space(1) & xx & Space(1) & "(" & xservice & ")"
       Endif
     Endif
-
+    
   Else
     xx = ""
   Endif
-
+  
   If modBasic.$PatNameUCase = "Yes" Then
     xx = UCase(xx)
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPatientAddressByPatno(patno As String, Optional sCon As Connection) As String
-
+  
   Dim adfir As String
   Dim award As String
   Dim addist As String
   Dim xx As String
   Dim $con As Connection
   Dim res As Result
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   res = $con.Exec("select fldptaddvill,fldptaddward,fldptadddist from tblpatientinfo where fldpatientval=&1", patno)
   If res.Available Then
     If res["fldptaddvill"] Then
@@ -499,17 +501,17 @@ Public Function GetPatientAddressByPatno(patno As String, Optional sCon As Conne
   Else
     xx = ""
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function PatientGenderByPatNo(patno As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim sex As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
@@ -526,15 +528,15 @@ Public Function PatientGenderByPatNo(patno As String, Optional sCon As Connectio
     sex = ""
   Endif
   Return sex
-
+  
 End
 
 Public Function GetPatientContactByPatNo(patno As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
@@ -558,16 +560,16 @@ Public Function GetPatientContactByPatNo(patno As String, Optional sCon As Conne
   Else
     xx = ""
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPatientAgePatNo(patno As String, dtnow As Date) As String
-
+  
   Dim res As Result
   Dim xage As String
-
+  
   res = modDatabase.$myConn.Exec("select fldptbirday from tblpatientinfo where fldpatientval=&1", patno)
   If res.Available Then
     If res["fldptbirday"] Then
@@ -578,18 +580,18 @@ Public Function GetPatientAgePatNo(patno As String, dtnow As Date) As String
   Else
     xage = "?"
   Endif
-
+  
   Return xage
-
+  
 End
 
 ''============================ encounter id ================================
 Public Function GetPatientNoByEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim $con As Connection
   Dim res As Result
   Dim xx As String
-
+  
   If sCon Then
     $con = sCon
   Else
@@ -611,26 +613,26 @@ Public Function GetPatientNoByEnc(encid As String, Optional sCon As Connection) 
     Endif
   Endif
   Return xx
-
+  
 End
 
 Public Function GetEncounterExist(sCon As Connection, encid As String) As Boolean
-
+  
   Dim res As Result
   Dim xval As Boolean
-
+  
   res = sCon.Exec("select fldencounterval from tblencounter where fldencounterval=&1", encid)
   xval = res.Available
-
+  
   Return xval
-
+  
 End
 
 Public Function GetSecondLastEncidPatient(encid As String) As String
-
+  
   Dim res As Result
   Dim newid As String
-
+  
   res = modDatabase.$myConn.Exec("select fldencounterval from tblencounter where fldencounterval<>&1 and fldpatientval=&2 and fldregdate<&3 ORDER BY fldregdate DESC", encid, GetPatientNoByEnc(encid), GetRecordDate(encid))
   If res.Available Then
     res.MoveFirst
@@ -639,14 +641,14 @@ Public Function GetSecondLastEncidPatient(encid As String) As String
     newid = encid
   Endif
   Return newid
-
+  
 End
 
 Public Function GetPatientFileByEnc(encid As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldadmitfile from tblpatientinfo where fldpatientval in(select fldpatientval from tblencounter where fldencounterval=&1)", encid)
   If res.Available Then
     If res["fldadmitfile"] Then
@@ -658,22 +660,22 @@ Public Function GetPatientFileByEnc(encid As String) As String
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 ''----------------- patient  Profile  --------------------
 Public Function GetPatientCommentByEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   res = $con.Exec("select fldcomment from tblpatientinfo where fldpatientval in(select fldpatientval from tblencounter where fldencounterval=&1)", encid)
   If res.Available Then
     If res["fldcomment"] Then
@@ -685,21 +687,21 @@ Public Function GetPatientCommentByEnc(encid As String, Optional sCon As Connect
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 Public Function GetPatientExtCOdebyEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatCodeData.Exist(encid) Then
     xx = $PatCodeData[encid]
   Else
@@ -716,21 +718,21 @@ Public Function GetPatientExtCOdebyEnc(encid As String, Optional sCon As Connect
     Endif
   Endif
   Return xx
-
+  
 End
 
 Public Function GetPatEncryptionbyEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As Boolean
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatEncryptData.Exist(encid) Then
     xx = $PatEncryptData[encid]
   Else
@@ -747,21 +749,21 @@ Public Function GetPatEncryptionbyEnc(encid As String, Optional sCon As Connecti
     Endif
   Endif
   Return xx
-
+  
 End
 
 Public Function GetPatientEthnicity(encid As String, Optional sCon As Connection) As String
-
+  
   Dim xx As String
   Dim res As Result
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatEthnicData.Exist(encid) Then
     xx = $PatEthnicData[encid]
   Else
@@ -778,23 +780,23 @@ Public Function GetPatientEthnicity(encid As String, Optional sCon As Connection
     Endif
   Endif
   Return xx
-
+  
 End
 
 Public Function GetPatientFirstNameEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim $con As Connection
   Dim firname As String
   Dim xencrypt As Boolean
   Dim xval As String
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatFirNameData.Exist(encid) Then
     firname = $PatFirNameData[encid]
   Else
@@ -810,7 +812,7 @@ Public Function GetPatientFirstNameEnc(encid As String, Optional sCon As Connect
       firname = ""
     Endif
   Endif
-
+  
   If firname Then
     xencrypt = GetPatEncryptionbyEnc(encid, $con)
     If MMain.$RepoReportMode = True Then
@@ -825,25 +827,25 @@ Public Function GetPatientFirstNameEnc(encid As String, Optional sCon As Connect
   Else
     xval = ""
   Endif
-
+  
   Return xval
-
+  
 End
 
 Public Function GetPatientLastNameEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim $con As Connection
   Dim lstname As String
   Dim xencrypt As Boolean
   Dim xval As String
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatSurNameData.Exist(encid) Then
     lstname = $PatSurNameData[encid]
   Else
@@ -859,7 +861,7 @@ Public Function GetPatientLastNameEnc(encid As String, Optional sCon As Connecti
       lstname = ""
     Endif
   Endif
-
+  
   If lstname Then
     xencrypt = GetPatEncryptionbyEnc(encid, $con)
     If MMain.$RepoReportMode = True Then
@@ -874,40 +876,40 @@ Public Function GetPatientLastNameEnc(encid As String, Optional sCon As Connecti
   Else
     xval = ""
   Endif
-
+  
   Return xval
-
+  
 End
 
 Public Function GetPatientNameByEnc(encid As String, Optional sCon As Connection, Optional sFormat As String) As String
-
+  
   Dim xx As String
   Dim firname As String
   Dim lstname As String
   Dim xrank As String
   Dim xservice As String
-
+  
   Dim $con As Connection
   Dim xformat As String
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If sFormat Then
     xformat = sFormat
   Else
     xformat = modBasic.$PatNameFormat
   Endif
-
+  
   ''name is displayed first so calling full collection
   GetPatientDataColl(encid)
-
+  
   firname = GetPatientFirstNameEnc(encid, $con)
   lstname = GetPatientLastNameEnc(encid, $con)
-
+  
   If xformat = "FirstName+SurName" Then
     xx = firname & Space(1) & lstname
   Else If xformat = "SurName+FirstName" Then
@@ -925,7 +927,7 @@ Public Function GetPatientNameByEnc(encid As String, Optional sCon As Connection
   Else
     xx = firname & Space(1) & lstname
   Endif
-
+  
   If modBasic.$PatNameModification Then
     xrank = GetPatServiceRank(encid, $con)
     xservice = GetPatServiceType(encid, $con)
@@ -935,36 +937,38 @@ Public Function GetPatientNameByEnc(encid As String, Optional sCon As Connection
       xx = xx & Space(1) & "(" & xservice & ")"
     Else If modBasic.$PatNameModification = "Rank+Name+Category" Then
       xx = xrank & Space(1) & xx & Space(1) & "(" & xservice & ")"
+    Else If modBasic.$PatNameModification = "Rank+Name+Category+Scheme" Then
+      xx = xrank & Space(1) & xx & Space(1) & "(" & xservice & " : " & ShowDiscountCategEnc(encid, $con) & ")"
     Endif
   Endif
-
+  
   If modBasic.$PatNameUCase = "Yes" Then
     xx = UCase(xx)
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPatFirAddressByEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xaddr As String[]
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatAddressData.Exist(encid) Then
     xx = $PatAddressData[encid]
   Else
     res = $con.Exec("select fldptaddvill,fldptaddward from tblpatientinfo where fldpatientval in(select fldpatientval from tblencounter where fldencounterval=&1)", encid)
     If res.Available Then
-
+      
       If res["fldptaddward"] Then
         xx = res["fldptaddvill"]
       Else
@@ -984,34 +988,34 @@ Public Function GetPatFirAddressByEnc(encid As String, Optional sCon As Connecti
         Endif
       Endif
       $PatAddressData.Add(xx, encid)
-
+      
     Else
       xx = ""
     Endif
   Endif
   Return xx
-
+  
 End
 
 Public Function GetPatWardAddressByEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xaddr As String[]
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatWardData.Exist(encid) Then
     xx = $PatWardData[encid]
   Else
     res = $con.Exec("select fldptaddvill,fldptaddward from tblpatientinfo where fldpatientval in(select fldpatientval from tblencounter where fldencounterval=&1)", encid)
     If res.Available Then
-
+      
       If res["fldptaddward"] Then
         xx = res["fldptaddward"]
       Else
@@ -1031,28 +1035,28 @@ Public Function GetPatWardAddressByEnc(encid As String, Optional sCon As Connect
         Endif
       Endif
       $PatWardData.Add(xx, encid)
-
+      
     Else
       xx = ""
     Endif
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPatDistrictByEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatDistrictData.Exist(encid) Then
     xx = $PatDistrictData[encid]
   Else
@@ -1069,23 +1073,23 @@ Public Function GetPatDistrictByEnc(encid As String, Optional sCon As Connection
     Endif
   Endif
   Return xx
-
+  
 End
 
 Public Function GetPatientAddressByEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim adfir As String
   Dim addist As String
   Dim award As String
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   adfir = GetPatFirAddressByEnc(encid, $con)
   award = GetPatWardAddressByEnc(encid, $con)
   addist = GetPatDistrictByEnc(encid, $con)
@@ -1105,23 +1109,23 @@ Public Function GetPatientAddressByEnc(encid As String, Optional sCon As Connect
       xx = addist
     Endif
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPatientSex(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim sex As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatGenderData.Exist(encid) Then
     sex = $PatGenderData[encid]
   Else
@@ -1138,23 +1142,23 @@ Public Function GetPatientSex(encid As String, Optional sCon As Connection) As S
     Endif
   Endif
   Return sex
-
+  
 End
 
 Public Function GetPatientContactByEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xcont As String
   Dim xval As String
   Dim $con As Connection
   Dim xencrypt As Boolean
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatContactData.Exist(encid) Then
     xcont = $PatContactData[encid]
   Else
@@ -1170,7 +1174,7 @@ Public Function GetPatientContactByEnc(encid As String, Optional sCon As Connect
       xcont = ""
     Endif
   Endif
-
+  
   If xcont Then
     xencrypt = GetPatEncryptionbyEnc(encid, $con)
     If MMain.$RepoReportMode = True Then
@@ -1185,25 +1189,25 @@ Public Function GetPatientContactByEnc(encid As String, Optional sCon As Connect
   Else
     xval = ""
   Endif
-
+  
   Return xval
-
+  
 End
 
 Public Function GetPatientEmail(encid As String, Optional sCon As Connection) As String
-
+  
   Dim smail As String
   Dim res As Result
   Dim $con As Connection
   Dim xencrypt As Boolean
   Dim xval As String
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatEMailData.Exist(encid) Then
     smail = $PatEMailData[encid]
   Else
@@ -1219,7 +1223,7 @@ Public Function GetPatientEmail(encid As String, Optional sCon As Connection) As
       smail = ""
     Endif
   Endif
-
+  
   If smail Then
     xencrypt = GetPatEncryptionbyEnc(encid, $con)
     If MMain.$RepoReportMode = True Then
@@ -1234,23 +1238,23 @@ Public Function GetPatientEmail(encid As String, Optional sCon As Connection) As
   Else
     xval = ""
   Endif
-
+  
   Return xval
-
+  
 End
 
 Public Function GetPatientGuardianByEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatGuardData.Exist(encid) Then
     xx = $PatGuardData[encid]
   Else
@@ -1266,23 +1270,23 @@ Public Function GetPatientGuardianByEnc(encid As String, Optional sCon As Connec
       xx = ""
     Endif
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPatientReltionByEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatRelationData.Exist(encid) Then
     xx = $PatRelationData[encid]
   Else
@@ -1298,23 +1302,23 @@ Public Function GetPatientReltionByEnc(encid As String, Optional sCon As Connect
       xx = ""
     Endif
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPatServiceType(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   res = $con.Exec("select fldcategory from tblpatientinfo where fldpatientval in(select fldpatientval from tblencounter where fldencounterval=&1)", encid)
   If res.Available Then
     If res["fldcategory"] Then
@@ -1325,23 +1329,23 @@ Public Function GetPatServiceType(encid As String, Optional sCon As Connection) 
   Else
     xx = ""
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPatServiceRank(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   res = $con.Exec("select fldrank from tblpatientinfo where fldpatientval in(select fldpatientval from tblencounter where fldencounterval=&1)", encid)
   If res.Available Then
     If res["fldrank"] Then
@@ -1352,23 +1356,23 @@ Public Function GetPatServiceRank(encid As String, Optional sCon As Connection) 
   Else
     xx = ""
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPatServiceUnit(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   res = $con.Exec("select fldunit from tblpatientinfo where fldpatientval in(select fldpatientval from tblencounter where fldencounterval=&1)", encid)
   If res.Available Then
     If res["fldunit"] Then
@@ -1380,21 +1384,21 @@ Public Function GetPatServiceUnit(encid As String, Optional sCon As Connection) 
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 Public Function GetPatientBirthDay(encid As String, Optional sCon As Connection) As Date
-
+  
   Dim res As Result
   Dim xx As Date
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   If $PatDOBData.Exist(encid) Then
     xx = $PatDOBData[encid]
   Else
@@ -1410,17 +1414,17 @@ Public Function GetPatientBirthDay(encid As String, Optional sCon As Connection)
       xx = ""
     Endif
   Endif
-
+  
   Return xx
-
+  
 End
 
 ''-------------------------------- Birthday and age
 Public Function GetAgeGroup(encid As String, Optional NowDate As Date) As String
-
+  
   Dim xx As String
   Dim xnow As String
-
+  
   If NowDate Then
     xnow = NowDate
   Else
@@ -1428,20 +1432,20 @@ Public Function GetAgeGroup(encid As String, Optional NowDate As Date) As String
   Endif
   xx = GetAgeGroupFIxed(encid, xnow)
   Return xx
-
+  
 End
 
 Public Function GetAgeGroupFIxed(encid As String, xnow As Date) As String
-
+  
   Dim agrgrp As String
   Dim age As Float
   Dim xdate As Date
   Dim xvar As String[]
-
+  
   xdate = GetPatientBirthDay(encid)
   If xdate Then
     age = DateDiff(xdate, xnow, gb.Day)
-
+    
     If modBasic.$PatDBAgeGroupList And If modBasic.$PatDBAgeGroupList.Count Then
       For Each xvar In modBasic.$PatDBAgeGroupList
         If age >= CInt(xvar[1]) And If age < CInt(xvar[2]) Then
@@ -1449,7 +1453,7 @@ Public Function GetAgeGroupFIxed(encid As String, xnow As Date) As String
         Endif
       Next
     Endif
-
+    
     If Not agrgrp Then
       If age >= 60 * 365 Then
         agrgrp = "Elderly"
@@ -1467,32 +1471,32 @@ Public Function GetAgeGroupFIxed(encid As String, xnow As Date) As String
         agrgrp = "Neonate"
       Endif
     Endif
-
+    
   Else
     agrgrp = ""
   Endif
-
+  
   Return agrgrp
-
+  
 End
 
 Public Function GetAgeGroupCustom(encid As String, Optional NowDate As Date) As String
-
+  
   Dim xx As String
   Dim age As Float
   Dim xdate As Date
   Dim xnow As Date
-
+  
   Dim hFile As File
   Dim sline As String
   Dim agegrp As String[]
-
+  
   If NowDate Then
     xnow = NowDate
   Else
     xnow = Now()
   Endif
-
+  
   If Exist(modHelpVariable.AppDirectory &/ "agegrouping") And If modSettings.ShowSettingFromFIle("AgeGrouping/Custom") = "Yes" Then
     xdate = GetPatientBirthDay(encid)
     If xdate Then
@@ -1509,51 +1513,51 @@ Public Function GetAgeGroupCustom(encid As String, Optional NowDate As Date) As 
       Next
       hFile.Close()
     Endif
-
+    
   Else
     xx = ""
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPatientAgeString(encid As String, dtnow As Date) As String
-
+  
   Dim xage As String
   Dim xdate As Date
-
+  
   xdate = GetPatientBirthDay(encid)
   If xdate Then
     xage = modDate.GetAgeString(xdate, dtnow)
   Else
     xage = "?"
   Endif
-
+  
   Return xage
-
+  
 End
 
 ''================ from  tblencounter =================================
 ''get patient color
 Public Function GetPatientColor(encid As String) As Integer
-
+  
   Dim xint As Integer
-
+  
   If modBasic.$TriageMode = "Dynamic" Then
     xint = modPathoSub.GetPatientColorDynamic(encid)
   Else
     xint = GetPatientColorStatic(encid)
   Endif
   Return xint
-
+  
 End
 
 Public Function GetPatientColorStatic(encid As String) As Integer
-
+  
   Dim xint As Integer
   Dim res As Result
-
+  
   res = modDatabase.$myConn.Exec("select fldheight from tblencounter where fldencounterval=&1", encid)
   If res.Available Then
     If res["fldheight"] Then
@@ -1565,26 +1569,26 @@ Public Function GetPatientColorStatic(encid As String) As Integer
     xint = Color.White
   Endif
   Return xint
-
+  
 End
 
 Public Sub SetPatientColor(encid As String, xColor As String)
-
+  
   Dim res As Result
-
+  
   res = modDatabase.$myConn.Edit("tblencounter", "fldencounterval=&1", encid)
   res["fldheight"] = xColor
   res["xyz"] = False
   res.Update
-
+  
 End
 
 ''------------------------ Rate Plan
 Public Function GetPatBillingMode(encid As String) As String
-
+  
   Dim res As Result
   Dim bilmode As String
-
+  
   res = modDatabase.$myConn.Exec("select fldbillingmode from tblencounter where fldencounterval=&1", encid)
   If res.Available Then
     If res["fldbillingmode"] Then
@@ -1595,18 +1599,18 @@ Public Function GetPatBillingMode(encid As String) As String
   Else
     bilmode = ""
   Endif
-
+  
   Return bilmode
-
+  
 End
 
 ''------------------------------- discount by encid
 Public Function ShowDiscountCategEnc(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
@@ -1622,16 +1626,16 @@ Public Function ShowDiscountCategEnc(encid As String, Optional sCon As Connectio
   Else
     xx = ""
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function ShowDiscValidityEnc(encid As String) As Date
-
+  
   Dim res As Result
   Dim xx As Date
-
+  
   res = modDatabase.$myConn.Exec("select fldvalidity from tblencounter where fldencounterval=&1", encid)
   If res.Available Then
     If res["fldvalidity"] Then
@@ -1642,17 +1646,17 @@ Public Function ShowDiscValidityEnc(encid As String) As Date
   Else
     xx = ""
   Endif
-
+  
   Return xx
-
+  
 End
 
 ''--------------------------------- Visit Type
 Public Function GetPatVisitHMIS(encid As String) As String
-
+  
   Dim res As Result
   Dim vistype As String
-
+  
   res = modDatabase.$myConn.Exec("select fldvisit from tblencounter where fldencounterval=&1", encid)
   If res.Available Then
     If res["fldvisit"] Then
@@ -1663,16 +1667,16 @@ Public Function GetPatVisitHMIS(encid As String) As String
   Else
     vistype = ""
   Endif
-
+  
   Return vistype
-
+  
 End
 
 Public Function GetPatVisitType(encid As String) As String
-
+  
   Dim res As Result
   Dim vistype As String
-
+  
   If $PatVisType.Exist(encid) Then
     vistype = $PatVisType[encid]
   Else
@@ -1689,15 +1693,15 @@ Public Function GetPatVisitType(encid As String) As String
     Endif
   Endif
   Return vistype
-
+  
 End
 
 '''----------------------Current location (Bed)
 Public Function GetAdmitLocation(encid As String) As String
-
+  
   Dim res As Result
   Dim bedno As String
-
+  
   If $PatRegDepartData.Exist(encid) Then
     bedno = $PatRegDepartData[encid]
   Else
@@ -1713,23 +1717,54 @@ Public Function GetAdmitLocation(encid As String) As String
       bedno = ""
     Endif
   Endif
-
+  
   Return bedno
+  
+End
 
+''used for HI and SSF
+Public Function GetAdmitLocationCategory(encid As String) As String
+  
+  Dim res As Result
+  Dim xval As String
+  Dim bedno As String
+  
+  res = modDatabase.$myConn.Exec("select fldcateg,fldactive from tbldepartment where flddept in(select fldadmitlocat from tblencounter where fldencounterval=&1)", encid)
+  If res.Available Then
+    If res["fldcateg"] Then
+      xval = res["fldcateg"]
+      If xval = "OPD Visit" Then
+        If res["fldactive"] = "Emergency" Then
+          bedno = "Emergency"
+        Else
+          bedno = "Consultation"
+        Endif
+      Else
+        bedno = xval
+      Endif
+    Else
+      bedno = ""
+    Endif
+  Else
+    bedno = ""
+  Endif
+  
+  Return bedno
+  
 End
 
 Public Function GetPatientLocation(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim bedno As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   res = $con.Exec("select fldadmitlocat,fldcurrlocat from tblencounter where fldencounterval=&1", encid)
   If res.Available Then
     If res["fldcurrlocat"] Then
@@ -1745,14 +1780,14 @@ Public Function GetPatientLocation(encid As String, Optional sCon As Connection)
     bedno = ""
   Endif
   Return bedno
-
+  
 End
 
 Public Function GetPatientWardName(encid As String) As String
-
+  
   Dim res As Result
   Dim bedno As String
-
+  
   res = modDatabase.$myConn.Exec("select flddept from tbldepartmentbed where fldbed in(select fldcurrlocat from tblencounter where fldencounterval=&1)", encid)
   If res.Available Then
     If res["flddept"] Then
@@ -1764,22 +1799,22 @@ Public Function GetPatientWardName(encid As String) As String
     bedno = ""
   Endif
   Return bedno
-
+  
 End
 
 Public Function GetPatientCurrDepartment(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xdept As String
   Dim bedno As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   res = $con.Exec("select fldadmission,fldadmitlocat,fldcurrlocat from tblencounter where fldencounterval=&1", encid)
   If res.Available Then
     Select res["fldadmission"]
@@ -1794,7 +1829,7 @@ Public Function GetPatientCurrDepartment(encid As String, Optional sCon As Conne
         Else
           bedno = res["fldadmitlocat"]
         Endif
-
+        
       Case Else
         If res["fldcurrlocat"] Then
           bedno = res["fldcurrlocat"]
@@ -1802,20 +1837,20 @@ Public Function GetPatientCurrDepartment(encid As String, Optional sCon As Conne
           bedno = res["fldadmitlocat"]
         Endif
     End Select
-
+    
   Else
     bedno = ""
   Endif
-
+  
   Return bedno
-
+  
 End
 
 Public Function GetPatientBedOxygen(encid As String) As String
-
+  
   Dim res As Result
   Dim bedno As String
-
+  
   res = modDatabase.$myConn.Exec("select fldoxyport from tbldepartmentbed where fldbed in(select fldcurrlocat from tblencounter where fldencounterval=&1)", encid)
   If res.Available Then
     If res["fldoxyport"] Then
@@ -1827,14 +1862,14 @@ Public Function GetPatientBedOxygen(encid As String) As String
     bedno = ""
   Endif
   Return bedno
-
+  
 End
 
 Public Function GetPatientBedVentilator(encid As String) As String
-
+  
   Dim res As Result
   Dim bedno As String
-
+  
   res = modDatabase.$myConn.Exec("select fldventilator from tbldepartmentbed where fldbed in(select fldcurrlocat from tblencounter where fldencounterval=&1)", encid)
   If res.Available Then
     If res["fldventilator"] Then
@@ -1846,14 +1881,14 @@ Public Function GetPatientBedVentilator(encid As String) As String
     bedno = ""
   Endif
   Return bedno
-
+  
 End
 
 Public Function GetPatientWardCaption(encid As String) As String
-
+  
   Dim res As Result
   Dim bedno As String
-
+  
   res = modDatabase.$myConn.Exec("select fldactive from tbldepartment where flddept in(select flddept from tbldepartmentbed where fldbed in(select fldcurrlocat from tblencounter where fldencounterval=&1))", encid)
   If res.Available Then
     If res["fldactive"] Then
@@ -1865,15 +1900,15 @@ Public Function GetPatientWardCaption(encid As String) As String
     bedno = ""
   Endif
   Return bedno
-
+  
 End
 
 '''--------------------------- Admission Date and other dates
 Public Function GetRecordDate(encid As String) As Date
-
+  
   Dim res As Result
   Dim dt As Date
-
+  
   If $PatDORegData.Exist(encid) Then
     dt = $PatDORegData[encid]
   Else
@@ -1890,14 +1925,14 @@ Public Function GetRecordDate(encid As String) As Date
     Endif
   Endif
   Return dt
-
+  
 End
 
 Public Function GetFollowUpDate(encid As String) As Date
-
+  
   Dim res As Result
   Dim dt As Date
-
+  
   dt = modHelpVariable.GetCollectionValue($PatDOFollData, encid, modBasic.$AppCachePatientVisits)
   If Not dt Then
     res = modDatabase.$myConn.Exec("select fldfollowdate from tblencounter where fldencounterval=&1", encid)
@@ -1914,16 +1949,16 @@ Public Function GetFollowUpDate(encid As String) As Date
       dt = ""
     Endif
   Endif
-
+  
   Return dt
-
+  
 End
 
 Public Function GetReferLocation(encid As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldreferto from tblencounter where fldencounterval=&1", encid)
   If res.Available Then
     If res["fldreferto"] Then
@@ -1935,14 +1970,14 @@ Public Function GetReferLocation(encid As String) As String
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 Public Function GetDischargeDate(encid As String) As Date
-
+  
   Dim res As Result
   Dim dt As Date
-
+  
   dt = modHelpVariable.GetCollectionValue($PatDODData, encid, modBasic.$AppCachePatientVisits)
   If Not dt Then
     res = modDatabase.$myConn.Exec("select flddod from tblencounter where fldencounterval=&1", encid)
@@ -1959,16 +1994,16 @@ Public Function GetDischargeDate(encid As String) As Date
       dt = ""
     Endif
   Endif
-
+  
   Return dt
-
+  
 End
 
 Public Function GetAdmissionDate(encid As String) As Date
-
+  
   Dim dt As Date
   Dim res As Result
-
+  
   dt = modHelpVariable.GetCollectionValue($PatDOAData, encid, modBasic.$AppCachePatientVisits)
   If Not dt Then
     res = modDatabase.$myConn.Exec("select flddoa from tblencounter where fldencounterval=&1", encid)
@@ -1986,14 +2021,14 @@ Public Function GetAdmissionDate(encid As String) As Date
     Endif
   Endif
   Return dt
-
+  
 End
 
 Public Function GetDayDiffAdmission(encid As String, dt As Date) As String
-
+  
   Dim xx As String
   Dim xadmis As Date
-
+  
   xadmis = GetAdmissionDate(encid)
   If xadmis And If xadmis < dt Then
     xx = "Day " & CStr(Floor(DateDiff(modDate.StartSqlDate(xadmis), dt, gb.Minute) / 1440) + 1)
@@ -2001,15 +2036,15 @@ Public Function GetDayDiffAdmission(encid As String, dt As Date) As String
     xx = modReportVar.GetDateTimeReport(dt, gb.MediumDate)
   Endif
   Return xx
-
+  
 End
 
 Public Function GetHospitalStayInHours(encid As String) As Integer
-
+  
   Dim xadmis As Date
   Dim xdisc As Date
   Dim xdiff As Integer
-
+  
   xadmis = GetAdmissionDate(encid)
   xdisc = GetDischargeDate(encid)
   If xadmis And If xdisc Then
@@ -2018,23 +2053,23 @@ Public Function GetHospitalStayInHours(encid As String) As Integer
     xdiff = 0
   Endif
   Return xdiff
-
+  
 End
 
 Public Function GetDayTimeFromAdmission(encid As String, fldnow As Date) As String
-
+  
   Dim xx As String
-
+  
   xx = GetDayDiffAdmission(encid, fldnow) & "::" & Format(fldnow, "hh:nn")
   Return xx
-
+  
 End
 
 ''----------------------- Other ------------------------------
 Public Function GetLocationSetting(encid As String, xStatus As String) As String
-
+  
   Dim txtlocation As String
-
+  
   Select xStatus
     Case "Registered", "Admitted"
       txtlocation = GetPatientLocation(encid)
@@ -2043,16 +2078,31 @@ Public Function GetLocationSetting(encid As String, xStatus As String) As String
     Case Else
       txtlocation = xStatus
   End Select
-
+  
   Return txtlocation
-
+  
 End
 
 Public Function GetPatientFirstWard(encid As String) As String
-
+  
   Dim xx As String
-  Dim res As Result
+  Dim res1 As Result
+  
+  res1 = modDatabase.$myConn.Exec("select fldadmitward from tblencounter where fldencounterval=&1", encid)
+  If res1.Available And If res1["fldadmitward"] Then
+    xx = res1["fldadmitward"]
+  Else
+    xx = GetFirstWardTransfer(encid)
+  Endif
+  Return xx
+  
+End
 
+Public Function GetFirstWardTransfer(encid As String) As String
+  
+  Dim res As Result
+  Dim xx As String
+  
   res = modDatabase.$myConn.Exec("select flditem from tblpattiming where fldencounterval=&1 and fldtype=&2 and fldfirstreport=&3 ORDER BY fldfirsttime", encid, "General Services", "Bed")
   If res.Available Then
     res.MoveFirst
@@ -2064,16 +2114,17 @@ Public Function GetPatientFirstWard(encid As String) As String
   Else
     xx = ""
   Endif
+  
   Return xx
-
+  
 End
 
 ''------------------------------ Admission status
 Public Function CurrentAdmissionStatus(encid As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldadmission from tblencounter where fldencounterval=&1", encid)
   If res.Available Then
     If res["fldadmission"] Then
@@ -2085,14 +2136,14 @@ Public Function CurrentAdmissionStatus(encid As String) As String
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 Public Function GetPatExitComment(encid As String, sType As String) As String ''Type: "Discharged","Death"
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldcomment from tblpatientdate where fldencounterval=&1 and fldhead=&2", encid, sType)
   If res.Available Then
     If res["fldcomment"] Then
@@ -2104,14 +2155,14 @@ Public Function GetPatExitComment(encid As String, sType As String) As String ''
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 Public Function CurrentStatuswithComment(encid As String) As String
-
+  
   Dim xstate As String
   Dim xx As String
-
+  
   xstate = CurrentAdmissionStatus(encid)
   If xstate Then
     If xstate = "Discharged" Then
@@ -2122,16 +2173,16 @@ Public Function CurrentStatuswithComment(encid As String) As String
   Else
     xx = ""
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPptientImpDateUser(encid As String, sType As String) As String
-
+  
   Dim res As Result
   Dim xuser As String
-
+  
   If sType = "Clearance" Then
     res = modDatabase.$myConn.Exec("select flduserid from tblpatientdate where fldencounterval=&1 and fldhead=&2", encid, "Clearance")
   Else If sType = "Discharge" Then
@@ -2152,14 +2203,14 @@ Public Function GetPptientImpDateUser(encid As String, sType As String) As Strin
     xuser = ""
   Endif
   Return xuser
-
+  
 End
 
 Public Function GetClearanceDateTime(encid As String) As Date
-
+  
   Dim res As Result
   Dim xval As Date
-
+  
   res = modDatabase.$myConn.Exec("select fldtime from tblpatientdate where fldencounterval=&1 and fldhead=&2", encid, "Clearance")
   If res.Available Then
     res.MoveLast
@@ -2172,13 +2223,13 @@ Public Function GetClearanceDateTime(encid As String) As Date
     xval = ""
   Endif
   Return xval
-
+  
 End
 
 Public Function EnableClinicForm(xStatus As String) As Boolean
-
+  
   Dim fme As Boolean
-
+  
   If modBasic.$SuperUser = True Then
     fme = True
   Else
@@ -2196,19 +2247,19 @@ Public Function EnableClinicForm(xStatus As String) As Boolean
           fme = True
         Endif
     End Select
-
+    
   Endif
   Return fme
-
+  
 End
 
 ''---------------------------- delivery/ Mother Info---------------------
 Public Function GetBirthValue(sField As String, encid As String) As Variant
-
+  
   Dim res As Result
   Dim sql As String
   Dim xx As Variant
-
+  
   sql = Subst("select &1 from tblconfinement", sField)
   res = modDatabase.$myConn.Exec(sql & " where fldbabypatno in(select fldpatientval from tblencounter where fldencounterval=&1)", encid)
   If res.Available Then
@@ -2218,15 +2269,15 @@ Public Function GetBirthValue(sField As String, encid As String) As Variant
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 Public Function GetMotherEncounter(encid As String, Optional aCon As Connection) As String
-
+  
   Dim xenc As String
   Dim res As Result
   Dim sCon As Connection
-
+  
   If aCon Then
     sCon = aCon
   Else
@@ -2243,14 +2294,14 @@ Public Function GetMotherEncounter(encid As String, Optional aCon As Connection)
     xenc = ""
   Endif
   Return xenc
-
+  
 End
 
 Public Function GetObstetricFieldValue(xReference As String, xField As String) As Variant
-
+  
   Dim res As Result
   Dim sVal As Variant
-
+  
   res = modDatabase.$syConn.Exec(Subst("select &1 as col from tblobstetrics", xField) & " where flddelref=&1", xReference)
   If res.Available Then
     If res["col"] Then
@@ -2261,18 +2312,18 @@ Public Function GetObstetricFieldValue(xReference As String, xField As String) A
   Else
     sVal = ""
   Endif
-
+  
   Return sVal
-
+  
 End
 
 ''mother details from obs
 Public Function GetObstetricFieldEnc(sField As String, encid As String) As Variant
-
+  
   Dim res As Result
   Dim sVal As Variant
   Dim xdtstr As String
-
+  
   xdtstr = modDate.GetSQLDateDiffStr("tblencounter.fldregdate", "tblobstetrics.fldexpect", modDatabase.$myConn)
   res = modDatabase.$syConn.Exec(Subst("select &1 as col from tblobstetrics", "tblobstetrics." & sField) & " inner join tblencounter on tblobstetrics.fldpatientval=tblencounter.fldpatientval where tblencounter.fldencounterval=&1 and tblobstetrics.fldlast<tblencounter.fldregdate and " & xdtstr & " <&2", encid, 90)
   If res.Available Then
@@ -2284,17 +2335,17 @@ Public Function GetObstetricFieldEnc(sField As String, encid As String) As Varia
   Else
     sVal = ""
   Endif
-
+  
   Return sVal
-
+  
 End
 
 ''baby details from obs
 Public Function GetObsFieldBabyEnc(sField As String, encid As String) As Variant
-
+  
   Dim res As Result
   Dim sVal As Variant
-
+  
   res = modDatabase.$syConn.Exec(Subst("select &1 as col from tblobstetrics", sField) & " where flddelref in(select fldreference from tblconfinement where fldbabypatno in(select fldpatientval from tblencounter where fldencounterval=&1))", encid)
   If res.Available Then
     If res["col"] Then
@@ -2305,17 +2356,17 @@ Public Function GetObsFieldBabyEnc(sField As String, encid As String) As Variant
   Else
     sVal = ""
   Endif
-
+  
   Return sVal
-
+  
 End
 
 ''Used on entry
 Public Function GetLastMensDate(xRefNo As String) As Date
-
+  
   Dim res As Result
   Dim xdate As Date
-
+  
   res = modDatabase.$myConn.Exec("select fldlast from tblobstetrics where flddelref=&1 ORDER BY fldlast ASC", xRefNo)
   If res.Available Then
     res.MoveLast
@@ -2327,16 +2378,16 @@ Public Function GetLastMensDate(xRefNo As String) As Date
   Else
     xdate = ""
   Endif
-
+  
   Return xdate
-
+  
 End
 
 Public Function GetLastObstReference(xPatNo As String) As String
-
+  
   Dim res As Result
   Dim xval As String
-
+  
   res = modDatabase.$myConn.Exec("select flddelref from tblobstetrics where fldpatientval=&1 and fldlast<&2 and fldexpect>&3 ORDER BY fldlast ASC", xPatNo, Now(), DateAdd(Now(), gb.Month, -3))
   If res.Available Then
     res.MoveLast
@@ -2348,18 +2399,18 @@ Public Function GetLastObstReference(xPatNo As String) As String
   Else
     xval = ""
   Endif
-
+  
   Return xval
-
+  
 End
 
 '''------------------------------------- ENCOUNTER SPECIFIC ---------------------------------------------------------------------------
 Public Function PatientFindingList(encid As String, strType As String) As String[]
-
+  
   Dim sql As String
   Dim res As Result
   Dim xx As String[]
-
+  
   xx = New String[]
   sql = "select fldcode,fldcodenew from tblpatfindings where fldencounterval=&1 and fldtype=&2 and fldsave=&3"
   res = modDatabase.$myConn.Exec(sql, encid, strType, True) '("Allergic Drugs","Final Diagnosis","Provisional Diagnosis")
@@ -2380,29 +2431,29 @@ Public Function PatientFindingList(encid As String, strType As String) As String
       xx.Add("None")
     Endif
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function PatientDiagnoCurrentList(encid As String) As String[]
-
+  
   Dim xx As String[]
-
+  
   xx = PatientFindingList(encid, "Final Diagnosis")
   If xx.Count = 0 Then
     xx = PatientFindingList(encid, "Provisional Diagnosis")
   Endif
   Return xx
-
+  
 End
 
 Public Function PatientDiagnoCurrentCount(encid As String) As Integer
-
+  
   Dim sql As String
   Dim res As Result
   Dim xx As Integer
-
+  
   sql = "select fldcode,fldcodenew from tblpatfindings where fldencounterval=&1 and (fldtype=&2 or fldtype=&3) and fldsave=&4"
   res = modDatabase.$myConn.Exec(sql, encid, "Provisional Diagnosis", "Final Diagnosis", True)
   If res.Available Then
@@ -2411,15 +2462,15 @@ Public Function PatientDiagnoCurrentCount(encid As String) As Integer
     xx = 0
   Endif
   Return xx
-
+  
 End
 
 Public Function PatientDiagnoClassList(encid As String, strType As String) As String[]
-
+  
   Dim sql As String
   Dim res As Result
   Dim xx As String[]
-
+  
   xx = New String[]
   sql = "select distinct(fldcodenew) as col from tblpatfindings where fldencounterval=&1 and fldtype=&2 and fldsave=&3"
   res = modDatabase.$myConn.Exec(sql, encid, strType, True) '("Final Diagnosis","Provisional Diagnosis")
@@ -2431,18 +2482,18 @@ Public Function PatientDiagnoClassList(encid As String, strType As String) As St
     Next
     xx.Sort(gb.Ascent)
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function PatientDiagnoCurClassList(encid As String) As String[]
-
+  
   Dim sql As String
   Dim res As Result
   Dim xx As String[]
   Dim res1 As Result
-
+  
   xx = New String[]
   sql = "select distinct(fldcodenew) as col from tblpatfindings where fldencounterval=&1 and fldtype=&2 and fldsave=&3"
   res = modDatabase.$myConn.Exec(sql, encid, "Final Diagnosis", True)
@@ -2464,17 +2515,17 @@ Public Function PatientDiagnoCurClassList(encid As String) As String[]
       xx.Sort(gb.Ascent)
     Endif
   Endif
-
+  
   Return xx
-
+  
 End
 
 ''---------------------------------------------- demographics -----------------------------
 Public Function GetAccDemographicType(sItem As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldoption from tblaccdemograp where flddemoid=&1", sItem)
   If res.Available Then
     If res["fldoption"] Then
@@ -2486,26 +2537,26 @@ Public Function GetAccDemographicType(sItem As String) As String
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 Public Function GetAccDemographicOptionList(sName As String, sType As String) As String[]
-
+  
   Dim res As Result
   Dim opt As String[]
-
+  
   res = modDatabase.$myConn.Exec("select fldanswer from tblaccdemogoption where flddemoid=&1 and fldanswertype like &2 ORDER BY fldindex", sName, sType)
   opt = modControlSub.GetDirectFillresult(res)
-
+  
   Return opt
-
+  
 End
 
 Public Function GetDemographAccountValue(encid As String, sDemographic As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select fldreportquali from tblpataccgeneral where fldencounterval=&1 and fldinput=&2 and flditem=&3", encid, "Demographics", sDemographic)
   If res.Available Then
     If res["fldreportquali"] Then
@@ -2517,20 +2568,24 @@ Public Function GetDemographAccountValue(encid As String, sDemographic As String
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 'NOTE: --------------------- Consult -------------------------------
 Public Function GetPatientCOnsultList(encid As String) As String[]
-
+  
   Dim xxx As String[]
   Dim res As Result
-
+  
   xxx = New String[]
-  res = modDatabase.$myConn.Exec("select fldconsultname,fldconsulttime,fldstatus from tblconsult where fldencounterval=&1", encid)
+  res = modDatabase.$myConn.Exec("select fldconsultname,fldconsulttime,fldstatus,fldorduserid from tblconsult where fldencounterval=&1", encid)
   If res.Available Then
     For Each res
-      If modBasic.$ShowDayMedReport = "Yes" Then
+      If modBasic.$ShowDayMedReport = "User" Then
+        xxx.Add(res["fldconsultname"] & " (" & res["fldstatus"] & ")" & gb.NewLine & "[User: " & res["fldorduserid"] & "]")
+      Else If modBasic.$ShowDayMedReport = "Date+User" Then
+        xxx.Add(modReportVar.GetDateTimeReport(res["fldconsulttime"], gb.GeneralDate) & " : " & res["fldconsultname"] & " (" & res["fldstatus"] & ")" & gb.NewLine & "[User: " & res["fldorduserid"] & "]")
+      Else If modBasic.$ShowDayMedReport = "Date" Then
         xxx.Add(modReportVar.GetDateTimeReport(res["fldconsulttime"], gb.GeneralDate) & " : " & res["fldconsultname"] & " (" & res["fldstatus"] & ")")
       Else
         xxx.Add(res["fldconsultname"] & " (" & res["fldstatus"] & ")")
@@ -2538,14 +2593,14 @@ Public Function GetPatientCOnsultList(encid As String) As String[]
     Next
   Endif
   Return xxx
-
+  
 End
 
 Public Function GetAttendingConsultant(encid As String) As String
-
+  
   Dim res As Result
   Dim xx As String
-
+  
   res = modDatabase.$myConn.Exec("select flduserid from tblencounter where fldencounterval=&1", encid)
   If res.Available Then
     If res["flduserid"] Then
@@ -2557,14 +2612,14 @@ Public Function GetAttendingConsultant(encid As String) As String
     xx = ""
   Endif
   Return xx
-
+  
 End
 
 Public Function GetLastConsultBillMode(encid As String, sDepart As String) As String
-
+  
   Dim sBillMode As String
   Dim res As Result
-
+  
   res = modDatabase.$myConn.Exec("select fldbillingmode from tblconsult where fldencounterval=&1 and fldbillingmode=&2", encid, sDepart)
   If res.Available Then
     res.MoveLast
@@ -2577,22 +2632,26 @@ Public Function GetLastConsultBillMode(encid As String, sDepart As String) As St
     sBillMode = ""
   Endif
   Return sBillMode
-
+  
 End
 
 ''------------------------------ Patient SUbscripts --------------------------------
 Public Sub GetPatientNoPrefixes()
-
+  
   Dim res As Result
-
+  
   res = modDatabase.$myConn.Exec("select fldid,fldpatno,fldpatlen,fldencid,fldenclen,fldbooking,fldbooklen,fldhospcode from tblpatsubs")
   If res.Available Then
     res.MoveLast
-    If res["fldhospcode"] Then
-      modBasic.$HospCode = res["fldhospcode"]
+    If MMain.$WebEntry = True Then
     Else
-      modBasic.$HospCode = ""
+      If res["fldhospcode"] Then
+        modBasic.$HospCode = res["fldhospcode"]
+      Else
+        modBasic.$HospCode = ""
+      Endif
     Endif
+    
     If res["fldpatno"] Then
       modBasic.$PatNoPrefix = res["fldpatno"]
     Else
@@ -2608,7 +2667,7 @@ Public Sub GetPatientNoPrefixes()
     Else
       modBasic.$BookNoPrefix = ""
     Endif
-
+    
     If res["fldpatlen"] Then
       modBasic.$PatNoLen = res["fldpatlen"]
     Else
@@ -2624,7 +2683,7 @@ Public Sub GetPatientNoPrefixes()
     Else
       modBasic.$BookNoLen = 0
     Endif
-
+    
   Else
     modBasic.$HospCode = ""
     modBasic.$PatNoPrefix = ""
@@ -2634,18 +2693,18 @@ Public Sub GetPatientNoPrefixes()
     modBasic.$EncIdLen = 0
     modBasic.$BookNoLen = 0
   Endif
-
+  
 End
 
 Public Function PatientParameterPresent(patno As String) As Boolean
-
+  
   Dim sql As String
   Dim res As Result
   Dim xx As Boolean
-
+  
   sql = "select fldptaddvill,fldptaddward,fldptadddist,fldptcontact,fldptguardian,fldptbirday,fldptadmindate,fldemail,fldrelation,fldptcode from tblpatientinfo where fldpatientval = &1 "                                    ''"
   res = modDatabase.$myConn.Exec(sql, patno)
-
+  
   xx = True
   If res.Available Then
     If modBasic.$RegistEssAddress = "Yes" Then
@@ -2653,49 +2712,49 @@ Public Function PatientParameterPresent(patno As String) As Boolean
         xx = False
       Endif
     Endif
-
+    
     ' If modBasic.$AdmitEssWardNo = "Yes" Then
     '   If Not res["fldptaddward"] Then
     '     xx = False
     '   Endif
     ' Endif
-
+    
     If modBasic.$RegistEssDistrict = "Yes" Then
       If Not res["fldptadddist"] Then
         xx = False
       Endif
     Endif
-
+    
     If modBasic.$RegistEssAge = "Yes" Then
       If Not res["fldptbirday"] Then
         xx = False
       Endif
     Endif
-
+    
     If modBasic.$RegistEssGuardian = "Yes" Then
       If Not res["fldptguardian"] Then
         xx = False
       Endif
     Endif
-
+    
     If modBasic.$RegistEssRelation = "Yes" Then
       If Not res["fldrelation"] Then
         xx = False
       Endif
     Endif
-
+    
     If modBasic.$RegistEssContact = "Yes" Then
       If Not res["fldptcontact"] Then
         xx = False
       Endif
     Endif
-
+    
     If modBasic.$RegistEssEMail = "Yes" Then
       If Not res["fldemail"] Then
         xx = False
       Endif
     Endif
-
+    
     If modBasic.$RegistEssCode = "Yes" Then
       If Not res["fldptcode"] Then
         xx = False
@@ -2703,17 +2762,17 @@ Public Function PatientParameterPresent(patno As String) As Boolean
     Endif
   Endif
   Return xx
-
+  
 End
 
 ''----------------------------------- BOOKING ------------------------------------------
 Public Function GetPatFullNameBooking(bookid As String) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim firname As String
   Dim lstname As String
-
+  
   res = modDatabase.$myConn.Exec("select fldptnamefir,fldptnamelast from tblpatientbook where fldbookingval=&1", bookid)
   If res.Available Then
     If res["fldptnamefir"] Then
@@ -2726,7 +2785,7 @@ Public Function GetPatFullNameBooking(bookid As String) As String
     Else
       lstname = ""
     Endif
-
+    
     If modBasic.$PatNameFormat = "Name+Surname" Then
       xx = firname & Space(1) & lstname
     Else If modBasic.$PatNameFormat = "Surname+Name" Then
@@ -2734,20 +2793,20 @@ Public Function GetPatFullNameBooking(bookid As String) As String
     Else
       xx = firname & Space(1) & lstname
     Endif
-
+    
   Else
     xx = ""
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPatRemoteMailBooking(bookid As String) As String
-
+  
   Dim res As Result
   Dim xemail As String
-
+  
   res = modDatabase.$myConn.Exec("select fldremotemail from tblpatientbook where fldbookingval=&1", bookid)
   If res.Available Then
     If res["fldremotemail"] Then
@@ -2758,16 +2817,16 @@ Public Function GetPatRemoteMailBooking(bookid As String) As String
   Else
     xemail = ""
   Endif
-
+  
   Return xemail
-
+  
 End
 
 Public Function GetPatRemoteOnlineBooking(bookid As String) As String
-
+  
   Dim res As Result
   Dim xemail As String
-
+  
   res = modDatabase.$myConn.Exec("select fldremotemail from tblonlinebook where fldbookingval=&1", bookid)
   If res.Available Then
     If res["fldremotemail"] Then
@@ -2778,16 +2837,16 @@ Public Function GetPatRemoteOnlineBooking(bookid As String) As String
   Else
     xemail = ""
   Endif
-
+  
   Return xemail
-
+  
 End
 
 Public Function GetLastVisitDate(encid As String) As Date
-
+  
   Dim xdate As Date
   Dim res As Result
-
+  
   res = modDatabase.$myConn.Exec("select fldconsulttime from tblconsult where fldencounterval=&1", encid)
   If res.Available Then
     res.MoveLast
@@ -2796,14 +2855,14 @@ Public Function GetLastVisitDate(encid As String) As Date
     xdate = modPatient.GetRecordDate(encid)
   Endif
   Return xdate
-
+  
 End
 
 Public Function GetLastVisitLocation(encid As String) As String
-
+  
   Dim xlocat As String
   Dim res As Result
-
+  
   res = modDatabase.$myConn.Exec("select fldconsultname from tblconsult where fldencounterval=&1", encid)
   If res.Available Then
     res.MoveLast
@@ -2812,15 +2871,15 @@ Public Function GetLastVisitLocation(encid As String) As String
     xlocat = modPatient.GetAdmitLocation(encid)
   Endif
   Return xlocat
-
+  
 End
 
 Public Sub GetRegistrationAllow(xpatno As String, Optional xDept As String) As Boolean
-
+  
   Dim res As Result
   Dim xallow As Boolean
   Dim res1 As Result
-
+  
   If modBasic.$RegistOneDaily = "OnePerDay" Then
     res = modDatabase.$myConn.Exec("select fldencounterval from tblencounter where fldpatientval=&1 and fldregdate>=&2 and fldregdate<=&3", xpatno, modDate.StartSqlDate(Now()), modDate.EndSqlDate(Now()))
     If res.Available Then
@@ -2828,7 +2887,7 @@ Public Sub GetRegistrationAllow(xpatno As String, Optional xDept As String) As B
     Else
       xallow = True
     Endif
-
+    
   Else If modBasic.$RegistOneDaily = "OnePerCompPerDay" Then
     res = modDatabase.$myConn.Exec("select fldencounterval from tblencounter where fldpatientval=&1 and fldregdate>=&2 and fldregdate<=&3 and fldcomp=&4", xpatno, modDate.StartSqlDate(Now()), modDate.EndSqlDate(Now()), modBasic.$compID)
     If res.Available Then
@@ -2836,10 +2895,10 @@ Public Sub GetRegistrationAllow(xpatno As String, Optional xDept As String) As B
     Else
       xallow = True
     Endif
-
+    
   Else If modBasic.$RegistOneDaily = "None" Then
     xallow = True
-
+    
   Else
     res1 = modDatabase.$myConn.Exec("select fldencounterval from tblencounter where fldpatientval=&1 and fldadmission=&2", xpatno, "Admitted")
     If res1.Available Then
@@ -2851,7 +2910,7 @@ Public Sub GetRegistrationAllow(xpatno As String, Optional xDept As String) As B
         Else
           xallow = False
         Endif
-
+        
       Else
         res = modDatabase.$myConn.Exec("select fldencounterval from tblencounter where fldpatientval=&1 and fldregdate>=&2 and fldregdate<=&3", xpatno, modDate.StartSqlDate(Now()), modDate.EndSqlDate(Now()))
         If res.Available Then
@@ -2859,22 +2918,22 @@ Public Sub GetRegistrationAllow(xpatno As String, Optional xDept As String) As B
         Else
           xallow = True
         Endif
-
+        
       Endif
     Endif
-
+    
   Endif
-
-  Return xallow
+  
+  Return xallow  
 
 End
 
 Public Function GetLastPaidConsultDate(xpatno As String) As Date
-
+  
   Dim res As Result
   Dim res1 As Result
   Dim xdate As Date
-
+  
   res1 = modDatabase.$myConn.Exec("select fldregdate from tblencounter where fldpatientval=&1 and fldfollow=&2 ORDER BY fldregdate ASC", xpatno, "New")
   If res1.Available Then
     res1.MoveLast
@@ -2886,7 +2945,7 @@ Public Function GetLastPaidConsultDate(xpatno As String) As Date
   Else
     xdate = ""
   Endif
-
+  
   If Not xdate Then
     res = modDatabase.$myConn.Exec("select fldconsulttime from tblconsult where fldencounterval in(select fldencounterval from tblencounter where fldpatientval=&1) and fldcomment=&2 ORDER BY fldconsulttime ASC", xpatno, "Paid Consultation")
     If res.Available Then
@@ -2901,17 +2960,17 @@ Public Function GetLastPaidConsultDate(xpatno As String) As Date
     Endif
   Endif
   Return xdate
-
+  
 End
 
 ''------------------------- HMIS -------------------------
 ''get Patient Status
 Public Function GetPatientHMISStattus(sPatNo As String) As String
-
+  
   Dim xval As String
   Dim res As Result
   Dim xDate As Date
-
+  
   If sPatNo Then
     xDate = modDate.GetNepaliFiscalYarStart(Now())
     If xDate Then
@@ -2933,14 +2992,14 @@ Public Function GetPatientHMISStattus(sPatNo As String) As String
     xval = "NEW"
   Endif
   Return xval
-
+  
 End
 
 Public Function GetPatientHMISRegValue(encid As String) As String
-
+  
   Dim xval As String
   Dim res As Result
-
+  
   res = modDatabase.$myConn.Exec("select fldregistid from tblencounter where fldencounterval=&1", encid)
   If res.Available Then
     If res["fldregistid"] Then
@@ -2951,17 +3010,17 @@ Public Function GetPatientHMISRegValue(encid As String) As String
   Else
     xval = ""
   Endif
-
+  
   Return xval
-
+  
 End
 
 Public Function GetPatientHMISRegVal(sPatNo As String) As String
-
+  
   Dim xval As String
   Dim res As Result
   Dim xDate As Date
-
+  
   If sPatNo Then
     xDate = modDate.GetNepaliFiscalYarStart(Now())
     If xDate Then
@@ -2980,15 +3039,15 @@ Public Function GetPatientHMISRegVal(sPatNo As String) As String
     xval = modBillLock.GetHMISRegVal("Master")
   Endif
   Return xval
-
+  
 End
 
 Public Function GetPatientHMISAdmission(sPatNo As String) As String
-
+  
   Dim xval As String
   Dim res As Result
   Dim xDate As Date
-
+  
   If sPatNo Then
     xDate = modDate.GetNepaliFiscalYarStart(Now())
     If xDate Then
@@ -3007,15 +3066,15 @@ Public Function GetPatientHMISAdmission(sPatNo As String) As String
     xval = modBillLock.GetHMISRegVal("Indoor")
   Endif
   Return xval
-
+  
 End
 
 Public Function GetPatientHMISConsult(encid As String) As String
-
+  
   Dim xval As String
   Dim res As Result
   Dim xDate As Date
-
+  
   If encid Then
     xDate = modDate.GetNepaliFiscalYarStart(Now())
     If xDate Then
@@ -3035,14 +3094,14 @@ Public Function GetPatientHMISConsult(encid As String) As String
     xval = modBillLock.GetHMISRegVal("Consult")
   Endif
   Return xval
-
+  
 End
 
 Public Function GetDeliveryHMISVal(sPatNo As String) As String
-
+  
   Dim xval As String
   Dim res As Result
-
+  
   res = modDatabase.$myConn.Exec("select flddelref from tblobstetrics where fldlast<&1 and fldexpect>&2 and fldencounterval in(select fldencounterval from tblencounter where fldpatientval=&3) ORDER BY fldtime", Now(), DateAdd(Now(), gb.Month, -3), sPatNo)
   If res.Available Then
     res.MoveFirst
@@ -3054,24 +3113,24 @@ Public Function GetDeliveryHMISVal(sPatNo As String) As String
   Else
     xval = modBillLock.GetHMISRegVal("Delivery")
   Endif
-
+  
   Return xval
-
+  
 End
 
 ''------------------------ claim code --------------------
 Public Function GetPatientNHSIbyCode(claimcode As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   res = $con.Exec("select fldptcode from tblclaimcode where fldclaimid=&1", claimcode)
   If res.Available Then
     If res["fldptcode"] Then
@@ -3082,23 +3141,23 @@ Public Function GetPatientNHSIbyCode(claimcode As String, Optional sCon As Conne
   Else
     xx = ""
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPatientSSFbyCode(claimcode As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   res = $con.Exec("select fldptcode from tblssfclaim where fldclaimid=&1", claimcode)
   If res.Available Then
     If res["fldptcode"] Then
@@ -3109,24 +3168,24 @@ Public Function GetPatientSSFbyCode(claimcode As String, Optional sCon As Connec
   Else
     xx = ""
   Endif
-
+  
   Return xx
-
+  
 End
 
 ''from encounter
 Public Function GetPatientNHSIbyEncounter(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   res = $con.Exec("select fldptcode from tblclaimcode where fldencounterval=&1", encid)
   If res.Available Then
     res.MoveFirst
@@ -3138,23 +3197,23 @@ Public Function GetPatientNHSIbyEncounter(encid As String, Optional sCon As Conn
   Else
     xx = ""
   Endif
-
+  
   Return xx
-
+  
 End
 
 Public Function GetPatientSSFbyEncounter(encid As String, Optional sCon As Connection) As String
-
+  
   Dim res As Result
   Dim xx As String
   Dim $con As Connection
-
+  
   If sCon Then
     $con = sCon
   Else
     $con = modDatabase.$myConn
   Endif
-
+  
   res = $con.Exec("select fldptcode from tblssfclaim where fldencounterval=&1", encid)
   If res.Available Then
     res.MoveFirst
@@ -3166,17 +3225,17 @@ Public Function GetPatientSSFbyEncounter(encid As String, Optional sCon As Conne
   Else
     xx = ""
   Endif
-
+  
   Return xx
-
+  
 End
 
 ''-------------------- HMIS ID View only ---------------------
 Public Function GetHMISAdmissionNo(encid As String) As String
-
+  
   Dim res As Result
   Dim xval As String
-
+  
   res = modDatabase.$myConn.Exec("select fldadmitid from tblencounter where fldencounterval=&1", encid)
   If res.Available Then
     If res["fldadmitid"] Then
@@ -3187,17 +3246,17 @@ Public Function GetHMISAdmissionNo(encid As String) As String
   Else
     xval = ""
   Endif
-
+  
   Return xval
-
+  
 End
 
 ''------------------------------- HAI summary --------------------------------
 Public Function GetHaiClassificationSet(encid As String, sType As String) As String
-
+  
   Dim res As Result
   Dim xclass As String
-
+  
   If sType = "BSI" Then
     res = modDatabase.$myConn.Exec("select fldbsiclassify from tblhaicasereports where fldencounterval=&1", encid)
   Else If sType = "UTI" Then
@@ -3212,7 +3271,7 @@ Public Function GetHaiClassificationSet(encid As String, sType As String) As Str
   Else
     xclass = ""
   Endif
-
+  
   Return xclass
-
+  
 End

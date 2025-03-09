@@ -215,7 +215,7 @@ Public Sub mnuregistration_Click()
 
   Dim xx As String
 
-  xx = RegistrationForm(False)
+  xx = RegistHMIS()
 
 End
 
@@ -456,6 +456,12 @@ Public Sub mnudepartsetting_Click()
 
 End
 
+Public Sub mnumedsetting_Click()
+
+  fmMedSetting.ShowModal
+
+End
+
 Public Sub mnugensett_Click()
 
   fmGeneralSettings.ShowModal
@@ -484,48 +490,14 @@ End
 
 Public Sub mnualter_Click()
 
-  Dim hFile As File
-  Dim sLine As String
-  Dim xx As String
-  Dim newPath As String
-  Dim sType As String
-  Dim sQuery As String
-
   Dim xPass As String
 
   xPass = InputPassword("Provide Root Password", "Verification", "")
   If modPassword.GetSuperVerification(modBasic.$lbluser, xPass) = True Then
-    sQuery = ""
-    xx = GetTextArea("SQL Query", sQuery)
-    If xx Then
-      newPath = Temp()
-      File.Save(newPath, xx)
-      If Message.Question(("Do you really want to update Database structure at your own risk?"), ("No"), ("Yes")) = 2 Then
-        sType = modDatabase.$myConn.Type
-        If sType = "mysql" Or If sType = "postgresql" Then
-          Message.Info(("Executing Request ...."), ("OK"))
-          hFile = Open newPath
-          For Each sLine In hFile.Lines
-            sLine = Trim(sLine)
-            If sLine Then
-              If Left(sLine, 1) = "#" Then
-              Else
-                Try modDatabase.$myConn.Exec(sLine)
-              Endif
-            Endif
-          Next
-          hFile.Close()
-        Endif
-        Me.Exec("Toastify({text: 'Tables Alteration completed', duration: 3000}).showToast()")
-      Endif
-    Endif
+    modDatabase.AlterDBTablesAdmin()
   Else
     Message.Info("Incorrect Root Password", ("OK"))
   Endif
-
-  ' Else
-  '   Message.Warning(("File doesn't exist"), ("OK"))
-  ' Endif
 
 End
 
@@ -647,5 +619,39 @@ End
 Public Sub mnudarkmode_Click()
 
   Me.Exec("changeScreenMode();")
+
+End
+
+Public Sub mnutelemedicine_Click()
+
+  Dim xPass As String
+  Dim hForm As FmTeleMedList
+
+  xPass = InputPassword("Provide Root Password", "Verification", "")
+  If modPassword.GetSuperVerification(modBasic.$lbluser, xPass) = True Then
+    If Workspace1.Children.Count Then
+      Workspace1.DeleteChildren()
+    Endif
+    hForm = New FmTeleMedList(Workspace1)
+  Else
+    Message.Info("Incorrect Root Password", ("OK"))
+  Endif
+
+End
+
+Public Sub mnusetup_Click()
+
+  Dim hForm As FmShowSqlite
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmShowSqlite(Workspace1)
+
+End
+
+Public Sub mnupassword_Click()
+
+  modGeneral.UpdateMainUserPassword(modBasic.$lbluser)
 
 End

@@ -82,6 +82,9 @@
     { mnudepartsetting WebMenu
       Text = ("Depart Setting")
     }
+    { mnumedsetting WebMenu
+      Text = ("Medical Setting")
+    }
     { mnugensett WebMenu
       Text = ("General Settings")
     }
@@ -94,6 +97,9 @@
     { mnuappsetting WebMenu
       Text = ("App Setting")
     }
+    { mnupassword WebMenu
+      Text = ("Password")
+    }
   }
   { mnuparams WebMenu
     Text = ("Params")
@@ -103,8 +109,14 @@
     { mnuhospitals WebMenu
       Text = ("Hospitals")
     }
+    { mnutelemedicine WebMenu
+      Text = ("Telemedicine")
+    }
     { mnuallsettings WebMenu
       Text = ("File Settings")
+    }
+    { mnusetup WebMenu
+      Text = ("Setup Info")
     }
     { mnuapplog WebMenu
       Text = ("Log File")

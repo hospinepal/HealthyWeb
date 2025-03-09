@@ -241,7 +241,7 @@
         { lbladdress WebLabel
           #MoveScaled(1,1,12,2)
           Width = "7em"
-          Text = ("Address")
+          Text = ("Municipal")
           Border = True
         }
         { txtaddfir WebComboBox

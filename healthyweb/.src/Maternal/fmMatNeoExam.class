@@ -73,12 +73,18 @@ Public Sub _new(encid As String)
   cmbassist.List = ["SBA trained ANM", "Skilled Health Professional", "Other Health Professional", "Home Attendant"]
   cmbdetlocation.List = ["This facility", "Other facility", "Home", "Other place"]
   cmbdischoutcome.List = ["Recovered", "Not improved", "Referred out", "LAMA", "Absconded", "Died"]
+  cmburgency.List = ["Urgent", "Normal"]
   xlocat = modSettings.ShowSettingFromFIle("DeliveryForm/NurseList")
   If xlocat Then
     cmbassist.List = modString.GetStringArrayFromFile(xlocat, True)
   Endif
   dtdelivery.Value = Now()
   $UserRestrict = modBasic.$ClinicDisableCompo
+  If modBasic.$ClinConsultTelemed = "Remote" Then
+    btnshowexpert.Visible = True
+  Else
+    btnshowexpert.Visible = False
+  Endif
 
   $PopDiagno = False
   rbsingle.Value = True
@@ -152,6 +158,8 @@ Private Sub GetEncounterValue()
           btnconsult.Tag = modBasic.$lbluser
           btnconsult.Text = modGeneral.GetUserFullName(btnconsult.Tag)
           modClinSub.GetPatientHeight(Trim(txtencid.Text), txtpatheight, cmbpatheightunit)
+          $vidRoom = LCase(Trim(txtencid.Text) & Format(Now(), "yymmdd"))
+          $VidIndex = modApplication.GetMD5SumString($vidRoom)
           modAppSupport.RecordPatientActivity("Patient Data", Me.Name, "EncounterID", Trim(txtencid.Text))
           pnlcolor.Background = modPatient.GetPatientColor(Trim(txtencid.Text))
           Wait
@@ -299,6 +307,17 @@ Public Sub btnvideo_Click()
 
 End
 
+Public Sub btnfiles_Click()
+
+  Dim hForm As FmScanForm
+
+  If txtencid.Text Then
+    hForm = New FmScanForm(Trim(txtencid.Text), "Scanned Images", "")
+    hForm.ShowModal
+  Endif
+
+End
+
 ''============================== MAIN FORM ================================
 Private Sub BasicInfoPatient()
 
@@ -340,12 +359,12 @@ Private Sub BasicInfoPatient()
       End Select
 
       ShowReferOutSet()
-      ShowTelemedSaved()
       cmbhospcode.Text = modPatPatho.GetDemographicValue(Trim(txtencid.text), "Refer Out")
       If cmbhospcode.Text Then
         txthospname.Text = modDataRepo.GetHospitaltName(cmbhospcode.Text)
       Endif
     Endif
+    ShowTelemedSaved()
     If xadmit And If xdiscd Then
       txtlenstay.Value = DateDiff(xadmit, xdiscd, gb.Day)
     Endif
@@ -451,7 +470,7 @@ Private Sub ShowTelemedSaved()
 
   Dim res As Result
 
-  res = modDatabase.$myConn.Exec("select fldteleuser,fldsms,fldurgency,fldrequest,fldcoment,flduserid,fldtime from tbltelemedtalk where fldtalkid=&1", $VidIndex)
+  res = modDatabase.$myConn.Exec("select fldteleuser,fldsms,fldurgency,fldrequest,fldcoment,flduserid,fldtime,fldvidroom,fldvidpass,fldvidserver from tbltelemedtalk where fldtalkid=&1", $VidIndex)
   If res.Available Then
     res.MoveLast
     cmbexpert.Tag = res["fldteleuser"]
@@ -461,6 +480,14 @@ Private Sub ShowTelemedSaved()
     chkquerysms.Value = res["fldsms"]
     cmburgency.Text = res["fldurgency"]
     txtquery.RichText = res["fldrequest"]
+
+    If Not res["fldcoment"] Then
+      txtcamus.Text = res["fldvidserver"] &/ "room" &/ res["fldvidroom"]
+      txtpassword.Text = res["fldvidpass"]
+      If txtcamus.Text Then
+        pnlvideocall.Visible = True
+      Endif
+    Endif
   Endif
 
 End
@@ -1203,7 +1230,7 @@ Private Sub AddDeliverySelection(encid As String, sExamLabel As String, sysConst
     Endif
     xquantival = GetQuantiValues(examtype, encid, sName, xlimit[0], xlimit[1], xdefval)
     If xquantival Then
-      modClinSub.AddQuantiData(encid, "", sExamLabel, xquantival[0], xquantival[1], xcategory, sysConst, $Category)
+      modClinSub.AddQuantiData(encid, "", sExamLabel, OptionType, xquantival[0], xquantival[1], xcategory, sysConst, $Category)
     Endif
 
   Else
@@ -1287,9 +1314,9 @@ Private Sub AddDeliverySelection(encid As String, sExamLabel As String, sysConst
 
     If yqualival Then
       If yqualival.Count = 3 And If yqualival[2] Then
-        modClinSub.AddClinicExam(encid, "", sExamLabel, yqualival[0], CFloat(yqualival[2]), yqualival[1], xcategory, sysConst, $Category)
+        modClinSub.AddClinicExam(encid, "", sExamLabel, OptionType, yqualival[0], CFloat(yqualival[2]), yqualival[1], xcategory, sysConst, $Category)
       Else
-        modClinSub.AddClinicExam(encid, "", sExamLabel, yqualival[0], 0, yqualival[1], xcategory, sysConst, $Category)
+        modClinSub.AddClinicExam(encid, "", sExamLabel, OptionType, yqualival[0], 0, yqualival[1], xcategory, sysConst, $Category)
       Endif
     Endif
   Endif ''quali or quanti
@@ -1615,7 +1642,7 @@ End
 Public Sub AddConsultDataMat(encid As String, consultname As String, consulttime As Date, sComment As String, Optional xnotice As String)
 
   Dim res As Result
-  Dim res1 As Result
+  ' Dim res1 As Result
   Dim anotice As String
   Dim xIntVal As String
 
@@ -1625,54 +1652,55 @@ Public Sub AddConsultDataMat(encid As String, consultname As String, consulttime
     anotice = ""
   Endif
   If txtreference.Text Then
+    ' If MMain.$WebEntry = True Then
+    '   res1 = modDatabase.$myConn.Exec("select fldrepoid from tblopvisit where fldencounterval=&1 and fldemerid=&2", encid, txtreference.Text)
+    ' Else
+    '   res1 = modDatabase.$myConn.Exec("select fldid from tblopvisit where fldencounterval=&1 and fldemerid=&2", encid, txtreference.Text)
+    ' Endif
+    ' If res1.Available Then
+    '   res1.MoveLast
+    '   If MMain.$WebEntry = True Then
+    '     res = modDatabase.$myConn.Edit("tblopvisit", "fldrepoid=&1", res1["fldrepoid"])
+    '   Else
+    '     res = modDatabase.$myConn.Edit("tblopvisit", "fldid=&1", res1["fldid"])
+    '   Endif
+    '   res["fldconsulttime"] = consulttime
+    '   res["fldstatus"] = "Done"
+    '   res["fldbillingmode"] = $billMode
+    '   res["fldnotice"] = anotice
+    '   res["flduserid"] = modBasic.$lbluser
+    '   res.Update
+    ' Else
+    res = modDatabase.$myConn.Create("tblopvisit")
+    res["fldencounterval"] = encid
+    res["fldconsultname"] = consultname
+    res["fldconsulttime"] = consulttime
+    res["fldcomment"] = sComment
+    res["fldstatus"] = "Done"
+    res["fldbillingmode"] = $billMode
+    res["fldoutcome"] = ""
+    res["fldnotice"] = anotice
+    res["fldflag"] = False
+    res["flduserid"] = modBasic.$lbluser
+    res["fldtime"] = Now()
+    res["fldcomp"] = modBasic.$compID
+    res["fldsave"] = False
+    res["fldemerid"] = txtreference.Text
+    res["xyz"] = False
+
     If MMain.$WebEntry = True Then
-      res1 = modDatabase.$myConn.Exec("select fldrepoid from tblopvisit where fldencounterval=&1 and fldemerid=&2", encid, txtreference.Text)
-    Else
-      res1 = modDatabase.$myConn.Exec("select fldid from tblopvisit where fldencounterval=&1 and fldemerid=&2", encid, txtreference.Text)
+      xIntVal = modString.GetDateString(Now())
+      res["fldid"] = CLong(xIntVal)
+      res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+      res["fldrepodate"] = Now()
+      res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+      res["fldhospcode"] = modBasic.$HospCode
     Endif
-    If res1.Available Then
-      res1.MoveLast
-      If MMain.$WebEntry = True Then
-        res = modDatabase.$myConn.Edit("tblopvisit", "fldrepoid=&1", res1["fldrepoid"])
-      Else
-        res = modDatabase.$myConn.Edit("tblopvisit", "fldid=&1", res1["fldid"])
-      Endif
-      res["fldconsulttime"] = consulttime
-      res["fldstatus"] = "Done"
-      res["fldbillingmode"] = $billMode
-      res["fldnotice"] = anotice
-      res["flduserid"] = modBasic.$lbluser
-      res.Update
-    Else
-      res = modDatabase.$myConn.Create("tblopvisit")
-      res["fldencounterval"] = encid
-      res["fldconsultname"] = consultname
-      res["fldconsulttime"] = consulttime
-      res["fldcomment"] = sComment
-      res["fldstatus"] = "Done"
-      res["fldbillingmode"] = $billMode
-      res["fldoutcome"] = ""
-      res["fldnotice"] = anotice
-      res["flduserid"] = modBasic.$lbluser
-      res["fldtime"] = Now()
-      res["fldcomp"] = modBasic.$compID
-      res["fldsave"] = False
-      res["fldemerid"] = txtreference.Text
-      res["xyz"] = False
+    res.Update
 
-      If MMain.$WebEntry = True Then
-        xIntVal = modString.GetDateString(Now())
-        res["fldid"] = CLong(xIntVal)
-        res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
-        res["fldrepodate"] = Now()
-        res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
-        res["fldhospcode"] = modBasic.$HospCode
-      Endif
-      res.Update
-
-      modPatientSub.AddEncounterSpecData(encid, consultname)
-      modPatientSub.EnterPatientImpDate(encid, "OP Visit", consultname)
-    Endif
+    modPatientSub.AddEncounterSpecData(encid, consultname)
+    modPatientSub.EnterPatientImpDate(encid, "OP Visit", consultname)
+    ' Endif
   Endif
 
 End
@@ -2920,7 +2948,11 @@ Public Sub btnquery_Click()
   If modBasic.$HospCode Then
     xURL = modBasic.$ClinVideoServer
     If xURL Then
-      xPass = Left(modPassword.GetRandomPassword(), 6)
+      If modBasic.$ClinVideoPass = "Disable" Then
+        xPass = "NA"
+      Else
+        xPass = Left(modPassword.GetRandomPassword(), 6)
+      Endif
       btnquery.Tag = xPass
       rsx = modDatabase.$myConn.Exec("select fldtalkid from tbltelemedtalk where fldtalkid=&1", $VidIndex)
 
@@ -2972,7 +3004,7 @@ Public Sub btnquery_Click()
         res["xyz"] = False
         If MMain.$WebEntry = True Then
           res["fldrepodate"] = Now()
-          res["fldrepomac"] = modHelpVariable.$MACAddress
+          res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
           res["fldhospcode"] = modBasic.$HospCode
         Endif
       Endif
@@ -3025,11 +3057,28 @@ Public Sub btnvideocall_Click()
         Wait
         hForm1 = New FmTeleURL(xURL &/ "room" &/ xroom, xPass, xval, xuser)
         hForm1.Show
+
+        txtcamus.Text = xURL &/ "room" &/ xroom
+        txtpassword.Text = xPass
+        If txtcamus.Text Then
+          pnlvideocall.Visible = True
+        Endif
       Endif
     Endif
 
   Else
     Message.Warning("Camus server not specified.", "OK")
+  Endif
+
+End
+
+Public Sub btncamus_Click()
+
+  Dim hForm As FmOpenLink
+
+  If txtcamus.Text Then
+    hForm = New FmOpenLink(txtcamus.Text)
+    hForm.ShowModal
   Endif
 
 End
