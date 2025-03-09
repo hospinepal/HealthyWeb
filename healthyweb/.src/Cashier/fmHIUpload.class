@@ -24,10 +24,10 @@ Public Sub _new()
   If cmbaccount.Count Then
     cmbaccount.Index = 0
   Endif
-  If modBasic.$RegistNewClaimEnc = "Enable" Then
-    cmbnodiagno.Enabled = False
-  Else
+  If modBasic.$RegistNewClaimEnc = "Disable" Then
     cmbnodiagno.List = ["Disable", "Enable"]
+  Else
+    cmbnodiagno.Enabled = False
   Endif
   $ClinicianLst = GetClinicianList()
   dtfir.Value = Now()
@@ -37,12 +37,23 @@ Public Sub _new()
   modAccount.PasInvoiceSetting(cmbfiscal, False)
   LoadTableNames()
   modSettings.ShowCheckBox(chkshow, "ClaimUpload/ShowOlder")
+  LoadHIFormats()
 
 End
 
 Public Sub WebForm_Open()
 
   modGeneralMain.RecordFormUse(Me)
+
+End
+
+Private Sub LoadHIFormats()
+
+  modSettings.SaveSettingsToFile("Claim Code" & "/" & "Name", "HI Discharge Report")
+  modSettings.SaveSettingsToFile("Claim Code" & "/" & "HeaderType", "False")
+  modSettings.SaveSettingsToFile("Claim Code" & "/" & "BodyType", "False")
+  modSettings.SaveSettingsToFile("Claim Code" & "/" & "FooterType", "False")
+  modSettings.SaveSettingsToFile("Claim Code" & "/" & "BodyPath", modHelpVariable.$htmlDirectory &/ "discharge_Insurance.html")
 
 End
 
@@ -146,7 +157,7 @@ End
 
 Private Sub FillGridView()
 
-  Dim xList As String[] = ["fldchequeno", "fldbankname", "fldencounterval", "fldencounterval", "fldencounterval", "fldchequeno", "fldbilltype", "fldchequeno", "fldchequeno", "fldchequeno"]
+  Dim xList As String[] = ["fldchequeno", "fldbankname", "fldencounterval", "fldencounterval", "fldencounterval", "fldchequeno", "fldbilltype", "fldchequeno", "fldchequeno", "fldchequeno", "fldchequeno"]
   Dim sql1 As String
   Dim sql2 As String
   Dim encid As String
@@ -166,20 +177,20 @@ Private Sub FillGridView()
   Endif
 
   If cmbstate.Text = "Pending" Then
-    If modBasic.$RegistNewClaimEnc = "Enable" Then
-      xsear = " and fldbillno in(select fldbillno from " & $tblpatbilling & " where fldclaimstate IS NULL)"
-      xsear1 = " and fldbillno in(select fldbillno from tblpatbilling where fldclaimstate IS NULL)"
-    Else
+    If modBasic.$RegistNewClaimEnc = "Disable" Then
       xsear = " and fldbillno not in(select fldbillno from tblbillupload)"
       xsear1 = " and fldbillno not in(select fldbillno from tblbillupload)"
+    Else
+      xsear = " and fldbillno in(select fldbillno from " & $tblpatbilling & " where fldclaimstate IS NULL)"
+      xsear1 = " and fldbillno in(select fldbillno from tblpatbilling where fldclaimstate IS NULL)"
     Endif
   Else If cmbstate.Text = "Completed" Then
-    If modBasic.$RegistNewClaimEnc = "Enable" Then
-      xsear = " and fldbillno in(select fldbillno from " & $tblpatbilling & " where fldclaimstate IS NOT NULL)"
-      xsear1 = " and fldbillno in(select fldbillno from tblpatbilling where fldclaimstate IS NOT NULL)"
-    Else
+    If modBasic.$RegistNewClaimEnc = "Disable" Then
       xsear = " and fldbillno in(select fldbillno from tblbillupload)"
       xsear1 = " and fldbillno in(select fldbillno from tblbillupload)"
+    Else
+      xsear = " and fldbillno in(select fldbillno from " & $tblpatbilling & " where fldclaimstate IS NOT NULL)"
+      xsear1 = " and fldbillno in(select fldbillno from tblpatbilling where fldclaimstate IS NOT NULL)"
     Endif
   Else
     xsear = ""
@@ -237,7 +248,8 @@ Private Sub FillGridView()
       .Columns[7].Hidden = True
       .Columns[8].Hidden = True
     Endif
-    .Columns[9].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
+    .Columns[9].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
+    .Columns[10].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
 
     .Columns[0].Text = "Reference"
     .Columns[1].Text = "Account"
@@ -248,6 +260,7 @@ Private Sub FillGridView()
     .Columns[7].Text = "Invoice"
     .Columns[8].Text = "Receipt"
     .Columns[9].Text = "Origin"
+    .Columns[10].Text = "NHIS"
   End With
 
 End
@@ -276,6 +289,8 @@ Public Sub GridView1_Data(Row As Integer, Column As Integer, Data As WebTableDat
     Endif
   Else If Column = 9 Then
     Data.Text = modReportVar.GetDateTimeReport(modClaim.GetHIClaimTime($rData[$aMyFields[Column]]), gb.GeneralDate)
+  Else If Column = 10 Then
+    Data.Text = modPatient.GetPatientNHSIbyCode($rData[$aMyFields[Column]], modDatabase.$myConn)
   Else
     Data.Text = $rData[$aMyFields[Column]]
   Endif
@@ -500,11 +515,11 @@ Public Sub GridView2_Data(Row As Integer, Column As Integer, Data As WebTableDat
   If Column = 1 Then
     Data.Text = modClaimAPI.GetBillingItemAbbvName($rData1[$aMyFields1[Column]])
   Else If Column = 3 Then
-    Data.Text = Format($rData1[$aMyFields1[Column]], gb.Fixed)
+    Data.Text = Round($rData1[$aMyFields1[Column]], -2)
   Else If Column = 4 Then
-    Data.Text = CStr($rData1[$aMyFields1[Column]])
+    Data.Text = Round($rData1[$aMyFields1[Column]], -2)
   Else If Column = 5 Then
-    Data.Text = Format($rData1[$aMyFields1[Column]], gb.Fixed)
+    Data.Text = Round($rData1[$aMyFields1[Column]], -2)
   Else
     Data.Text = $rData1[$aMyFields1[Column]]
   Endif
@@ -754,6 +769,9 @@ Public Sub btnselectuser_Click()
     If xMedUser And If xMedUser.Count Then
       btnconsult.Tag = xMedUser[0]
       btnconsult.Text = xMedUser[1]
+    Else
+      btnconsult.Tag = ""
+      btnconsult.Text = ""
     Endif
   Endif
 

@@ -30,8 +30,13 @@ End
 
 Public Sub WebForm_Open()
 
+  If MMain.$WebEntry = True Then
+    modDataRepo.$RepositoryMode = MMain.$AppLogCategory
+    modBasic.$HospCode = MMain.$AppLogString
+  Endif
   modHelpVariable.SetApplicationGUI()
   MMain.GetApplVersionType()
+  DiaplayCustMenu()
 
   ' DiaplayCustMenu()
   modBasic.LoadClinicalLists()
@@ -50,6 +55,7 @@ Public Sub WebForm_Open()
   modBasic.MedicineDoseSetting()
   modBasic.DispLabelSettings()
   modBasic.LoadLargeLists()
+  modBasic.CloudAISettings()
 
   modLinkDB.LoadExtraDBSettings()
   modBasic.$IPDDepartmentsAll = modGeneral.GetDepartmentWithBedList()
@@ -72,26 +78,36 @@ Private Sub SetFormAccess()
   modGeneralMain.ShowSelectedFormMenu(mnucasbilling)
   modGeneralMain.ShowSelectedFormMenu(mnudeposit)
   modGeneralMain.ShowSelectedFormMenu(mnucasreturn)
+  modGeneralMain.ShowSelectedFormMenu(mnupharmretn)
   modGeneralMain.ShowSelectedFormMenu(mnurextrecept)
 
   modGeneralMain.ShowSelectedFormMenu(mnubill)
   modGeneralMain.ShowSelectedFormMenu(mnudepositrepo)
-  modGeneralMain.ShowSelectedFormMenu(mnuvouchers)
   modGeneralMain.ShowSelectedFormMenu(mnusercoll)
+  modGeneralMain.ShowSelectedFormMenu(mnusercollect)
   modGeneralMain.ShowSelectedFormMenu(mnuentryrecord)
+  modGeneralMain.ShowSelectedFormMenu(mnuvouchers)
+  modGeneralMain.ShowSelectedFormMenu(mnuclaimup)
+  modGeneralMain.ShowSelectedFormMenu(mnussfup)
 
   modGeneralMain.ShowSelectedFormMenu(mnupatprofile)
   modGeneralMain.ShowSelectedFormMenu(mnupataccount)
   modGeneralMain.ShowSelectedFormMenu(mnubedoccup)
   modGeneralMain.ShowSelectedFormMenu(mnusavedrepo)
+  modGeneralMain.ShowSelectedFormMenu(mnuopdlist)
+  modGeneralMain.ShowSelectedFormMenu(mnuopvisits)
 
   modGeneralMain.ShowSelectedFormMenu(mnuregistered)
   modGeneralMain.ShowSelectedFormMenu(mnuplaned)
   modGeneralMain.ShowSelectedFormMenu(mnupatfollow)
   modGeneralMain.ShowSelectedFormMenu(mnuplanproced)
+  modGeneralMain.ShowSelectedFormMenu(mnuonlinebook)
   modGeneralMain.ShowSelectedFormMenu(mnuextraproc)
   modGeneralMain.ShowSelectedFormMenu(mnuradiolist)
   modGeneralMain.ShowSelectedFormMenu(mnureferral)
+
+  modGeneralMain.ShowSelectedFormMenu(mnucustquery)
+  modGeneralMain.ShowSelectedFormMenu(mnupersonal)
 
 End
 
@@ -163,6 +179,103 @@ Public Sub btnfullscreen_Click()
     Me.Exec("closeFullscreen()")
 
   Endif
+
+End
+
+''---------------------------------------- CustomAccount Reports -------------------------------------
+Private Sub DiaplayCustMenu()
+
+  If modSettings.ShowSettingForReport("Cashier.CustomQuery1/Name") Then
+    mnucust1.Text = modSettings.ShowSettingForReport("Cashier.CustomQuery1/Name")
+    mnucust1.Tag = "Cashier.CustomQuery1"
+    mnucust1.Visible = True
+  Endif
+
+  If modSettings.ShowSettingForReport("Cashier.CustomQuery2/Name") Then
+    mnucust2.Text = modSettings.ShowSettingForReport("Cashier.CustomQuery2/Name")
+    mnucust2.Tag = "Cashier.CustomQuery2"
+    mnucust2.Visible = True
+  Endif
+
+  If modSettings.ShowSettingForReport("Cashier.CustomQuery3/Name") Then
+    mnucust3.Text = modSettings.ShowSettingForReport("Cashier.CustomQuery3/Name")
+    mnucust3.Tag = "Cashier.CustomQuery3"
+    mnucust3.Visible = True
+  Endif
+
+  If modSettings.ShowSettingForReport("Cashier.CustomQuery4/Name") Then
+    mnucust4.Text = modSettings.ShowSettingForReport("Cashier.CustomQuery4/Name")
+    mnucust4.Tag = "Cashier.CustomQuery4"
+    mnucust4.Visible = True
+  Endif
+
+  If modSettings.ShowSettingForReport("Cashier.CustomQuery5/Name") Then
+    mnucust5.Text = modSettings.ShowSettingForReport("Cashier.CustomQuery5/Name")
+    mnucust5.Tag = "Cashier.CustomQuery5"
+    mnucust5.Visible = True
+  Endif
+
+End
+
+Public Sub mnucust1_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust1.Tag, Workspace1)
+
+End
+
+Public Sub mnucust2_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust2.Tag, Workspace1)
+
+End
+
+Public Sub mnucust3_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust3.Tag, Workspace1)
+
+End
+
+Public Sub mnucust4_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust4.Tag, Workspace1)
+
+End
+
+Public Sub mnucust5_Click()
+
+  Dim hForm As FmCustQueryTable
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust5.Tag, Workspace1)
+
+End
+
+Public Sub mnuaccrepset_Click()
+
+  fmCusAccReport.Close
+  fmCusAccReport.ShowModal
 
 End
 
@@ -353,6 +466,21 @@ Public Sub mnuplaned_Click()
 
 End
 
+Public Sub mnupatfollow_Click()
+
+End
+
+Public Sub mnuonlinebook_Click()
+
+  Dim hForm As FmOnlineRegist
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmOnlineRegist(Workspace1)
+
+End
+
 Public Sub mnureferral_Click()
 
   Dim hForm As FmRepoStatus
@@ -397,6 +525,11 @@ Public Sub mnuaddclaim_Click()
         res["flduserid"] = ""
         res["fldsave"] = False
         res["xyz"] = True
+        If MMain.$WebEntry = True Then
+          res["fldrepodate"] = Now()
+          res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+          res["fldhospcode"] = modBasic.$HospCode
+        Endif
         res.Update
       Next
     Endif

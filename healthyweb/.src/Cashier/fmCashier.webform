@@ -25,8 +25,9 @@
         Text = ("Counter Return")
       }
       { mnupharmretn WebMenu
+        #Translate = False
         Tag = "Pharmacy Return"
-        Text = ("Pharmacy Return")
+        Text = "Pharmacy Return"
       }
     }
     { mnurextrecept WebMenu
@@ -57,6 +58,7 @@
         Text = ("Reporting")
       }
       { mnusercollect WebMenu
+        Tag = "User Collection"
         Text = ("Submission")
       }
     }
@@ -64,9 +66,12 @@
       Text = ("Entry Records")
     }
     { mnuclaimup WebMenu
-      Text = ("Claim Upload")
+      #Translate = False
+      Tag = "HI Upload"
+      Text = "Claim Upload"
     }
     { mnussfup WebMenu
+      Tag = "SSF Upload"
       Text = ("SSF Upload")
     }
   }
@@ -85,9 +90,11 @@
       Text = ("Bed Occupancy")
     }
     { mnuopdlist WebMenu
+      Tag = "Consultation List"
       Text = ("Consultation")
     }
     { mnuopvisits WebMenu
+      Tag = "OPD Visit List"
       Text = ("OP Visits")
     }
     { mnusavedrepo WebMenu
@@ -109,6 +116,10 @@
       Tag = "FollowUp List"
       Text = ("FollowUp List")
     }
+    { mnuonlinebook WebMenu
+      Tag = "Paid Online Bookings"
+      Text = ("Web Booking")
+    }
     { WebMenu4 WebMenu
     }
     { mnuplanproced WebMenu
@@ -126,7 +137,35 @@
     { WebMenu8 WebMenu
     }
     { mnureferral WebMenu
+      Tag = "Remote referrals"
       Text = ("Referrals (Remote)")
+    }
+  }
+  { mnucustquery WebMenu
+    Tag = "Query Report"
+    Text = ("CustQuery")
+    { mnucust1 WebMenu
+      Visible = False
+      Text = ("AccountReport1")
+    }
+    { mnucust2 WebMenu
+      Visible = False
+      Text = ("AccountReport2")
+    }
+    { mnucust3 WebMenu
+      Visible = False
+      Text = ("AccountReport3")
+    }
+    { mnucust4 WebMenu
+      Visible = False
+      Text = ("AccountReport4")
+    }
+    { mnucust5 WebMenu
+      Visible = False
+      Text = ("AccountReport5")
+    }
+    { mnuaccrepset WebMenu
+      Text = ("Custom Setting")
     }
   }
   { mnuparam WebMenu
@@ -159,6 +198,7 @@
       Image = "icon:/small/user"
     }
     { mnupersonal WebMenu
+      Tag = "Personal Page"
       Text = ("Personal Page")
     }
     { mnuclearcache WebMenu

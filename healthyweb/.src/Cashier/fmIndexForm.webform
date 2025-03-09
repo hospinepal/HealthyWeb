@@ -3,7 +3,6 @@
 { WebForm WebForm
   #MoveScaled(0,0,102,59)
   Class = "widesize-popupform"
-  Height = "60vh"
   Tag = "Index Form"
   Arrangement = Arrange.Horizontal
   Margin = True
@@ -23,6 +22,7 @@
           #MoveScaled(1,1,9,2)
           Width = "6em"
           Text = ("Encounter")
+          Border = True
         }
         { txtencounter WebTextBox
           #MoveScaled(10,1,9,2)
@@ -48,6 +48,7 @@
           #MoveScaled(1,1,11,2)
           Width = "6em"
           Text = ("Encryption")
+          Border = True
         }
         { chkencrypt WebCheckBox
           #MoveScaled(12,1,5,2)
@@ -90,6 +91,7 @@
           #MoveScaled(1,1,9,2)
           Width = "6em"
           Text = ("File No")
+          Border = True
         }
         { txtfileno WebTextBox
           #MoveScaled(10,1,9,2)
@@ -116,6 +118,7 @@
           #MoveScaled(1,1,9,2)
           Width = "6em"
           Text = ("Patient No")
+          Border = True
         }
         { txtpatno WebTextBox
           #MoveScaled(10,1,9,2)
@@ -145,6 +148,7 @@
           #MoveScaled(1,1,9,2)
           Width = "6em"
           Text = ("Name")
+          Border = True
         }
         { txtnamefir WebTextBox
           #MoveScaled(10,1,13,2)
@@ -164,6 +168,7 @@
           #MoveScaled(1,1,11,2)
           Width = "6em"
           Text = ("SurName")
+          Border = True
         }
         { txtnamelast WebTextBox
           #MoveScaled(12,1,13,2)
@@ -192,6 +197,7 @@
           #MoveScaled(1,1,9,2)
           Width = "6em"
           Text = ("District")
+          Border = True
         }
         { cmbdistrict WebComboBox
           #MoveScaled(10,1,13,2)
@@ -218,6 +224,7 @@
           #MoveScaled(1,1,12,2)
           Width = "6em"
           Text = ("Address")
+          Border = True
         }
         { txtaddfir WebComboBox
           #MoveScaled(13,1,13,2)
@@ -247,6 +254,7 @@
           #MoveScaled(1,1,8,2)
           Width = "6em"
           Text = ("Gender")
+          Border = True
         }
         { cmbsex WebComboBox
           #MoveScaled(9,1,13,2)
@@ -267,6 +275,7 @@
           #MoveScaled(1,1,5,2)
           Width = "3em"
           Text = ("Age")
+          Border = True
         }
         { dtdobmain WebButton
           #MoveScaled(6,1,4,2)
@@ -323,6 +332,7 @@
           #MoveScaled(1,1,8,2)
           Width = "6em"
           Text = ("Contact")
+          Border = True
         }
         { txtcontact WebTextBox
           #MoveScaled(9,1,13,2)
@@ -342,6 +352,7 @@
           #MoveScaled(1,1,11,2)
           Width = "6em"
           Text = ("E-Mail")
+          Border = True
         }
         { txtemail WebTextBox
           #MoveScaled(12,1,13,2)
@@ -365,6 +376,7 @@
           #MoveScaled(1,1,8,2)
           Width = "6em"
           Text = ("Guardian")
+          Border = True
         }
         { txtguardian WebTextBox
           #MoveScaled(9,1,13,2)
@@ -384,6 +396,7 @@
           #MoveScaled(1,1,11,2)
           Width = "6em"
           Text = ("Relation")
+          Border = True
         }
         { cmbrelation WebComboBox
           #MoveScaled(12,1,13,2)
@@ -408,6 +421,7 @@
           #MoveScaled(1,1,8,2)
           Width = "6em"
           Text = ("Comment")
+          Border = True
         }
         { txtcomment WebTextBox
           #MoveScaled(9,1,13,2)
@@ -427,6 +441,7 @@
           #MoveScaled(1,1,8,2)
           Width = "6em"
           Text = ("Code/PAN")
+          Border = True
         }
         { txtextcode WebTextBox
           #MoveScaled(9,1,13,2)
@@ -462,6 +477,7 @@
           #MoveScaled(1,1,8,2)
           Width = "6em"
           Text = ("Password")
+          Border = True
         }
         { txtpassword WebTextBox
           #MoveScaled(9,1,13,2)

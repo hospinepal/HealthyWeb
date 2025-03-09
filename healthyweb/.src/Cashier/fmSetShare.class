@@ -464,6 +464,9 @@ Public Sub btnselectuser_Click()
   If xMedUser And If xMedUser.Count Then
     btnconsult.Tag = xMedUser[0]
     btnconsult.Text = xMedUser[1]
+  Else
+    btnconsult.Tag = ""
+    btnconsult.Text = ""
   Endif
 
 End
@@ -476,6 +479,9 @@ Public Sub btnselectuser2_Click()
   If xMedUser And If xMedUser.Count Then
     btnconsult2.Tag = xMedUser[0]
     btnconsult2.Text = xMedUser[1]
+  Else
+    btnconsult2.Tag = ""
+    btnconsult2.Text = ""
   Endif
 
 End
@@ -488,6 +494,9 @@ Public Sub btnselectuser3_Click()
   If xMedUser And If xMedUser.Count Then
     btnconsult3.Tag = xMedUser[0]
     btnconsult3.Text = xMedUser[1]
+  Else
+    btnconsult3.Tag = ""
+    btnconsult3.Text = ""
   Endif
 
 End
@@ -500,6 +509,9 @@ Public Sub btnselectuser4_Click()
   If xMedUser And If xMedUser.Count Then
     btnconsult4.Tag = xMedUser[0]
     btnconsult4.Text = xMedUser[1]
+  Else
+    btnconsult4.Tag = ""
+    btnconsult4.Text = ""
   Endif
 
 End
@@ -512,6 +524,9 @@ Public Sub btnselectuser5_Click()
   If xMedUser And If xMedUser.Count Then
     btnconsult5.Tag = xMedUser[0]
     btnconsult5.Text = xMedUser[1]
+  Else
+    btnconsult5.Tag = ""
+    btnconsult5.Text = ""
   Endif
 
 End
@@ -524,6 +539,9 @@ Public Sub btnselectuser6_Click()
   If xMedUser And If xMedUser.Count Then
     btnconsult6.Tag = xMedUser[0]
     btnconsult6.Text = xMedUser[1]
+  Else
+    btnconsult6.Tag = ""
+    btnconsult6.Text = ""
   Endif
 
 End
@@ -536,6 +554,9 @@ Public Sub btnselectuser7_Click()
   If xMedUser And If xMedUser.Count Then
     btnconsult7.Tag = xMedUser[0]
     btnconsult7.Text = xMedUser[1]
+  Else
+    btnconsult7.Tag = ""
+    btnconsult7.Text = ""
   Endif
 
 End

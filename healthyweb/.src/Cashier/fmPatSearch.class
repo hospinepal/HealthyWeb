@@ -191,7 +191,7 @@ Private Sub FillRegistrationGrid()
     .Columns[10].Width = CStr(125 * modBasic.$AppWidthRatio) & "px"
 
     .Columns[0].Text = "PatientNo"
-    .Columns[1].Text = "Diary No"
+    .Columns[1].Text = "Diary"
     .Columns[2].Text = "Name"
     .Columns[3].Text = "SurName"
     .Columns[4].Text = "Gender"

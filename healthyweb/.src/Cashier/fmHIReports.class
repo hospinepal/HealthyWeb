@@ -18,12 +18,23 @@ Private $sType As String
 
 Public Sub _new(encid As String, sClaim As String, sAccount As String, sYear As String)
 
+  Dim xStatus As String
+
   $encid = encid
   $sClaim = sClaim
   $sAccount = sAccount
   $sYear = sYear
 
   $sType = modNonMedical.GetFixedReferenceFromLedger($sAccount)
+  xStatus = modPatient.CurrentAdmissionStatus($encid)
+  Select xStatus
+    Case "Registered", "Admitted"
+      mnudischarge.Visible = False
+      mnudischupload.Visible = False
+    Case Else
+      mnudischarge.Visible = True
+      mnudischupload.Visible = True
+  End Select
 
   ''Reports
   mnudocs.Visible = True
@@ -120,7 +131,7 @@ Public Sub mnuscanfile_Click()
   Dim hForm As FmScanForm
 
   If $encid Then
-    hForm = New FmScanForm($encid, "Scanned Images")
+    hForm = New FmScanForm($encid, "Scanned Images", "")
     hForm.ShowModal
     ShowDocuments()
   Endif
@@ -134,7 +145,10 @@ Public Sub mnucamera_Click()
 
   sPath = modImage.GetWebCamValue()
   If sPath Then
-    sLongID = modImage.SavePatientFileGeneral($encid, "Scanned Images", "Scanned Images:" & modString.GetDateString(Now()), sPath, False)
+    sLongID = modImage.SavePatientFileGeneral($encid, "Scanned Images", "Scanned Images:" & modString.GetDateString(Now()), sPath)
+    If sLongID Then
+      Me.Exec("Toastify({text: 'File saved', duration: 3000}).showToast()")
+    Endif
     ShowDocuments()
   Endif
 
@@ -305,15 +319,22 @@ Public Sub mnudischarge_Click()
   Dim xPath As String
 
   If $encid Then
-    If modSettings.ShowSettingFromFIle("Discharge Letter/Name") Then
-      hCls = New CReportCustom($encid, "Discharge Letter", "ReportSize", MMain.$defUnit)
+    If Exist(modSettings.ShowSettingFromFIle("Claim Code" & "/" & "BodyPath")) Then
+      hCls = New CReportCustom($encid, "Claim Code", "ReportSize", MMain.$defUnit)
       hCls.Preview()
     Else
-      xvarList = ListViewMulti($encid)
-      If xvarList Then
-        xPath = modPatReports.ShowDischargeReport($encid, xvarList[0], xvarList[2], xvarList[1], MMain.$defUnit)
-        modControlSub.OpenHTMLPreview($encid, xPath, "ReportSize")
+
+      If modSettings.ShowSettingFromFIle("Discharge Letter/Name") Then
+        hCls = New CReportCustom($encid, "Discharge Letter", "ReportSize", MMain.$defUnit)
+        hCls.Preview()
+      Else
+        xvarList = ListViewMulti($encid)
+        If xvarList Then
+          xPath = modPatReports.ShowDischargeReport($encid, xvarList[0], xvarList[2], xvarList[1], MMain.$defUnit)
+          modControlSub.OpenHTMLPreview($encid, xPath, "ReportSize")
+        Endif
       Endif
+
     Endif
   Endif
 
@@ -325,7 +346,7 @@ Public Sub btnupload_Click()
   Select $sType
     Case "Claim Code"
       UploadHIDocs()
-    Case "Accident SSF", "Medical SSF"
+    Case "Accident SSF", "Medical SSF", "Critical SSF"
       UploadSSfDocs()
   End Select
 
@@ -340,7 +361,7 @@ Private Function GetClaimFilesList() As String[]
   fileList = New Long[]
   For iRow = 0 To GridView1.Count - 1
     If GridView1.IsSelected(iRow) = True Then
-      $rData.MoveTo(GridView1.Selection[0])
+      $rData.MoveTo(iRow)
       xFPath = modImage.GetBlobFileData($rData["fldid"], $tblpatreport)
       If xFPath And If Exist(xFPath) Then
 
@@ -497,13 +518,13 @@ Public Sub mnupresupload_Click()
     If xPath And If Exist(xPath) Then
       sPath = modPrint.ConvertHTMLToPDFString(xPath, "ReportSize")
       If sPath And If Exist(sPath) Then
-        sDocID = modImage.SavePatientFileGeneral($encid, "General Reports", "OPD Prescription", sPath, True, modReportVar.$ReportHash)
+        sDocID = modImage.SavePatientFileGeneral($encid, "General Reports", "OPD Prescription", sPath, modReportVar.$ReportHash)
         If sDocID Then
           Select $sType
             Case "Claim Code"
               hForm = New FmClaimForm(sDocID, "Report", $tblpatreport, False, $sClaim)
               hForm.ShowModal
-            Case "Accident SSF", "Medical SSF"
+            Case "Accident SSF", "Medical SSF", "Critical SSF"
               hForm1 = New CssfAPIAttach($encid, $sClaim)
               hForm1.AddDocuments([sPath])
               xmsg = hForm1.GetUploadDocs()
@@ -513,6 +534,10 @@ Public Sub mnupresupload_Click()
           End Select
           ShowDocuments()
         Endif
+      Endif
+
+      If sDocID Then
+        Me.Exec("Toastify({text: 'File saved', duration: 3000}).showToast()")
       Endif
     Endif
 
@@ -532,26 +557,33 @@ Public Sub mnudischupload_Click()
   Dim xmsg As String
 
   If $encid Then
-    If modSettings.ShowSettingFromFIle("Discharge Letter/Name") Then
-      hCls = New CReportCustom($encid, "Discharge Letter", "ReportSize", MMain.$defUnit)
+    If Exist(modSettings.ShowSettingFromFIle("Claim Code" & "/" & "BodyPath")) Then
+      hCls = New CReportCustom($encid, "Claim Code", "ReportSize", MMain.$defUnit)
       xPath = hCls.NewHTMLPath()
     Else
-      xvarList = ListViewMulti($encid)
-      If xvarList Then
-        xPath = modPatReports.ShowDischargeReport($encid, xvarList[0], xvarList[2], xvarList[1], MMain.$defUnit)
+
+      If modSettings.ShowSettingFromFIle("Discharge Letter/Name") Then
+        hCls = New CReportCustom($encid, "Discharge Letter", "ReportSize", MMain.$defUnit)
+        xPath = hCls.NewHTMLPath()
+      Else
+        xvarList = ListViewMulti($encid)
+        If xvarList Then
+          xPath = modPatReports.ShowDischargeReport($encid, xvarList[0], xvarList[2], xvarList[1], MMain.$defUnit)
+        Endif
       Endif
+
     Endif
 
     If xPath And If Exist(xPath) Then
       sPath = modPrint.ConvertHTMLToPDFString(xPath, "ReportSize")
       If sPath And If Exist(sPath) Then
-        sDocID = modImage.SavePatientFileGeneral($encid, "General Reports", "Discharge Letter", sPath, True, modReportVar.$ReportHash)
+        sDocID = modImage.SavePatientFileGeneral($encid, "General Reports", "Discharge Letter", sPath, modReportVar.$ReportHash)
         If sDocID Then
           Select $sType
             Case "Claim Code"
               hForm = New FmClaimForm(sDocID, "Report", $tblpatreport, False, $sClaim)
               hForm.ShowModal
-            Case "Accident SSF", "Medical SSF"
+            Case "Accident SSF", "Medical SSF", "Critical SSF"
               hForm1 = New CssfAPIAttach($encid, $sClaim)
               hForm1.AddDocuments([sPath])
               xmsg = hForm1.GetUploadDocs()
@@ -561,6 +593,10 @@ Public Sub mnudischupload_Click()
           End Select
           ShowDocuments()
         Endif
+      Endif
+
+      If sDocID Then
+        Me.Exec("Toastify({text: 'File saved', duration: 3000}).showToast()")
       Endif
     Endif
 
@@ -674,7 +710,7 @@ Public Sub btnuploadinv_Click()
   Select $sType
     Case "Claim Code"
       UploadHIInvoices()
-    Case "Accident SSF", "Medical SSF"
+    Case "Accident SSF", "Medical SSF", "Critical SSF"
       UploadSSFInvoices()
   End Select
 

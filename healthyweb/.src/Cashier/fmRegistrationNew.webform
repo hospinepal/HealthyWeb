@@ -1,7 +1,7 @@
 # Gambas Form File 3.0
 
 { WebForm WebForm
-  #MoveScaled(0,0,98,87)
+  #MoveScaled(0,0,104,87)
   Height = "80vh"
   Tag = "Recording Form"
   Arrangement = Arrange.Horizontal
@@ -199,12 +199,12 @@
         }
       }
       { WebContainer34 WebContainer
-        #MoveScaled(40,1,47,4)
+        #MoveScaled(40,1,51,4)
         Class = "size-tablet less-container-margin"
         Arrangement = Arrange.Horizontal
         { WebLabel8 WebLabel
           #MoveScaled(1,1,5,2)
-          Width = "4em"
+          Width = "5em"
           Text = ("Age ")
           Border = True
         }
@@ -224,24 +224,32 @@
           Width = "4em"
           Height = "2em"
         }
+        { WebContainer61 WebContainer
+          #MoveScaled(22,1,3,2)
+          Width = "1em"
+        }
         { txtmonths WebValueBox
-          #MoveScaled(22,1,6,2)
+          #MoveScaled(25,1,6,2)
           Width = "4em"
           Height = "2em"
         }
         { btnmon WebButton
-          #MoveScaled(28,1,6,2)
+          #MoveScaled(31,1,6,2)
           Width = "4em"
           Height = "2em"
         }
         { btnnepdate WebButton
-          #MoveScaled(34,1,4,2)
+          #MoveScaled(37,1,4,2)
           Width = "2em"
           Height = "2em"
           Image = "icon:/32/calendar"
         }
+        { WebContainer67 WebContainer
+          #MoveScaled(41,1,3,2)
+          Width = "2em"
+        }
         { chknull WebCheckBox
-          #MoveScaled(38,1,4,2)
+          #MoveScaled(44,1,4,2)
           Height = "2em"
           Expand = True
           Text = ("Null")
@@ -285,7 +293,7 @@
         { WebLabel10 WebLabel
           #MoveScaled(1,1,9,2)
           Width = "7em"
-          Text = ("Address")
+          Text = ("Municipal")
           Border = True
         }
         { txtaddfir WebComboBox

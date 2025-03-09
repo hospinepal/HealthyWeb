@@ -338,7 +338,7 @@
               Width = "4em"
             }
           }
-          { WebContainer39 WebContainer
+          { WebContainer48 WebContainer
             #MoveScaled(1,5,31,4)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
@@ -357,10 +357,6 @@
             { WebContainer25 WebContainer
               #MoveScaled(18,1,4,2)
               Width = "4em"
-            }
-            { txtlastencid WebTextBox
-              #MoveScaled(22,1,6,2)
-              Visible = False
             }
           }
         }
@@ -402,6 +398,10 @@
             { WebContainer27 WebContainer
               #MoveScaled(14,1,4,2.875)
               Width = "4em"
+            }
+            { txtlastencid WebTextBox
+              #MoveScaled(18,1,6,2.875)
+              Visible = False
             }
           }
         }

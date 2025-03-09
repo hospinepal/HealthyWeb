@@ -211,6 +211,9 @@
     { mnuremovrefer WebMenu
       Text = ("Remove Referral")
     }
+    { mnumedhilimit WebMenu
+      Text = ("Medicine Limits")
+    }
     { mnuclearqrcode WebMenu
       Text = ("Clear QR Code")
     }
@@ -1119,6 +1122,7 @@
             #MoveScaled(8,1,12,2)
             Width = "7em"
             Height = "2em"
+            ReadOnly = False
           }
           { txtday WebValueBox
             #MoveScaled(20,1,7,2)

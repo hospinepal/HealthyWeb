@@ -28,12 +28,6 @@
       Text = ("Full Report")
     }
   }
-  { mnuactivity WebMenu
-    Text = ("Activity")
-    { mnubulkclaim WebMenu
-      Text = ("Bulk Claim")
-    }
-  }
   { WebContainer52 WebContainer
     #MoveScaled(1,1,141,87)
     Class = "height-tablet-prefull"
