@@ -28,6 +28,10 @@ End
 
 Public Sub WebForm_Open()
 
+  If MMain.$WebEntry = True Then
+    modDataRepo.$RepositoryMode = MMain.$AppLogCategory
+    modBasic.$HospCode = MMain.$AppLogString
+  Endif
   modHelpVariable.SetApplicationGUI()
   MMain.GetApplVersionType()
 
@@ -62,7 +66,7 @@ Public Sub WebForm_Open()
   Endif
 
   modBasic.$ClinDietApprove = modGlobalSetting.ShowSettingFromDB("ClinicForms/User_DietApproval")
-  modAMISRep.$AyurvedicDiagnosis = modHelpVariable.$docsDirectory &/ "ayurvedicdisease.csv"
+  modAyurv.$AyurvedicDiagnosis = modHelpVariable.$docsDirectory &/ "ayurvedicdisease.csv"
   SetFormAccess()
   DefaultFormLoad()
 
@@ -81,18 +85,23 @@ End
 Private Sub SetFormAccess()
 
   modGeneralMain.ShowSelectedFormMenu(mnuhmis)
-  modGeneralMain.ShowSelectedFormMenu(mnuaccrepoall)
   modGeneralMain.ShowSelectedFormMenu(fmpatlist)
   modGeneralMain.ShowSelectedFormMenu(mnudept)
   modGeneralMain.ShowSelectedFormMenu(mnubedocc)
-  modGeneralMain.ShowSelectedFormMenu(mnuipdates)
-  modGeneralMain.ShowSelectedFormMenu(mnutrans)
+  modGeneralMain.ShowSelectedFormMenu(mnuopdlist)
+  modGeneralMain.ShowSelectedFormMenu(mnuopvisits)
 
   modGeneralMain.ShowSelectedFormMenu(mnuconsreport)
+  modGeneralMain.ShowSelectedFormMenu(mnuopvisit)
+  modGeneralMain.ShowSelectedFormMenu(mnuipdates)
+  modGeneralMain.ShowSelectedFormMenu(mnutrans)
+  modGeneralMain.ShowSelectedFormMenu(mnuconfine)
+
   modGeneralMain.ShowSelectedFormMenu(mnuprocerepo)
   modGeneralMain.ShowSelectedFormMenu(mnuequiprepo)
+  modGeneralMain.ShowSelectedFormMenu(mnudeviceuse)
   modGeneralMain.ShowSelectedFormMenu(mnumedquery)
-  modGeneralMain.ShowSelectedFormMenu(mnuconfine)
+  modGeneralMain.ShowSelectedFormMenu(mnunutrition)
 
   modGeneralMain.ShowSelectedFormMenu(mnuexamall)
   modGeneralMain.ShowSelectedFormMenu(mnucustdept)
@@ -107,16 +116,24 @@ Private Sub SetFormAccess()
   modGeneralMain.ShowSelectedFormMenu(mnupacsrepo)
   modGeneralMain.ShowSelectedFormMenu(mnusearchdb)
 
-  modGeneralMain.ShowSelectedFormMenu(mnugeneric)
+  modGeneralMain.ShowSelectedFormMenu(mnuaccrepoall)
   modGeneralMain.ShowSelectedFormMenu(mnuserv)
   modGeneralMain.ShowSelectedFormMenu(mnugrpreport)
   modGeneralMain.ShowSelectedFormMenu(mnufacultyrepo)
+  modGeneralMain.ShowSelectedFormMenu(mnugeneric)
   modGeneralMain.ShowSelectedFormMenu(mnusharing)
   modGeneralMain.ShowSelectedFormMenu(mnubill)
+  modGeneralMain.ShowSelectedFormMenu(mnubillsummary)
   modGeneralMain.ShowSelectedFormMenu(mnudeposit)
   modGeneralMain.ShowSelectedFormMenu(mnuvouchers)
+  modGeneralMain.ShowSelectedFormMenu(mnupur)
   modGeneralMain.ShowSelectedFormMenu(mnuinventory)
   modGeneralMain.ShowSelectedFormMenu(mnutransfer)
+  modGeneralMain.ShowSelectedFormMenu(mnumedsales)
+  modGeneralMain.ShowSelectedFormMenu(mnuarchive)
+
+  modGeneralMain.ShowSelectedFormMenu(mnucustreport)
+  modGeneralMain.ShowSelectedFormMenu(mnupersonal)
 
 End
 
@@ -230,8 +247,10 @@ Public Sub mnucust1_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust1.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust1.Tag, Workspace1)
 
 End
 
@@ -239,8 +258,10 @@ Public Sub mnucust2_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust2.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust2.Tag, Workspace1)
 
 End
 
@@ -248,8 +269,10 @@ Public Sub mnucust3_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust3.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust3.Tag, Workspace1)
 
 End
 
@@ -257,8 +280,10 @@ Public Sub mnucust4_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust4.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust4.Tag, Workspace1)
 
 End
 
@@ -266,8 +291,10 @@ Public Sub mnucust5_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust5.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust5.Tag, Workspace1)
 
 End
 
@@ -278,6 +305,17 @@ Public Sub mnucustsetting_Click()
 End
 
 ''=======================================
+Public Sub mnudashmain_Click()
+
+  Dim hForm As FmSummaryChart
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmSummaryChart(Workspace1)
+
+End
+
 Public Sub mnuhmis_Click()
 
   Dim hForm As FmHMISRepo

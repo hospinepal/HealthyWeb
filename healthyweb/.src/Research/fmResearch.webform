@@ -9,6 +9,9 @@
   Title = ("Research Desk")
   { mnurepo WebMenu
     Text = ("Patient")
+    { mnudashmain WebMenu
+      Text = ("Dashboard")
+    }
     { mnuhmis WebMenu
       Tag = "HMIS Report"
       Text = ("HMIS Report")
@@ -22,12 +25,15 @@
       Text = ("Visit Master")
     }
     { mnubedocc WebMenu
+      Tag = "Bed Occupancy"
       Text = ("Occupancy")
     }
     { mnuopdlist WebMenu
+      Tag = "Consultation List"
       Text = ("Consultation")
     }
     { mnuopvisits WebMenu
+      Tag = "OPD Visit List"
       Text = ("OP Visits")
     }
   }
@@ -38,6 +44,7 @@
       Text = ("Consultations")
     }
     { mnuopvisit WebMenu
+      Tag = "OP Visit Report"
       Text = ("OP Services")
     }
     { mnuipdates WebMenu
@@ -64,6 +71,7 @@
       Text = ("Equipments")
     }
     { mnudeviceuse WebMenu
+      Tag = "Event Report"
       Text = ("Device Usage")
     }
     { mnumedquery WebMenu
@@ -71,6 +79,7 @@
       Text = ("Prescriptions")
     }
     { mnunutrition WebMenu
+      Tag = "Diet Report"
       Text = ("Nutrition")
     }
   }
@@ -101,11 +110,11 @@
     Text = ("Query")
     { mnurecord WebMenu
       Tag = "Medical Report"
-      Text = ("Med Report")
+      Text = ("Medical Report")
     }
     { mnuquery WebMenu
       Tag = "Medical Query"
-      Text = ("Med Query")
+      Text = ("Medical Query")
     }
     { mnuclinsearch WebMenu
       Tag = "Text Search"
@@ -148,30 +157,42 @@
     { mnuservrelated WebMenu
       Text = ("Service Related")
       { mnuserv WebMenu
+        Tag = "Service Report"
         Text = ("Service Report")
       }
       { mnugrpreport WebMenu
+        Tag = "Group Report"
         Text = ("Group Report")
       }
       { mnufacultyrepo WebMenu
+        Tag = "Faculty Report"
         Text = ("Faculty Report")
       }
       { mnugeneric WebMenu
+        Tag = "Generic Report"
         Text = ("Generic Report")
       }
       { mnusharing WebMenu
+        Tag = "Sharing Report"
         Text = ("Sharing Report")
       }
     }
     { mnuinvrelated WebMenu
       Text = ("Invoice Related")
       { mnubill WebMenu
+        Tag = "Billing Report"
         Text = ("Billing Report")
       }
+      { mnubillsummary WebMenu
+        Tag = "Billing Summary"
+        Text = ("Billing Summary")
+      }
       { mnudeposit WebMenu
+        Tag = "Collection Report"
         Text = ("Deposit Report")
       }
       { mnuvouchers WebMenu
+        Tag = "Voucher Report"
         Text = ("Voucher Report")
       }
       { mnusalesreport WebMenu
@@ -184,21 +205,30 @@
     { mnuinventrelated WebMenu
       Text = ("Inventory Related")
       { mnupur WebMenu
+        Tag = "Supplier Info"
         Text = ("Supplier Info")
       }
       { mnuinventory WebMenu
+        Tag = "Inventory Report"
         Text = ("Inventory Report")
       }
+      { mnumedsales WebMenu
+        Tag = "Pharmacy Sales Report"
+        Text = ("Dispensing Report")
+      }
       { mnutransfer WebMenu
+        Tag = "Transfer Report"
         Text = ("Transfer Report")
       }
     }
-  }
-  { mnucustreport WebMenu
-    Text = ("Report")
     { mnuarchive WebMenu
+      Tag = "Archived Reports"
       Text = ("Archives")
     }
+  }
+  { mnucustreport WebMenu
+    Tag = "Query Report"
+    Text = ("Report")
     { mnucust1 WebMenu
       Visible = False
       Text = ("AccountReport1")
@@ -242,6 +272,7 @@
       Image = "icon:/small/user"
     }
     { mnupersonal WebMenu
+      Tag = "Personal Page"
       Text = ("Personal Page")
     }
     { mnuseract WebMenu

@@ -14,8 +14,9 @@
     Arrangement = Arrange.Horizontal
     { WebLabel2 WebLabel
       #MoveScaled(1,1,8,3)
-      Width = "4em"
+      Width = "6em"
       Text = ("Target")
+      Border = True
     }
     { cmbtarget WebComboBox
       #MoveScaled(9,1,12,3)
@@ -81,6 +82,11 @@
         Height = "2em"
         Text = ("Auto User")
       }
+      { btnclose WebButton
+        #MoveScaled(1,26,9,4)
+        Height = "2em"
+        Text = ("Close")
+      }
     }
     { IconPanel1 WebTabPanel
       #MoveScaled(13,1,91,56)
@@ -95,22 +101,23 @@
         #MoveScaled(1,1,88.75,49)
         Arrangement = Arrange.Row
         { WebContainer5 WebContainer
-          #MoveScaled(1,1,36,47)
+          #MoveScaled(1,1,38,47)
           Class = "size-tablet"
           Arrangement = Arrange.Vertical
           Margin = True
           { WebContainer7 WebContainer
-            #MoveScaled(1,1,34,5)
+            #MoveScaled(1,1,36,5)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel5 WebLabel
               #MoveScaled(1,1,13,3)
               Expand = True
               Text = ("Consultation")
+              Border = True
             }
             { cmbautoconsult WebComboBox
               #MoveScaled(14,1,12,3)
-              Width = "7em"
+              Width = "8em"
               Height = "2em"
               ReadOnly = False
             }
@@ -120,19 +127,24 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
+            { WebContainer77 WebContainer
+              #MoveScaled(30,1,3,3)
+              Width = "2em"
+            }
           }
           { WebContainer6 WebContainer
-            #MoveScaled(1,6,34,5)
+            #MoveScaled(1,6,36,5)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel4 WebLabel
               #MoveScaled(1,1,13,3)
               Expand = True
               Text = ("Bed Charges")
+              Border = True
             }
             { cmbautobed WebComboBox
               #MoveScaled(14,1,12,3)
-              Width = "7em"
+              Width = "8em"
               Height = "2em"
               ReadOnly = False
             }
@@ -142,19 +154,24 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
+            { WebContainer78 WebContainer
+              #MoveScaled(30,1,3,3)
+              Width = "2em"
+            }
           }
           { WebContainer8 WebContainer
-            #MoveScaled(1,11,34,5)
+            #MoveScaled(1,11,36,5)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel3 WebLabel
               #MoveScaled(1,1,14,3)
               Expand = True
               Text = ("Gen Services")
+              Border = True
             }
             { cmbautogenserv WebComboBox
               #MoveScaled(15,1,12,3)
-              Width = "7em"
+              Width = "8em"
               Height = "2em"
               ReadOnly = False
             }
@@ -164,19 +181,24 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
+            { WebContainer84 WebContainer
+              #MoveScaled(31,1,3,3)
+              Width = "2em"
+            }
           }
           { WebContainer9 WebContainer
-            #MoveScaled(1,16,34,5)
+            #MoveScaled(1,16,36,5)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel1 WebLabel
               #MoveScaled(1,1,14,3)
               Expand = True
               Text = ("Equipment")
+              Border = True
             }
             { cmbautoequip WebComboBox
               #MoveScaled(15,1,12,3)
-              Width = "7em"
+              Width = "8em"
               Height = "2em"
               ReadOnly = False
             }
@@ -186,19 +208,24 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
+            { WebContainer87 WebContainer
+              #MoveScaled(31,1,3,3)
+              Width = "2em"
+            }
           }
           { WebContainer38 WebContainer
-            #MoveScaled(1,21,34,5)
+            #MoveScaled(1,21,36,5)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel25 WebLabel
               #MoveScaled(1,1,14,3)
               Expand = True
               Text = ("Radiology")
+              Border = True
             }
             { cmbautoradio WebComboBox
               #MoveScaled(15,1,12,3)
-              Width = "7em"
+              Width = "8em"
               Height = "2em"
               ReadOnly = False
             }
@@ -208,19 +235,24 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
+            { WebContainer88 WebContainer
+              #MoveScaled(31,1,3,3)
+              Width = "2em"
+            }
           }
           { WebContainer39 WebContainer
-            #MoveScaled(1,26,34,5)
+            #MoveScaled(1,26,36,5)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel34 WebLabel
               #MoveScaled(1,1,14,3)
               Expand = True
               Text = ("Laboratory")
+              Border = True
             }
             { cmbautolab WebComboBox
               #MoveScaled(15,1,12,3)
-              Width = "7em"
+              Width = "8em"
               Height = "2em"
               ReadOnly = False
             }
@@ -230,19 +262,24 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
+            { WebContainer89 WebContainer
+              #MoveScaled(31,1,3,3)
+              Width = "2em"
+            }
           }
           { WebContainer40 WebContainer
-            #MoveScaled(1,31,34,5)
+            #MoveScaled(1,31,36,5)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel35 WebLabel
               #MoveScaled(1,1,14,3)
               Expand = True
               Text = ("Procedure")
+              Border = True
             }
             { cmbautoproc WebComboBox
               #MoveScaled(15,1,12,3)
-              Width = "7em"
+              Width = "8em"
               Height = "2em"
               ReadOnly = False
             }
@@ -252,19 +289,24 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
+            { WebContainer90 WebContainer
+              #MoveScaled(31,1,3,3)
+              Width = "2em"
+            }
           }
           { WebContainer85 WebContainer
-            #MoveScaled(1,36,34,5)
+            #MoveScaled(1,36,36,5)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel65 WebLabel
               #MoveScaled(1,1,15,3)
               Expand = True
               Text = ("Pharmacy")
+              Border = True
             }
             { cmbautopharm WebComboBox
               #MoveScaled(16,1,12,3)
-              Width = "7em"
+              Width = "8em"
               Height = "2em"
               ReadOnly = False
             }
@@ -274,19 +316,24 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
+            { WebContainer91 WebContainer
+              #MoveScaled(32,1,3,3)
+              Width = "2em"
+            }
           }
           { WebContainer86 WebContainer
-            #MoveScaled(1,41,34,5)
+            #MoveScaled(1,41,36,5)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel66 WebLabel
               #MoveScaled(1,1,15,3)
               Expand = True
               Text = ("Other Items")
+              Border = True
             }
             { cmbautoother WebComboBox
               #MoveScaled(16,1,12,3)
-              Width = "7em"
+              Width = "8em"
               Height = "2em"
               ReadOnly = False
             }
@@ -296,10 +343,14 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
+            { WebContainer92 WebContainer
+              #MoveScaled(32,1,3,3)
+              Width = "2em"
+            }
           }
         }
         { WebContainer11 WebContainer
-          #MoveScaled(37,1,37,47)
+          #MoveScaled(39,1,37,47)
           Class = "size-tablet"
           Arrangement = Arrange.Vertical
           Margin = True
@@ -311,10 +362,11 @@
               #MoveScaled(1,1,13,3)
               Expand = True
               Text = ("Save Zero Cash")
+              Border = True
             }
             { cmbautosave WebComboBox
               #MoveScaled(14,1,12,3)
-              Width = "7em"
+              Width = "8em"
               Height = "2em"
               ReadOnly = False
             }
@@ -323,6 +375,10 @@
               Width = "2em"
               Height = "2em"
               Image = "icon:/small/apply"
+            }
+            { WebContainer76 WebContainer
+              #MoveScaled(30,1,3,3)
+              Width = "2em"
             }
           }
           { WebContainer70 WebContainer
@@ -333,10 +389,11 @@
               #MoveScaled(1,1,13,3)
               Expand = True
               Text = ("Save FullCredit")
+              Border = True
             }
             { cmbcredtsave WebComboBox
               #MoveScaled(14,1,12,3)
-              Width = "7em"
+              Width = "8em"
               Height = "2em"
               Tooltip = ("Select to enable auto save of service is 100% credit")
               ReadOnly = False
@@ -347,6 +404,10 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
+            { WebContainer75 WebContainer
+              #MoveScaled(30,1,3,3)
+              Width = "2em"
+            }
           }
           { WebContainer65 WebContainer
             #MoveScaled(1,11,35,5)
@@ -356,10 +417,11 @@
               #MoveScaled(1,1,13,3)
               Expand = True
               Text = ("Bed Charge")
+              Border = True
             }
             { cmbbedcharge WebComboBox
               #MoveScaled(14,1,12,3)
-              Width = "7em"
+              Width = "8em"
               Height = "2em"
               ReadOnly = False
             }
@@ -368,6 +430,10 @@
               Width = "2em"
               Height = "2em"
               Image = "icon:/small/apply"
+            }
+            { WebContainer74 WebContainer
+              #MoveScaled(30,1,3,3)
+              Width = "2em"
             }
           }
           { WebContainer72 WebContainer
@@ -378,10 +444,11 @@
               #MoveScaled(1,1,13,3)
               Expand = True
               Text = ("Use Own Billing")
+              Border = True
             }
             { cmbuseown WebComboBox
               #MoveScaled(14,1,12,3)
-              Width = "7em"
+              Width = "8em"
               Height = "2em"
               ReadOnly = False
             }
@@ -390,6 +457,10 @@
               Width = "2em"
               Height = "2em"
               Image = "icon:/small/apply"
+            }
+            { WebContainer73 WebContainer
+              #MoveScaled(30,1,3,3)
+              Width = "2em"
             }
           }
         }
@@ -404,6 +475,7 @@
           #MoveScaled(1,1,13,3)
           Width = "6em"
           Text = ("Service")
+          Border = True
         }
         { cmbmodeservice2 WebComboBox
           #MoveScaled(14,1,12,3)
@@ -427,6 +499,10 @@
           Height = "2em"
           Image = "icon:/small/apply"
         }
+        { WebContainer93 WebContainer
+          #MoveScaled(48,1,3,3)
+          Width = "4em"
+        }
       }
       { WebContainer45 WebContainer
         #MoveScaled(1,6,88.75,5)
@@ -436,6 +512,7 @@
           #MoveScaled(1,1,13,3)
           Width = "6em"
           Text = ("Equipment")
+          Border = True
         }
         { cmbmodeequip2 WebComboBox
           #MoveScaled(14,1,12,3)
@@ -459,6 +536,10 @@
           Height = "2em"
           Image = "icon:/small/apply"
         }
+        { WebContainer94 WebContainer
+          #MoveScaled(48,1,3,3)
+          Width = "4em"
+        }
       }
       { WebContainer43 WebContainer
         #MoveScaled(1,11,88.75,5)
@@ -468,6 +549,7 @@
           #MoveScaled(1,1,13,3)
           Width = "6em"
           Text = ("Radiology")
+          Border = True
         }
         { cmbmoderadio2 WebComboBox
           #MoveScaled(14,1,12,3)
@@ -491,6 +573,10 @@
           Height = "2em"
           Image = "icon:/small/apply"
         }
+        { WebContainer95 WebContainer
+          #MoveScaled(48,1,3,3)
+          Width = "4em"
+        }
       }
       { WebContainer41 WebContainer
         #MoveScaled(1,16,88.75,5)
@@ -500,6 +586,7 @@
           #MoveScaled(1,1,13,3)
           Width = "6em"
           Text = ("Laboratory")
+          Border = True
         }
         { cmbmodelab2 WebComboBox
           #MoveScaled(14,1,12,3)
@@ -523,6 +610,10 @@
           Height = "2em"
           Image = "icon:/small/apply"
         }
+        { WebContainer96 WebContainer
+          #MoveScaled(48,1,3,3)
+          Width = "4em"
+        }
       }
       { WebContainer27 WebContainer
         #MoveScaled(1,21,88.75,5)
@@ -532,6 +623,7 @@
           #MoveScaled(1,1,13,3)
           Width = "6em"
           Text = ("Procedure")
+          Border = True
         }
         { cmbmodeproc2 WebComboBox
           #MoveScaled(14,1,12,3)
@@ -555,6 +647,10 @@
           Height = "2em"
           Image = "icon:/small/apply"
         }
+        { WebContainer97 WebContainer
+          #MoveScaled(48,1,3,3)
+          Width = "4em"
+        }
       }
       { WebContainer24 WebContainer
         #MoveScaled(1,26,88.75,5)
@@ -564,6 +660,7 @@
           #MoveScaled(1,1,13,3)
           Width = "6em"
           Text = ("Pharmacy")
+          Border = True
         }
         { cmbmodepharmacy2 WebComboBox
           #MoveScaled(14,1,12,3)
@@ -587,6 +684,10 @@
           Height = "2em"
           Image = "icon:/small/apply"
         }
+        { WebContainer98 WebContainer
+          #MoveScaled(48,1,3,3)
+          Width = "4em"
+        }
       }
       { WebContainer22 WebContainer
         #MoveScaled(1,31,88.75,5)
@@ -596,6 +697,7 @@
           #MoveScaled(1,1,13,3)
           Width = "6em"
           Text = ("Others")
+          Border = True
         }
         { cmbmodeother2 WebComboBox
           #MoveScaled(14,1,12,3)
@@ -619,6 +721,10 @@
           Height = "2em"
           Image = "icon:/small/apply"
         }
+        { WebContainer99 WebContainer
+          #MoveScaled(48,1,3,3)
+          Width = "4em"
+        }
       }
       Index = 2
       Text = ("Depo")
@@ -630,6 +736,7 @@
           #MoveScaled(1,1,13,3)
           Width = "9em"
           Text = ("Pharmacy")
+          Border = True
         }
         { cmbdepopharm WebComboBox
           #MoveScaled(14,1,12,3)
@@ -652,6 +759,7 @@
           #MoveScaled(1,1,13,3)
           Width = "9em"
           Text = ("Equipment")
+          Border = True
         }
         { cmbdepoequip WebComboBox
           #MoveScaled(14,1,12,3)
@@ -674,6 +782,7 @@
           #MoveScaled(1,1,13,3)
           Width = "9em"
           Text = ("Radiology")
+          Border = True
         }
         { cmbdeporadio WebComboBox
           #MoveScaled(14,1,12,3)
@@ -696,6 +805,7 @@
           #MoveScaled(1,1,13,3)
           Width = "9em"
           Text = ("Laboratory")
+          Border = True
         }
         { cmbdepolab WebComboBox
           #MoveScaled(14,1,12,3)
@@ -718,6 +828,7 @@
           #MoveScaled(1,1,13,3)
           Width = "9em"
           Text = ("Procedure")
+          Border = True
         }
         { cmbdepoproc WebComboBox
           #MoveScaled(14,1,12,3)
@@ -740,6 +851,7 @@
           #MoveScaled(1,1,13,3)
           Width = "9em"
           Text = ("Others")
+          Border = True
         }
         { cmbdepoother WebComboBox
           #MoveScaled(14,1,12,3)
@@ -762,6 +874,7 @@
           #MoveScaled(1,1,13,3)
           Width = "9em"
           Text = ("Services")
+          Border = True
         }
         { cmbdeposerv WebComboBox
           #MoveScaled(14,1,12,3)
@@ -785,6 +898,7 @@
           Width = "9em"
           Height = "2em"
           Text = ("Discharge on")
+          Border = True
         }
         { cmbdischarge WebComboBox
           #MoveScaled(15,1,12,3)
@@ -807,6 +921,7 @@
         Arrangement = Arrange.Horizontal
         { WebLabel20 WebLabel
           #MoveScaled(1,1,36,3)
+          Height = "2em"
           Expand = True
           Text = ("Rounding of Duration")
         }
@@ -819,6 +934,7 @@
           #MoveScaled(1,1,11,3)
           Width = "6em"
           Text = ("Service")
+          Border = True
         }
         { chkservmin WebCheckBox
           #MoveScaled(12,1,10,3)
@@ -828,19 +944,19 @@
         }
         { chkservhour WebCheckBox
           #MoveScaled(22,1,10,3)
-          Width = "5em"
+          Width = "6em"
           Height = "2em"
           Text = ("Hour")
         }
         { chkservday WebCheckBox
           #MoveScaled(32,1,10,3)
-          Width = "5em"
+          Width = "6em"
           Height = "2em"
           Text = ("Day")
         }
         { cmbsmartserv WebComboBox
           #MoveScaled(42,1,12,3)
-          Width = "8em"
+          Width = "10em"
           Height = "2em"
           ReadOnly = False
         }
@@ -849,6 +965,10 @@
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/apply"
+        }
+        { WebContainer100 WebContainer
+          #MoveScaled(58,1,3,3)
+          Width = "4em"
         }
       }
       { WebContainer15 WebContainer
@@ -859,6 +979,7 @@
           #MoveScaled(1,1,11,3)
           Width = "6em"
           Text = ("Equipment")
+          Border = True
         }
         { chkequimin WebCheckBox
           #MoveScaled(12,1,10,3)
@@ -868,19 +989,19 @@
         }
         { chkequihour WebCheckBox
           #MoveScaled(22,1,10,3)
-          Width = "5em"
+          Width = "6em"
           Height = "2em"
           Text = ("Hour")
         }
         { chkequiday WebCheckBox
           #MoveScaled(32,1,10,3)
-          Width = "5em"
+          Width = "6em"
           Height = "2em"
           Text = ("Day")
         }
         { cmbsmartequip WebComboBox
           #MoveScaled(42,1,12,3)
-          Width = "8em"
+          Width = "10em"
           Height = "2em"
           ReadOnly = False
         }
@@ -889,6 +1010,10 @@
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/apply"
+        }
+        { WebContainer101 WebContainer
+          #MoveScaled(58,1,3,3)
+          Width = "4em"
         }
       }
       { WebContainer34 WebContainer
@@ -901,6 +1026,7 @@
         Arrangement = Arrange.Horizontal
         { WebLabel21 WebLabel
           #MoveScaled(1,1,36,3)
+          Height = "2em"
           Expand = True
           Text = ("Inpatient Charges")
         }
@@ -913,6 +1039,7 @@
           #MoveScaled(1,1,21,3)
           Width = "9em"
           Text = ("Bed Use Charge")
+          Border = True
         }
         { cmbservbed WebComboBox
           #MoveScaled(22,1,12,3)
@@ -946,6 +1073,10 @@
           Height = "2em"
           Image = "icon:/small/apply"
         }
+        { WebContainer102 WebContainer
+          #MoveScaled(66,1,3,3)
+          Width = "4em"
+        }
       }
       { WebContainer66 WebContainer
         #MoveScaled(1,30,88.75,5)
@@ -955,6 +1086,7 @@
           #MoveScaled(1,1,21,3)
           Width = "9em"
           Text = ("IP Round Charge")
+          Border = True
         }
         { cmbservround WebComboBox
           #MoveScaled(22,1,12,3)
@@ -988,6 +1120,10 @@
           Height = "2em"
           Image = "icon:/small/apply"
         }
+        { WebContainer103 WebContainer
+          #MoveScaled(66,1,3,3)
+          Width = "4em"
+        }
       }
       Index = 4
       Text = ("User")
@@ -1005,7 +1141,7 @@
             Arrangement = Arrange.Horizontal
             { WebLabel19 WebLabel
               #MoveScaled(1,1,15,2)
-              Height = "0em"
+              Height = "2em"
               Font = "bold"
               Text = ("Payable User")
             }
@@ -1016,8 +1152,9 @@
             Arrangement = Arrange.Horizontal
             { WebLabel46 WebLabel
               #MoveScaled(1,1,12,2)
-              Expand = True
+              Width = "10em"
               Text = ("Service")
+              Border = True
             }
             { cmbpayservice WebComboBox
               #MoveScaled(13,1,12,2)
@@ -1033,7 +1170,7 @@
             }
             { WebContainer59 WebContainer
               #MoveScaled(29,1,4,2)
-              Width = "1em"
+              Width = "2em"
             }
           }
           { WebContainer79 WebContainer
@@ -1042,8 +1179,9 @@
             Arrangement = Arrange.Horizontal
             { WebLabel43 WebLabel
               #MoveScaled(1,1,12,2)
-              Expand = True
+              Width = "10em"
               Text = ("Equipment")
+              Border = True
             }
             { cmbpayequip WebComboBox
               #MoveScaled(13,1,12,2)
@@ -1057,9 +1195,9 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
-            { WebContainer58 WebContainer
+            { WebContainer10 WebContainer
               #MoveScaled(29,1,4,2)
-              Width = "1em"
+              Width = "2em"
             }
           }
           { WebContainer67 WebContainer
@@ -1068,8 +1206,9 @@
             Arrangement = Arrange.Horizontal
             { WebLabel42 WebLabel
               #MoveScaled(1,1,12,2)
-              Expand = True
+              Width = "10em"
               Text = ("Radiology")
+              Border = True
             }
             { cmbpayradio WebComboBox
               #MoveScaled(13,1,12,2)
@@ -1083,9 +1222,9 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
-            { WebContainer60 WebContainer
+            { WebContainer53 WebContainer
               #MoveScaled(29,1,4,2)
-              Width = "1em"
+              Width = "2em"
             }
           }
           { WebContainer33 WebContainer
@@ -1094,8 +1233,9 @@
             Arrangement = Arrange.Horizontal
             { WebLabel41 WebLabel
               #MoveScaled(1,1,12,2)
-              Expand = True
+              Width = "10em"
               Text = ("Laboratory")
+              Border = True
             }
             { cmbpaylab WebComboBox
               #MoveScaled(13,1,12,2)
@@ -1109,9 +1249,9 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
-            { WebContainer61 WebContainer
+            { WebContainer54 WebContainer
               #MoveScaled(29,1,4,2)
-              Width = "1em"
+              Width = "2em"
             }
           }
           { WebContainer32 WebContainer
@@ -1120,8 +1260,9 @@
             Arrangement = Arrange.Horizontal
             { WebLabel13 WebLabel
               #MoveScaled(1,1,12,2)
-              Expand = True
+              Width = "10em"
               Text = ("Procedure")
+              Border = True
             }
             { cmbpayproc WebComboBox
               #MoveScaled(13,1,12,2)
@@ -1135,9 +1276,9 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
-            { WebContainer62 WebContainer
+            { WebContainer55 WebContainer
               #MoveScaled(29,1,4,2)
-              Width = "1em"
+              Width = "2em"
             }
           }
           { WebContainer31 WebContainer
@@ -1146,8 +1287,9 @@
             Arrangement = Arrange.Horizontal
             { WebLabel12 WebLabel
               #MoveScaled(1,1,12,2)
-              Expand = True
+              Width = "10em"
               Text = ("Lock Payable")
+              Border = True
             }
             { cmblockpayable WebComboBox
               #MoveScaled(13,1,12,2)
@@ -1161,9 +1303,9 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
-            { WebContainer63 WebContainer
+            { WebContainer56 WebContainer
               #MoveScaled(29,1,4,2)
-              Width = "1em"
+              Width = "2em"
             }
           }
         }
@@ -1178,7 +1320,7 @@
             Arrangement = Arrange.Horizontal
             { WebLabel47 WebLabel
               #MoveScaled(1,1,15,2)
-              Height = "0em"
+              Height = "2em"
               Font = "bold"
               Text = ("Referral User")
             }
@@ -1189,8 +1331,9 @@
             Arrangement = Arrange.Horizontal
             { WebLabel11 WebLabel
               #MoveScaled(1,1,15,2)
-              Expand = True
+              Width = "10em"
               Text = ("Service")
+              Border = True
             }
             { cmbreferservice WebComboBox
               #MoveScaled(16,1,12,2)
@@ -1204,9 +1347,9 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
-            { WebContainer10 WebContainer
+            { WebContainer63 WebContainer
               #MoveScaled(32,1,4,2)
-              Width = "1em"
+              Width = "2em"
             }
           }
           { WebContainer36 WebContainer
@@ -1215,8 +1358,9 @@
             Arrangement = Arrange.Horizontal
             { WebLabel49 WebLabel
               #MoveScaled(1,1,15,2)
-              Expand = True
+              Width = "10em"
               Text = ("Equipment")
+              Border = True
             }
             { cmbreferequip WebComboBox
               #MoveScaled(16,1,12,2)
@@ -1230,9 +1374,9 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
-            { WebContainer53 WebContainer
+            { WebContainer62 WebContainer
               #MoveScaled(32,1,4,2)
-              Width = "1em"
+              Width = "2em"
             }
           }
           { WebContainer37 WebContainer
@@ -1241,8 +1385,9 @@
             Arrangement = Arrange.Horizontal
             { WebLabel60 WebLabel
               #MoveScaled(1,1,15,2)
-              Expand = True
+              Width = "10em"
               Text = ("Radiology")
+              Border = True
             }
             { cmbreferradio WebComboBox
               #MoveScaled(16,1,12,2)
@@ -1256,9 +1401,9 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
-            { WebContainer54 WebContainer
+            { WebContainer61 WebContainer
               #MoveScaled(32,1,4,2)
-              Width = "1em"
+              Width = "2em"
             }
           }
           { WebContainer68 WebContainer
@@ -1267,8 +1412,9 @@
             Arrangement = Arrange.Horizontal
             { WebLabel61 WebLabel
               #MoveScaled(1,1,15,2)
-              Expand = True
+              Width = "10em"
               Text = ("Laboratory")
+              Border = True
             }
             { cmbreferlab WebComboBox
               #MoveScaled(16,1,12,2)
@@ -1282,9 +1428,9 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
-            { WebContainer55 WebContainer
+            { WebContainer60 WebContainer
               #MoveScaled(32,1,4,2)
-              Width = "1em"
+              Width = "2em"
             }
           }
           { WebContainer82 WebContainer
@@ -1293,8 +1439,9 @@
             Arrangement = Arrange.Horizontal
             { WebLabel62 WebLabel
               #MoveScaled(1,1,15,2)
-              Expand = True
+              Width = "10em"
               Text = ("Procedure")
+              Border = True
             }
             { cmbreferproc WebComboBox
               #MoveScaled(16,1,12,2)
@@ -1308,9 +1455,9 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
-            { WebContainer56 WebContainer
+            { WebContainer58 WebContainer
               #MoveScaled(32,1,4,2)
-              Width = "1em"
+              Width = "2em"
             }
           }
           { WebContainer83 WebContainer
@@ -1319,8 +1466,9 @@
             Arrangement = Arrange.Horizontal
             { WebLabel63 WebLabel
               #MoveScaled(1,1,15,2)
-              Expand = True
+              Width = "10em"
               Text = ("Lock Referral")
+              Border = True
             }
             { cmblockreferral WebComboBox
               #MoveScaled(16,1,12,2)
@@ -1336,7 +1484,7 @@
             }
             { WebContainer57 WebContainer
               #MoveScaled(32,1,4,2)
-              Width = "1em"
+              Width = "2em"
             }
           }
         }

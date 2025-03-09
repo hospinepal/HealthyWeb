@@ -97,10 +97,10 @@
       Index = 0
       Text = ("Security")
       { WebContainer4 WebContainer
-        #MoveScaled(1,1,86.75,23)
+        #MoveScaled(1,1,86.75,37)
         Arrangement = Arrange.Row
         { WebContainer7 WebContainer
-          #MoveScaled(1,1,35,21)
+          #MoveScaled(1,1,35,29)
           Class = "size-tablet"
           Arrangement = Arrange.Vertical
           Margin = True
@@ -125,6 +125,10 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
+            { WebContainer99 WebContainer
+              #MoveScaled(27,1,3,2)
+              Width = "2em"
+            }
           }
           { WebContainer11 WebContainer
             #MoveScaled(1,5,33,4)
@@ -146,6 +150,10 @@
               Width = "2em"
               Height = "2em"
               Image = "icon:/small/apply"
+            }
+            { WebContainer100 WebContainer
+              #MoveScaled(26,1,3,2)
+              Width = "2em"
             }
           }
           { WebContainer10 WebContainer
@@ -169,15 +177,79 @@
               Height = "2em"
               Image = "icon:/small/apply"
             }
+            { WebContainer101 WebContainer
+              #MoveScaled(27,1,3,2)
+              Width = "2em"
+            }
+          }
+          { WebContainer102 WebContainer
+            #MoveScaled(1,13,33,3)
+            Height = "2em"
+          }
+          { WebLabel48 WebLabel
+            #MoveScaled(1,16,33,3)
+            Text = ("Two Factor Authentication")
+          }
+          { WebContainer105 WebContainer
+            #MoveScaled(1,19,33,4)
+            Class = "less-container-margin"
+            Arrangement = Arrange.Horizontal
+            { WebLabel50 WebLabel
+              #MoveScaled(1,1,9,2)
+              Expand = True
+              Text = ("Desk Access (Login)")
+            }
+            { cmbtwologin WebComboBox
+              #MoveScaled(10,1,12,2)
+              Width = "6em"
+              Height = "2em"
+              ReadOnly = False
+            }
+            { btntwologin WebButton
+              #MoveScaled(22,1,4,2)
+              Width = "2em"
+              Height = "2em"
+              Image = "icon:/small/apply"
+            }
+            { WebContainer106 WebContainer
+              #MoveScaled(26,1,3,2)
+              Width = "2em"
+            }
+          }
+          { WebContainer103 WebContainer
+            #MoveScaled(1,23,33,4)
+            Class = "less-container-margin"
+            Arrangement = Arrange.Horizontal
+            { WebLabel49 WebLabel
+              #MoveScaled(1,1,10,2)
+              Expand = True
+              Text = ("Root Pass Access")
+            }
+            { cmbtworoot WebComboBox
+              #MoveScaled(11,1,12,2)
+              Width = "6em"
+              Height = "2em"
+              ReadOnly = False
+            }
+            { btntworoot WebButton
+              #MoveScaled(23,1,4,2)
+              Width = "2em"
+              Height = "2em"
+              Image = "icon:/small/apply"
+            }
+            { WebContainer104 WebContainer
+              #MoveScaled(27,1,3,2)
+              Width = "2em"
+            }
           }
         }
         { WebContainer6 WebContainer
-          #MoveScaled(36,1,35,21)
+          #MoveScaled(36,1,41,31)
           Class = "size-tablet"
           Arrangement = Arrange.Vertical
           Margin = True
           { WebContainer13 WebContainer
-            #MoveScaled(1,1,33,4)
+            #MoveScaled(1,1,39,4)
             Class = "less-container-margin"
             Height = "2em"
             Arrangement = Arrange.Horizontal
@@ -200,8 +272,60 @@
             }
           }
           { ListBox1 WebListBox
-            #MoveScaled(1,5,33,11)
-            Height = "6em"
+            #MoveScaled(1,5,39,11)
+            Expand = True
+          }
+          { WebContainer96 WebContainer
+            #MoveScaled(1,16,39,4)
+            Class = "less-container-margin"
+            Arrangement = Arrange.Horizontal
+            { WebLabel47 WebLabel
+              #MoveScaled(1,1,19,2)
+              Expand = True
+              Text = ("Repository Database")
+            }
+            { cmbrepodb WebComboBox
+              #MoveScaled(20,1,8,2)
+              Width = "6em"
+              Height = "2em"
+              ReadOnly = False
+            }
+            { btnrepodb WebButton
+              #MoveScaled(28,1,4,2)
+              Width = "2em"
+              Height = "2em"
+              Image = "icon:/small/apply"
+            }
+            { WebContainer97 WebContainer
+              #MoveScaled(32,1,3,2)
+              Width = "2em"
+            }
+          }
+          { WebContainer95 WebContainer
+            #MoveScaled(1,20,39,4)
+            Class = "less-container-margin"
+            Arrangement = Arrange.Horizontal
+            { WebLabel46 WebLabel
+              #MoveScaled(1,1,18,2)
+              Expand = True
+              Text = ("Auto Repository Sync")
+            }
+            { cmbautorepo WebComboBox
+              #MoveScaled(19,1,8,2)
+              Width = "6em"
+              Height = "2em"
+              ReadOnly = False
+            }
+            { btnautorepo WebButton
+              #MoveScaled(27,1,4,2)
+              Width = "2em"
+              Height = "2em"
+              Image = "icon:/small/apply"
+            }
+            { WebContainer98 WebContainer
+              #MoveScaled(31,1,3,2)
+              Width = "2em"
+            }
           }
         }
       }
@@ -490,20 +614,8 @@
           Class = "size-tablet"
           Arrangement = Arrange.Vertical
           Margin = True
-          { WebContainer32 WebContainer
-            #MoveScaled(1,1,28,4)
-            Class = "less-container-margin"
-            Arrangement = Arrange.Horizontal
-            { WebLabel7 WebLabel
-              #MoveScaled(1,1,10,2)
-              Height = "2em"
-              Expand = True
-              Font = "bold"
-              Text = ("Upload Location")
-            }
-          }
           { WebContainer44 WebContainer
-            #MoveScaled(1,5,28,4)
+            #MoveScaled(1,1,28,4)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel17 WebLabel
@@ -525,7 +637,7 @@
             }
           }
           { WebContainer43 WebContainer
-            #MoveScaled(1,9,28,4)
+            #MoveScaled(1,5,28,4)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel16 WebLabel
@@ -547,7 +659,7 @@
             }
           }
           { WebContainer38 WebContainer
-            #MoveScaled(1,13,28,4)
+            #MoveScaled(1,9,28,4)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel15 WebLabel
@@ -569,7 +681,7 @@
             }
           }
           { WebContainer37 WebContainer
-            #MoveScaled(1,17,28,4)
+            #MoveScaled(1,13,28,4)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel14 WebLabel
@@ -590,14 +702,8 @@
               Image = "icon:/small/apply"
             }
           }
-        }
-        { WebContainer41 WebContainer
-          #MoveScaled(31,1,32,26)
-          Class = "size-tablet"
-          Arrangement = Arrange.Vertical
-          Margin = True
           { WebContainer36 WebContainer
-            #MoveScaled(1,1,30,4)
+            #MoveScaled(1,17,28,4)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel13 WebLabel
@@ -618,8 +724,14 @@
               Image = "icon:/small/apply"
             }
           }
+        }
+        { WebContainer41 WebContainer
+          #MoveScaled(31,1,32,26)
+          Class = "size-tablet"
+          Arrangement = Arrange.Vertical
+          Margin = True
           { WebContainer35 WebContainer
-            #MoveScaled(1,5,30,4)
+            #MoveScaled(1,1,30,4)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel12 WebLabel
@@ -641,7 +753,7 @@
             }
           }
           { WebContainer34 WebContainer
-            #MoveScaled(1,9,30,4)
+            #MoveScaled(1,5,30,4)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel11 WebLabel
@@ -663,7 +775,7 @@
             }
           }
           { WebContainer33 WebContainer
-            #MoveScaled(1,13,30,4)
+            #MoveScaled(1,9,30,4)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel10 WebLabel
@@ -685,7 +797,7 @@
             }
           }
           { WebContainer39 WebContainer
-            #MoveScaled(1,17,30,4)
+            #MoveScaled(1,13,30,4)
             Class = "less-container-margin"
             Arrangement = Arrange.Horizontal
             { WebLabel9 WebLabel
@@ -700,6 +812,28 @@
               ReadOnly = False
             }
             { btnupofficedocs WebButton
+              #MoveScaled(23,1,4,2)
+              Width = "2em"
+              Height = "2em"
+              Image = "icon:/small/apply"
+            }
+          }
+          { WebContainer32 WebContainer
+            #MoveScaled(1,17,30,4)
+            Class = "less-container-margin"
+            Arrangement = Arrange.Horizontal
+            { WebLabel7 WebLabel
+              #MoveScaled(1,1,10,2)
+              Expand = True
+              Text = ("Vouchers")
+            }
+            { cmbupvoucher WebComboBox
+              #MoveScaled(11,1,12,2)
+              Width = "6em"
+              Height = "2em"
+              ReadOnly = False
+            }
+            { btnupvoucher WebButton
               #MoveScaled(23,1,4,2)
               Width = "2em"
               Height = "2em"

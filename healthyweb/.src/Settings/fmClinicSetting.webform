@@ -41,11 +41,11 @@
     }
   }
   { WebContainer2 WebContainer
-    #MoveScaled(1,7,100,50)
+    #MoveScaled(1,7,100,56)
     Arrangement = Arrange.Horizontal
     Spacing = True
     { WebContainer3 WebContainer
-      #MoveScaled(1,1,11,48)
+      #MoveScaled(1,1,11,54)
       Width = "22.5%"
       Arrangement = Arrange.Vertical
       Spacing = True
@@ -74,18 +74,23 @@
         Height = "2em"
         Text = ("Telemed")
       }
-      { btnclose WebButton
+      { WebButtonL6 WebButton
         #MoveScaled(1,26,9,4)
+        Height = "2em"
+        Text = ("Access")
+      }
+      { btnclose WebButton
+        #MoveScaled(1,31,9,4)
         Height = "2em"
         Text = ("Close")
       }
     }
     { IconPanel1 WebTabPanel
-      #MoveScaled(13,1,82,48)
+      #MoveScaled(13,1,82,54)
       Enabled = False
       Expand = True
       Arrangement = Arrange.Vertical
-      Count = 5
+      Count = 6
       ShowTabs = False
       Index = 0
       Text = ("Gen")
@@ -177,8 +182,30 @@
           Image = "icon:/small/apply"
         }
       }
-      { WebContainer4 WebContainer
+      { WebContainer30 WebContainer
         #MoveScaled(1,21,79.75,5)
+        Class = "less-container-margin"
+        Arrangement = Arrange.Horizontal
+        { WebLabel25 WebLabel
+          #MoveScaled(1,1,21,3)
+          Expand = True
+          Text = ("Department Selection")
+        }
+        { cmbdeparttype WebComboBox
+          #MoveScaled(22,1,12,3)
+          Width = "12em"
+          Height = "2em"
+          ReadOnly = False
+        }
+        { btndeparttype WebButton
+          #MoveScaled(34,1,4,3)
+          Width = "2em"
+          Height = "2em"
+          Image = "icon:/small/apply"
+        }
+      }
+      { WebContainer4 WebContainer
+        #MoveScaled(1,26,79.75,5)
         Class = "less-container-margin"
         Arrangement = Arrange.Horizontal
         { WebLabel1 WebLabel
@@ -443,6 +470,28 @@
           Image = "icon:/small/apply"
         }
       }
+      { WebContainer36 WebContainer
+        #MoveScaled(1,43,79.75,5)
+        Class = "less-container-margin"
+        Arrangement = Arrange.Horizontal
+        { WebLabel29 WebLabel
+          #MoveScaled(1,1,21,3)
+          Expand = True
+          Text = ("History/Discharge")
+        }
+        { cmbhistdisch WebComboBox
+          #MoveScaled(22,1,12,3)
+          Width = "8em"
+          Height = "2em"
+          ReadOnly = False
+        }
+        { btnhistdisch WebButton
+          #MoveScaled(34,1,4,3)
+          Width = "2em"
+          Height = "2em"
+          Image = "icon:/small/apply"
+        }
+      }
       Index = 2
       Text = ("Activity")
       { WebContainer17 WebContainer
@@ -650,6 +699,116 @@
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/apply"
+        }
+      }
+      { WebContainer31 WebContainer
+        #MoveScaled(1,11,79.75,5)
+        Class = "less-container-margin"
+        Arrangement = Arrange.Horizontal
+        { WebLabel26 WebLabel
+          #MoveScaled(1,1,21,3)
+          Expand = True
+          Text = ("Password Protection for Video")
+        }
+        { cmbvideopass WebComboBox
+          #MoveScaled(22,1,12,3)
+          Width = "12em"
+          Height = "2em"
+          ReadOnly = False
+        }
+        { btnvideopass WebButton
+          #MoveScaled(34,1,4,3)
+          Width = "2em"
+          Height = "2em"
+          Image = "icon:/small/apply"
+        }
+      }
+      { WebContainer35 WebContainer
+        #MoveScaled(1,16,79.75,5)
+        Class = "less-container-margin"
+        Arrangement = Arrange.Horizontal
+        { WebLabel28 WebLabel
+          #MoveScaled(1,1,21,3)
+          Expand = True
+          Text = ("Consultant Location")
+        }
+        { cmbconsultsource WebComboBox
+          #MoveScaled(22,1,12,3)
+          Width = "12em"
+          Height = "2em"
+          ReadOnly = False
+        }
+        { btnconsultsource WebButton
+          #MoveScaled(34,1,4,3)
+          Width = "2em"
+          Height = "2em"
+          Image = "icon:/small/apply"
+        }
+      }
+      Index = 5
+      Text = ("Access")
+      { WebContainer32 WebContainer
+        #MoveScaled(1,1,79.75,5)
+        Class = "less-container-margin"
+        Arrangement = Arrange.Horizontal
+        { WebLabel27 WebLabel
+          #MoveScaled(1,1,25,3)
+          Height = "2em"
+          Expand = True
+          Text = ("User Restriction")
+        }
+        { btnsaveaccess WebButton
+          #MoveScaled(26,1,13,3)
+          Width = "7em"
+          Height = "2em"
+          Text = ("Save")
+          Image = "icon:/32/apply"
+        }
+      }
+      { WebContainer33 WebContainer
+        #MoveScaled(1,6,79.75,5)
+        Class = "less-container-margin"
+        Arrangement = Arrange.Horizontal
+        { chkaccessclinical WebCheckBox
+          #MoveScaled(1,1,16,3)
+          Width = "30%"
+          Height = "2em"
+          Text = ("Clinic Forms")
+        }
+        { chkaccessproced WebCheckBox
+          #MoveScaled(17,1,16,3)
+          Width = "30%"
+          Height = "2em"
+          Text = ("Procedure Forms")
+        }
+        { chkaccessspecial WebCheckBox
+          #MoveScaled(33,1,16,3)
+          Width = "30%"
+          Height = "2em"
+          Text = ("Specialized Forms")
+        }
+      }
+      { WebContainer34 WebContainer
+        #MoveScaled(1,11,79.75,5)
+        Class = "less-container-margin"
+        Arrangement = Arrange.Horizontal
+        { chkaccessstruct WebCheckBox
+          #MoveScaled(1,1,16,3)
+          Width = "30%"
+          Height = "2em"
+          Text = ("Structure Forms")
+        }
+        { chkaccessOPD WebCheckBox
+          #MoveScaled(17,1,16,3)
+          Width = "30%"
+          Height = "2em"
+          Text = ("Out Patient List")
+        }
+        { chkaccessIPD WebCheckBox
+          #MoveScaled(33,1,16,3)
+          Width = "30%"
+          Height = "2em"
+          Text = ("In Patient List")
         }
       }
       Index = 0

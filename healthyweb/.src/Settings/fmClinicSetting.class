@@ -11,6 +11,7 @@ Public Sub _new()
   cmbdeptlock.List = ["Yes", "No"]
   cmblockproced.List = ["Yes", "No"]
   cmbbedrelease.List = ["Enable", "Disable"]
+  cmbdeparttype.List = ["Location", "Service"]
   cmbsympscale.List = modControlSub.GetDirectFillresult(modDatabase.$syConn.Exec("select fldexamid as col from tblexam where fldoption=&1 and fldstatus=&2", "Clinical Scale", "Active"))        ''
 
   cmblockexam.List = ["Yes", "No"]
@@ -22,6 +23,7 @@ Public Sub _new()
   cmbpathistory.List = ["Single", "Multiple"]
   cmbdietapprove.List = ["Enable", "Disable"]
   cmbicdgroup.List = ["Enable", "Disable"]
+  cmbhistdisch.List = ["Selected", "All"]
 
   cmbtriage.List = ["Manual", "Dynamic"]
   cmbdosing.List = ["Enable", "Disable"]
@@ -33,6 +35,8 @@ Public Sub _new()
   cmbopdoutdiagno.List = ["Provisional", "Final"]
 
   cmbtelemed.List = ["Partial", "Complete", "Disable"]
+  cmbvideopass.List = ["Enable", "Disable"]
+  cmbconsultsource.List = ["Remote", "Local"]
 
 End
 
@@ -52,6 +56,7 @@ Public Sub btnshowsetting_Click()
     GetClinActivity()
     ShowOutcomeSett()
     ShowTelemedicineSett()
+    ShowUserAccessRestriction()
   Endif
 
 End
@@ -63,6 +68,7 @@ Private Sub GeneralSettings()
   cmbdeptlock.Text = modGlobalSetting.ShowSettingFromDBAny("IPClinic/LockToOwnDepartment", cmbtarget.Text)
   cmblockproced.Text = modGlobalSetting.ShowSettingFromDBAny("IPClinic/LockToOwnProcedures", cmbtarget.Text)
   cmbbedrelease.Text = modGlobalSetting.ShowSettingFromDBAny("IPClinic/MidBedRelease", cmbtarget.Text)
+  cmbdeparttype.Text = modGlobalSetting.ShowSettingFromDBAny("IPClinic/DepartmentType", cmbtarget.Text)
 
   cmbsympscale.Text = modGlobalSetting.ShowSettingFromDBAny("IPClinic/SymptomCauseScale", cmbtarget.Text)
 
@@ -99,6 +105,13 @@ End
 Public Sub btnbedrelease_Click()
 
   modGlobalSetting.SaveSettingToDB("IPClinic/MidBedRelease", cmbbedrelease.Text, cmbtarget.Text)
+  Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
+
+End
+
+Public Sub btndeparttype_Click()
+
+  modGlobalSetting.SaveSettingToDB("IPClinic/DepartmentType", cmbdeparttype.Text, cmbtarget.Text)
   Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
 
 End
@@ -169,6 +182,7 @@ Private Sub ShowDataEntry()
   cmbpathistory.Text = modGlobalSetting.ShowSettingFromDBAny("ClinicForms/History_InputFormat", cmbtarget.Text)
   cmbdietapprove.Text = modGlobalSetting.ShowSettingFromDBAny("ClinicForms/User_DietApproval", cmbtarget.Text)
   cmbicdgroup.Text = modGlobalSetting.ShowSettingFromDBAny("ClinicForms/ICDGroup_Diagnosis", cmbtarget.Text)
+  cmbhistdisch.Text = modGlobalSetting.ShowSettingFromDBAny("ClinicForms/History_Discharge_Variables", cmbtarget.Text)
 
 End
 
@@ -236,6 +250,13 @@ Public Sub btnicdgroup_Click()
 
 End
 
+Public Sub btnhistdisch_Click()
+
+  modGlobalSetting.SaveSettingToDB("ClinicForms/History_Discharge_Variables", cmbhistdisch.Text, cmbtarget.Text)
+  Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
+
+End
+
 ''-------------------------- Outcome -----------------------
 Private Sub ShowOutcomeSett()
 
@@ -263,6 +284,8 @@ Private Sub ShowTelemedicineSett()
 
   cmbtelemed.Text = modGlobalSetting.ShowSettingFromDBAny("IPClinic/TelemedicineRequest", cmbtarget.Text)
   txtvidchat.Text = modGlobalSetting.ShowSettingFromDBAny("IPClinic/TelemedicineServer", cmbtarget.Text)
+  cmbvideopass.Text = modGlobalSetting.ShowSettingFromDBAny("IPClinic/TelemedicinePassword", cmbtarget.Text)
+  cmbconsultsource.Text = modGlobalSetting.ShowSettingFromDBAny("IPClinic/TelemedicineConsultant", cmbtarget.Text)
 
 End
 
@@ -280,6 +303,43 @@ Public Sub btnvidchat_Click()
 
 End
 
+Public Sub btnvideopass_Click()
+
+  modGlobalSetting.SaveSettingToDB("IPClinic/TelemedicinePassword", cmbvideopass.Text, cmbtarget.Text)
+  Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
+
+End
+
+Public Sub btnconsultsource_Click()
+
+  modGlobalSetting.SaveSettingToDB("IPClinic/TelemedicineConsultant", cmbconsultsource.Text, cmbtarget.Text)
+  Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
+
+End
+
+'''------------------------- User Access Restriction ------------------------
+Private Sub ShowUserAccessRestriction()
+
+  modGlobalSetting.ShowCheckBoxFromDBAny(chkaccessclinical, "ClinicRestriction/ClinicalForms", cmbtarget.Text)
+  modGlobalSetting.ShowCheckBoxFromDBAny(chkaccessproced, "ClinicRestriction/ProcedureForms", cmbtarget.Text)
+  modGlobalSetting.ShowCheckBoxFromDBAny(chkaccessspecial, "ClinicRestriction/SpecializedForms", cmbtarget.Text)
+  modGlobalSetting.ShowCheckBoxFromDBAny(chkaccessstruct, "ClinicRestriction/StructuredForms", cmbtarget.Text)
+  modGlobalSetting.ShowCheckBoxFromDBAny(chkaccessOPD, "ClinicRestriction/OutPatientList", cmbtarget.Text)
+  modGlobalSetting.ShowCheckBoxFromDBAny(chkaccessIPD, "ClinicRestriction/InPatientList", cmbtarget.Text)
+
+End
+
+Public Sub btnsaveaccess_Click()
+
+  modGlobalSetting.EnterSettingFromDB(chkaccessclinical, "ClinicRestriction/ClinicalForms", cmbtarget.Text)
+  modGlobalSetting.EnterSettingFromDB(chkaccessproced, "ClinicRestriction/ProcedureForms", cmbtarget.Text)
+  modGlobalSetting.EnterSettingFromDB(chkaccessspecial, "ClinicRestriction/SpecializedForms", cmbtarget.Text)
+  modGlobalSetting.EnterSettingFromDB(chkaccessstruct, "ClinicRestriction/StructuredForms", cmbtarget.Text)
+  modGlobalSetting.EnterSettingFromDB(chkaccessOPD, "ClinicRestriction/OutPatientList", cmbtarget.Text)
+  modGlobalSetting.EnterSettingFromDB(chkaccessIPD, "ClinicRestriction/InPatientList", cmbtarget.Text)
+
+End
+
 ''-------------------------- List -----------------
 Public Sub btnsettall_Click()
 
@@ -291,6 +351,7 @@ Public Sub btnsettall_Click()
   xList.Add("IPClinic/LockToOwnDepartment")
   xList.Add("IPClinic/LockToOwnProcedures")
   xList.Add("IPClinic/MidBedRelease")
+  xList.Add("IPClinic/DepartmentType")
   xList.Add("IPClinic/SymptomCauseScale")
 
   xList.Add("IPClinic/TriageColorValue")
@@ -308,12 +369,22 @@ Public Sub btnsettall_Click()
   xList.Add("ClinicForms/History_InputFormat")
   xList.Add("ClinicForms/User_DietApproval")
   xList.Add("ClinicForms/ICDGroup_Diagnosis")
+  xList.Add("ClinicForms/History_Discharge_Variables")
 
   xList.Add("IPClinic/FixDiagnosisDischarge")
   xList.Add("IPClinic/FixDiagnosisOPDOutcome")
 
   xList.Add("IPClinic/TelemedicineRequest")
   xList.Add("IPClinic/TelemedicineServer")
+  xList.Add("IPClinic/TelemedicinePassword")
+  xList.Add("IPClinic/TelemedicineConsultant")
+
+  xList.Add("ClinicRestriction/ClinicalForms")
+  xList.Add("ClinicRestriction/ProcedureForms")
+  xList.Add("ClinicRestriction/SpecializedForms")
+  xList.Add("ClinicRestriction/StructuredForms")
+  xList.Add("ClinicRestriction/OutPatientList")
+  xList.Add("ClinicRestriction/InPatientList")
 
   xPath = modGENReport.ShowSelectSetting(xList)
   modControlSub.OpenHTMLPreview("", xPath, "ReportSize")
@@ -360,6 +431,14 @@ Public Sub WebButtonL5_Click()
 
 End
 
+Public Sub WebButtonL6_Click()
+
+  GetNormalButtons()
+  IconPanel1.Index = 5
+  WebButtonL6.Background = Color.LightGray
+
+End
+
 Private Sub GetNormalButtons()
 
   WebButtonL1.Background = Color.Default
@@ -367,6 +446,7 @@ Private Sub GetNormalButtons()
   WebButtonL3.Background = Color.Default
   WebButtonL4.Background = Color.Default
   WebButtonL5.Background = Color.Default
+  WebButtonL6.Background = Color.Default
 
 End
 

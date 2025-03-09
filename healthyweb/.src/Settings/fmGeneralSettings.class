@@ -10,6 +10,11 @@ Public Sub _new()
 
   cmbencrypdf.List = ["Yes", "No"]
   cmbftpfolder.List = ["{PatientFileNo}", "{ContactNo}", "{E-Mail}", "{PatientCode}", "{LastInvReference}", "{LastClaimCode}"]
+  cmbrepodb.List = ["sqlite3", "mysql"]
+  cmbautorepo.List = ["Enable", "Disable"]
+  cmbtwologin.List = ["SMS", "Email", "None"]
+  cmbtworoot.List = ["SMS", "Email", "None"]
+
   cmbuppersonal.List = ["DB", "FTP"]
   cmbuppatient.List = ["DB", "FTP"]
   cmbuplog.List = ["DB", "FTP"]
@@ -19,6 +24,7 @@ Public Sub _new()
   cmbupmedimage.List = ["DB", "FTP"]
   cmbupiresearch.List = ["DB", "FTP"]
   cmbupofficedocs.List = ["DB", "FTP"]
+  cmbupvoucher.List = ["DB", "FTP"]
 
   cmblabadd.List = ["Yes", "No"]
   cmbradioadd.List = ["Yes", "No"]
@@ -88,6 +94,12 @@ Public Sub GeneralSecurity()
   cmbpatencrp.Text = modGlobalSetting.ShowSettingFromDBAny("PatientInfo/Encryption", cmbtarget.Text)
   ListBox1.List = modGlobalSetting.ShowTableSettingDB(cmbtarget.Text, "DisableSQLQuery")
 
+  cmbrepodb.Text = modGlobalSetting.ShowSettingFromDBAny("Repository/Database", cmbtarget.Text)
+  cmbautorepo.Text = modGlobalSetting.ShowSettingFromDBAny("Repository/AutoSync", cmbtarget.Text)
+
+  cmbtwologin.Text = modGlobalSetting.ShowSettingFromDBAny("TwoFactorAuthentication/DeskAccess", cmbtarget.Text)
+  cmbtworoot.Text = modGlobalSetting.ShowSettingFromDBAny("TwoFactorAuthentication/RootAccess", cmbtarget.Text)
+
 End
 
 Public Sub btnaddtable_Click()
@@ -130,6 +142,40 @@ End
 Public Sub btnpatencryp_Click()
 
   modGlobalSetting.SaveSettingToDB("PatientInfo/Encryption", cmbpatencrp.Text, cmbtarget.Text)
+  Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
+  ' Balloon.Delay = modBasic.$BalloonDelay
+
+End
+
+''----------------- Repository ----------------
+Public Sub btnrepodb_Click()
+
+  modGlobalSetting.SaveSettingToDB("Repository/Database", cmbrepodb.Text, cmbtarget.Text)
+  Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
+  ' Balloon.Delay = modBasic.$BalloonDelay
+
+End
+
+Public Sub btnautorepo_Click()
+
+  modGlobalSetting.SaveSettingToDB("Repository/AutoSync", cmbautorepo.Text, cmbtarget.Text)
+  Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
+  ' Balloon.Delay = modBasic.$BalloonDelay
+
+End
+
+''---------------------- Two factor
+Public Sub btntwologin_Click()
+
+  modGlobalSetting.SaveSettingToDB("TwoFactorAuthentication/DeskAccess", cmbtwologin.Text, cmbtarget.Text)
+  Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
+  ' Balloon.Delay = modBasic.$BalloonDelay
+
+End
+
+Public Sub btntworoot_Click()
+
+  modGlobalSetting.SaveSettingToDB("TwoFactorAuthentication/RootAccess", cmbtworoot.Text, cmbtarget.Text)
   Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
   ' Balloon.Delay = modBasic.$BalloonDelay
 
@@ -284,6 +330,7 @@ Private Sub UploadSetting()
   cmbupmedimage.Text = modGlobalSetting.ShowSettingFromDBAny("GeneralSettings/Upload_MedicalImages", cmbtarget.Text)
   cmbupiresearch.Text = modGlobalSetting.ShowSettingFromDBAny("GeneralSettings/Upload_ResearchImages", cmbtarget.Text)
   cmbupofficedocs.Text = modGlobalSetting.ShowSettingFromDBAny("GeneralSettings/Upload_OfficeDocs", cmbtarget.Text)
+  cmbupvoucher.Text = modGlobalSetting.ShowSettingFromDBAny("GeneralSettings/Upload_Vouchers", cmbtarget.Text)
 
 End
 
@@ -380,6 +427,14 @@ End
 Public Sub btnupofficedocs_Click()
 
   modGlobalSetting.SaveSettingToDB("GeneralSettings/Upload_OfficeDocs", cmbupofficedocs.Text, cmbtarget.Text)
+  Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
+  ' Balloon.Delay = modBasic.$BalloonDelay
+
+End
+
+Public Sub btnupvoucher_Click()
+
+  modGlobalSetting.SaveSettingToDB("GeneralSettings/Upload_Vouchers", cmbupvoucher.Text, cmbtarget.Text)
   Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
   ' Balloon.Delay = modBasic.$BalloonDelay
 
@@ -622,6 +677,11 @@ Public Sub btnsettall_Click()
   xList.Add("RemoteExec/ScheduleTask")
   xList.Add("PatientInfo/Encryption")
 
+  xList.Add("Repository/Database")
+  xList.Add("Repository/AutoSync")
+  xList.Add("TwoFactorAuthentication/DeskAccess")
+  xList.Add("TwoFactorAuthentication/RootAccess")
+
   xList.Add("WebcamShot/Start")
   xList.Add("WebcamShot/Close")
   xList.Add("WebcamShot/Error")
@@ -648,6 +708,7 @@ Public Sub btnsettall_Click()
   xList.Add("GeneralSettings/Upload_MedicalImages")
   xList.Add("GeneralSettings/Upload_ResearchImages")
   xList.Add("GeneralSettings/Upload_OfficeDocs")
+  xList.Add("GeneralSettings/Upload_Vouchers")
 
   xList.Add("GeneralSettings/RegistrationAccess_CashierForm")
   xList.Add("GeneralSettings/RegistrationAccess_DispensingForm")

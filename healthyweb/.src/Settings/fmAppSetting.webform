@@ -1647,8 +1647,39 @@
             Image = "icon:/32/apply"
           }
         }
-        { WebContainer96 WebContainer
+        { WebContainer15 WebContainer
           #MoveScaled(1,16,34,5)
+          Class = "less-container-margin"
+          Arrangement = Arrange.Horizontal
+          { WebContainer16 WebContainer
+            #MoveScaled(1,1,4,3)
+            Width = "1em"
+          }
+          { WebLabel16 WebLabel
+            #MoveScaled(5,1,8,3)
+            Width = "5em"
+            Text = ("Validate")
+          }
+          { txtimisvalidateurl WebTextBox
+            #MoveScaled(13,1,7,3)
+            Height = "2em"
+            Expand = True
+          }
+          { lnkimisvalidurl WebButton
+            #MoveScaled(20,1,3,3)
+            Width = "2em"
+            Height = "2em"
+            Image = "icon:/32/pen"
+          }
+          { btnimisvalidurl WebButton
+            #MoveScaled(23,1,4,3)
+            Width = "2em"
+            Height = "2em"
+            Image = "icon:/32/apply"
+          }
+        }
+        { WebContainer96 WebContainer
+          #MoveScaled(1,21,34,5)
           Class = "less-container-margin"
           Arrangement = Arrange.Horizontal
           { WebContainer101 WebContainer
@@ -1673,7 +1704,7 @@
           }
         }
         { WebContainer97 WebContainer
-          #MoveScaled(1,21,34,5)
+          #MoveScaled(1,26,34,5)
           Class = "less-container-margin"
           Arrangement = Arrange.Horizontal
           { WebContainer102 WebContainer
@@ -1698,7 +1729,7 @@
           }
         }
         { WebContainer11 WebContainer
-          #MoveScaled(1,26,34,5)
+          #MoveScaled(1,31,34,5)
           Class = "less-container-margin"
           Arrangement = Arrange.Horizontal
           { WebContainer12 WebContainer
@@ -1894,7 +1925,7 @@
           { WebLabel98 WebLabel
             #MoveScaled(1,1,8,3)
             Width = "4em"
-            Text = ("Lock")
+            Text = ("Book")
           }
           { cmbssflock WebComboBox
             #MoveScaled(9,1,10,3)

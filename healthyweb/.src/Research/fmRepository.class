@@ -27,8 +27,10 @@ Public Sub _new()
   modBasic.ShowUserPrivilege()
   If modBasic.$SuperUser = True Then
     mnuparam.Visible = True
+    mnudb.Visible = True
   Else
     mnuparam.Visible = False
+    mnudb.Visible = False
   Endif
 
 End
@@ -208,8 +210,10 @@ Public Sub mnucust1_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust1.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust1.Tag, Workspace1)
 
 End
 
@@ -217,8 +221,10 @@ Public Sub mnucust2_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust2.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust2.Tag, Workspace1)
 
 End
 
@@ -226,8 +232,10 @@ Public Sub mnucust3_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust3.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust3.Tag, Workspace1)
 
 End
 
@@ -235,8 +243,10 @@ Public Sub mnucust4_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust4.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust4.Tag, Workspace1)
 
 End
 
@@ -244,8 +254,10 @@ Public Sub mnucust5_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust5.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust5.Tag, Workspace1)
 
 End
 
@@ -256,6 +268,17 @@ Public Sub mnucustsetting_Click()
 End
 
 ''=======================================
+Public Sub mnusumchart_Click()
+
+  Dim hForm As FmSummaryChart
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmSummaryChart(Workspace1)
+
+End
+
 Public Sub mnunepal_Click()
 
   Dim hForm1 As FmNepalMap
@@ -888,22 +911,7 @@ End
 
 Public Sub mnuchangePass_Click()
 
-  Dim xpass As String
-  Dim hForm As FmChangeText
-  Dim sql As String
-  Dim res As Result
-
-  xpass = InputPassword("Provide your current password", "Change Password", "")
-  If xpass Then
-    sql = "select fldaccess from tbluseraccess where flduserid in(select flduserid from tbluser where flduserid=&1 and fldpass=&2)"
-    res = modDatabase.$myConn.Exec(sql, modBasic.$lbluser, modPassword.EncryptSimple(xpass))
-    If res.Available = False Then
-      Me.Exec("Toastify({text: 'Incorrect User or Password', duration: 3000}).showToast()")
-    Else If res.Available = True Then
-      hForm = New FmChangeText("Change Password", modBasic.$lbluser, xpass, "tbluser", "flduserid", "fldpass")
-      hForm.ShowModal
-    Endif
-  Endif
+  modGeneral.UpdateMainUserPassword(modBasic.$lbluser)
 
 End
 
@@ -944,40 +952,11 @@ End
 
 Public Sub mnualtertb_Click()
 
-  Dim hFile As File
-  Dim sLine As String
-  Dim xx As String
-  Dim newPath As String
-  Dim sType As String
-  Dim sQuery As String
   Dim xPass As String
 
   xPass = InputPassword("Provide Root Password", "Verification", "")
   If modPassword.GetSuperVerification(modBasic.$lbluser, xPass) = True Then
-    sQuery = ""
-    xx = GetTextArea("SQL Query", sQuery)
-    If xx Then
-      newPath = Temp()
-      File.Save(newPath, xx)
-      If Message.Question(("Do you really want to update Database structure at your own risk?"), ("No"), ("Yes")) = 2 Then
-        sType = modDatabase.$myConn.Type
-        If sType = "mysql" Or If sType = "postgresql" Then
-          Message.Info(("Executing Request ...."), ("OK"))
-          hFile = Open newPath
-          For Each sLine In hFile.Lines
-            sLine = Trim(sLine)
-            If sLine Then
-              If Left(sLine, 1) = "#" Then
-              Else
-                Try modDatabase.$myConn.Exec(sLine)
-              Endif
-            Endif
-          Next
-          hFile.Close()
-        Endif
-        Me.Exec("Toastify({text: 'Process completed', duration: 3000}).showToast()")
-      Endif
-    Endif
+    modDatabase.AlterDBTablesAdmin()
   Else
     Message.Info("Incorrect Root Password", ("OK"))
   Endif
@@ -990,20 +969,34 @@ Public Sub mnurepository_Click()
   Dim doTables As String[]
   Dim goTables As String[]
 
-  xPass = InputPassword("Provide Root Password", "Verification", "")
-  If modPassword.GetSuperVerification(modBasic.$lbluser, xPass) = True Then
-
-    If Message.Question(("Do you really want to update Database structure at your own risk?"), ("No"), ("Yes")) = 2 Then
+  If Message.Question(("Do you really want to update Database structure at your own risk?"), ("No"), ("Yes")) = 2 Then
+    xPass = InputPassword("Provide Root Password", "Verification", "")
+    If modPassword.GetSuperVerification(modBasic.$lbluser, xPass) = True Then
       doTables = modDatabase.GetRepositoryTables(modDatabase.$myConn)
       goTables = SelectListView("Select Tables to alter", doTables, False)
       If goTables.Count Then
         modDatabase.AlterTableRepository(modDatabase.$myConn, goTables)
         Me.Exec("Toastify({text: 'Process completed', duration: 3000}).showToast()")
       Endif
+    Else
+      Message.Info("Incorrect Root Password", ("OK"))
     Endif
+  Endif
 
-  Else
-    Message.Info("Incorrect Root Password", ("OK"))
+End
+
+Public Sub mnusurveil_Click()
+
+  Dim xPass As String
+
+  If Message.Question(("Do you really want to update Database structure at your own risk?"), ("No"), ("Yes")) = 2 Then
+    xPass = InputPassword("Provide Root Password", "Verification", "")
+    If modPassword.GetSuperVerification(modBasic.$lbluser, xPass) = True Then
+      modDatabase.AlterTableHAIParam(modDatabase.$myConn, "Add")
+      Me.Exec("Toastify({text: 'Process completed', duration: 3000}).showToast()")
+    Else
+      Message.Info("Incorrect Root Password", ("OK"))
+    Endif
   Endif
 
 End
@@ -1014,20 +1007,22 @@ Public Sub mnudruginfo_Click()
   Dim aList As String[]
   Dim xtable As String
 
-  xPass = InputPassword("Provide Root Password", "Verification", "")
-  If modPassword.GetSuperVerification(modBasic.$lbluser, xPass) = True Then
-    aList = New String[]
-    aList.Insert(modRepoSync.$sBrandData)
-    aList.Insert(modRepoSync.$sMedSuppData)
-    aList.Insert(modRepoSync.$sPrecauData)
+  If Message.Question(("Do you really want to update Database structure at your own risk?"), ("No"), ("Yes")) = 2 Then
+    xPass = InputPassword("Provide Root Password", "Verification", "")
+    If modPassword.GetSuperVerification(modBasic.$lbluser, xPass) = True Then
+      aList = New String[]
+      aList.Insert(modRepoSync.$sBrandData)
+      aList.Insert(modRepoSync.$sMedSuppData)
+      aList.Insert(modRepoSync.$sPrecauData)
 
-    For Each xtable In aList
-      modDatabase.UpdateTableDrugInformation(modDatabase.$myConn, xtable)
-    Next
-    Me.Exec("Toastify({text: 'Process completed', duration: 3000}).showToast()")
+      For Each xtable In aList
+        modDatabase.UpdateTableDrugInformation(modDatabase.$myConn, xtable)
+      Next
+      Me.Exec("Toastify({text: 'Process completed', duration: 3000}).showToast()")
 
-  Else
-    Message.Info("Incorrect Root Password", ("OK"))
+    Else
+      Message.Info("Incorrect Root Password", ("OK"))
+    Endif
   Endif
 
 End
@@ -1064,6 +1059,36 @@ Public Sub mnucollation_Click()
     Endif
   Else
     Message.Info("Incorrect Root Password", ("OK"))
+  Endif
+
+End
+
+Public Sub mnusetindex_Click()
+
+  Dim xList As String[]
+  Dim xx As String
+  Dim xPass As String
+
+  xPass = InputPassword("Provide Root Password", "Verification", "")
+  If modPassword.GetSuperVerification(modBasic.$lbluser, xPass) = True Then
+    xList = SelectListView("Selected Tables will have secondary Index", modDBApp.FillDBTables(modDatabase.$myConn, True), False)
+    If xList Then
+      For Each xx In xList
+        modDBGroup.UpdateDBIndexes(modDatabase.$myConn, xx)
+      Next
+      Me.Exec("Toastify({text: 'Process completed', duration: 3000}).showToast()")
+    Endif
+  Endif
+
+End
+
+Public Sub mnualterfields_Click()
+
+  Dim xPass As String
+
+  xPass = InputPassword("Provide Root Password", "Verification", "")
+  If modPassword.GetSuperVerification(modBasic.$lbluser, xPass) = True Then
+    fmAlterTable.ShowModal
   Endif
 
 End
@@ -1311,5 +1336,24 @@ End
 Public Sub mnudarkmode_Click()
 
   Me.Exec("changeScreenMode();")
+
+End
+
+Public Sub mnusetup_Click()
+
+  Dim hForm As FmShowSqlite
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmShowSqlite(Workspace1)
+
+End
+
+Public Sub mnuwarmup_Click()
+
+  Message.Info(("Executing Request ...."), ("OK"))
+  modDBApp.WarmUpDatabase(modDatabase.$myConn)
+  Me.Exec("Toastify({text: 'Process completed', duration: 3000}).showToast()")
 
 End

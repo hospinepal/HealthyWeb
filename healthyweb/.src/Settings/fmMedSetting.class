@@ -37,7 +37,7 @@ Public Sub IconPanel1_Click()
     cmbqualtext.List = ["Yes", "No"]
     cmbmultisymp.List = ["Yes", "No"]
     cmbexamoption.List = ["Yes", "No"]
-    cmbgrpward.List = ["Yes", "No"]
+    cmbgrpward.List = ["Separate", "Grouped", "Tabbed"]
     cmbgrouplab.List = ["Group", "Section"]
     cmbgroupradio.List = ["Group", "Section"]
     cmbabnormexam.List = ["Enable", "Disable"]
@@ -48,8 +48,8 @@ Public Sub IconPanel1_Click()
   Else If IconPanel1.Index = 4 Then
     cmbmedlabel.List = ["Brand", "Generic", "Both"]
     cmbbodyformat.List = ["Tabular", "Paragraph"]
-    cmbshowday.List = ["Yes", "No"]
-    cmbdiagnoday.List = ["Yes", "No"]
+    cmbshowday.List = ["Date", "User", "Date+User", "None"]
+    cmbdiagnoday.List = ["Date", "User", "Date+User", "None"]
     cmbmedicineday.List = ["Yes", "No"]
     cmbquantchart.List = ["Chart", "FitsrVal", "LastVal", "First-LastVal", "AllValues"]
     cmbqualival.List = ["FitsrVal", "LastVal", "First-LastVal", "AllValues"]
@@ -252,7 +252,6 @@ End
 Public Sub btnallergy_Click()
 
   modSettings.SaveSettingsToFile("MedicineSetting/CheckPreviousSensitivity", cmballergy.Text)
-  modBasic.$CheckPreviousSensitivity = cmballergy.Text
   Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
 
 End
@@ -274,6 +273,7 @@ End
 Public Sub btninjsub_Click()
 
   modSettings.SaveSettingsToFile("ClinicForms/ShowInjectionSubRoutes", cmbinjsub.Text)
+  modBasic.$ClinInjSubRoutes = cmbinjsub.Text
   Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
 
 End
@@ -381,6 +381,7 @@ End
 Public Sub btngridcateg_Click()
 
   modSettings.SaveSettingsToFile("ClinicForms/CategoryGridView", cmbgridcateg.Text)
+  modBasic.$ClinCategoryGrid = cmbgridcateg.Text
   Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
 
 End

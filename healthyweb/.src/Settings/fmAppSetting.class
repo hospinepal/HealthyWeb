@@ -38,8 +38,8 @@ Public Sub IconPanel1_Click()
     cmbimiscert.List = ["Enable", "Disable"]
     cmbimisquote.List = ["Yes", "No"]
     cmbclaimicdform.List = ["ICD10", "ICD11"]
-    cmbautodoc.List = ["Enable", "Disable"]
-    cmbautoclaim.List = ["Consultation", "Emergency", "Both", "None"]
+    cmbautodoc.List = ["Enable", "AutoScan", "AutoDocs", "AddDocs", "Disable"]
+    cmbautoclaim.List = ["Consultation", "None"]
     ShowClaimParam()
     ShowIMISParam()
   Else If IconPanel1.Index = 7 Then
@@ -751,6 +751,7 @@ Private Sub ShowIMISParam()
   txtimispatURL.Text = modSettings.ShowSettingFromFIle("InsuranceMain/PatientURL")
   txtimiseligURL.Text = modSettings.ShowSettingFromFIle("InsuranceMain/EligibleURL")
   txtimisrequesturl.Text = modSettings.ShowSettingFromFIle("InsuranceMain/ClaimURL")
+  txtimisvalidateurl.Text = modSettings.ShowSettingFromFIle("InsuranceMain/ValidationURL")
 
   txtimishospuu.Text = modSettings.ShowSettingFromFIle("InsuranceMain/HospitalUUID")
   txtimisadminuu.Text = modSettings.ShowSettingFromFIle("InsuranceMain/ClaimAdminUUID")
@@ -777,6 +778,12 @@ End
 Public Sub lnkimisrequesturl_Click()
 
   txtimisrequesturl.Text = "https://imis.hib.gov.np/api/api_fhir/Claim/"
+
+End
+
+Public Sub lnkimisvalidurl_Click()
+
+  txtimisvalidateurl.Text = "https://imis.hib.gov.np/api/api_fhir/cap-validation"
 
 End
 
@@ -844,6 +851,15 @@ Public Sub btnimisrequrl_Click()
 
   modSettings.SaveSettingsToFile("InsuranceMain/ClaimURL", txtimisrequesturl.Text)
   modBasic.$IMISClaimURL = txtimisrequesturl.Text
+  Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
+  ' Balloon.Delay = modBasic.$BalloonDelay
+
+End
+
+Public Sub btnimisvalidurl_Click()
+
+  modSettings.SaveSettingsToFile("InsuranceMain/ValidationURL", txtimisvalidateurl.Text)
+  modBasic.$IMISValidateURL = txtimisvalidateurl.Text
   Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
   ' Balloon.Delay = modBasic.$BalloonDelay
 

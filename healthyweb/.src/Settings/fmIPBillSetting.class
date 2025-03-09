@@ -682,3 +682,9 @@ Private Sub GetNormalButtons()
   WebButtonL5.Background = Color.Default
 
 End
+
+Public Sub btnclose_Click()
+
+  Me.Close()
+
+End

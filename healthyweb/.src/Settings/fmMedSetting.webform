@@ -899,7 +899,7 @@
         { WebLabel17 WebLabel
           #MoveScaled(1,1,29,2)
           Expand = True
-          Text = ("Show Date of Entry")
+          Text = ("Show User Parameters")
           Border = True
         }
         { cmbshowday WebComboBox
@@ -927,7 +927,7 @@
         { WebLabel55 WebLabel
           #MoveScaled(1,1,29,2)
           Expand = True
-          Text = ("Show Diagnostic Date")
+          Text = ("Diagnostic User Parameters")
           Border = True
         }
         { cmbdiagnoday WebComboBox
@@ -1067,7 +1067,7 @@
         { WebLabel37 WebLabel
           #MoveScaled(1,1,29,2)
           Expand = True
-          Text = ("History Data Source")
+          Text = ("Visit Data Source")
           Border = True
         }
         { cmbvisithistory WebComboBox
