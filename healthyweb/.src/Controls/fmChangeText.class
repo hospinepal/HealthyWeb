@@ -32,9 +32,3 @@ Public Sub btnchange_Click()
   Endif
 
 End
-
-Public Sub WebForm_Close()
-
-  modDatabase.CloseDatabase()
-
-End

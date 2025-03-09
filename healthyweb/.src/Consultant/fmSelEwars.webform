@@ -34,23 +34,32 @@
       ReadOnly = False
     }
     { WebContainer13 WebContainer
-      #MoveScaled(13,1,15,3)
+      #MoveScaled(13,1,8,3)
+      Expand = True
+    }
+    { chkfinal WebCheckBox
+      #MoveScaled(21,1,15,3)
+      Height = "2em"
+      Text = ("Final Diagno")
+    }
+    { WebContainer14 WebContainer
+      #MoveScaled(36,1,8,3)
       Expand = True
     }
     { mnupload WebButton
-      #MoveScaled(28,1,12,3)
+      #MoveScaled(44,1,12,3)
       Width = "10em"
       Height = "2em"
       Text = ("Unit Upload")
     }
     { mnubulk WebButton
-      #MoveScaled(40,1,12,3)
+      #MoveScaled(56,1,12,3)
       Width = "10em"
       Height = "2em"
       Text = ("Bulk Upload")
     }
     { btnclose WebButton
-      #MoveScaled(52,1,12,3)
+      #MoveScaled(68,1,12,3)
       Width = "6em"
       Height = "2em"
       Text = ("Close")

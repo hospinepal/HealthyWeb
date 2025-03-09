@@ -10,25 +10,32 @@
   { mnuactiv WebMenu
     Text = ("Activity")
     { mnuposting WebMenu
+      Tag = "Consultation Plan"
       Text = ("User Posting")
     }
     { mnuessen WebMenu
+      Tag = "Comp Exam List"
       Text = ("Comp Exams")
     }
     { mnudeptexam WebMenu
+      Tag = "Departmental Examination"
       Text = ("Dept Exams")
     }
     { mnutriage WebMenu
+      Tag = "Triage Parameters"
       Text = ("Triage param")
     }
     { mnudemograph WebMenu
+      Tag = "Clinical Demographics"
       Text = ("Demographics")
     }
     { mnuclinaccess WebMenu
+      Tag = "Clinical Access"
       Text = ("Clinical Access")
     }
     { mnuresearch WebMenu
-      Text = ("Research")
+      Tag = "Research List"
+      Text = ("Research List")
     }
   }
   { mnugroups WebMenu
@@ -55,7 +62,12 @@
   { mnuverifyall WebMenu
     Text = ("Verify")
     { mnudiet WebMenu
+      Tag = "Diet Approval"
       Text = ("Nutrition")
+    }
+    { mnutelemedicine WebMenu
+      Tag = "Telemedicine List"
+      Text = ("Telemedicine")
     }
   }
   { mnuploadall WebMenu
@@ -70,6 +82,7 @@
   { mnurepo WebMenu
     Text = ("Reports")
     { mnubedocc WebMenu
+      Tag = "Bed Occupancy"
       Text = ("Occupancy")
     }
     { mnuipdates WebMenu
@@ -81,6 +94,7 @@
       Text = ("Transitions")
     }
     { mnuperformance WebMenu
+      Visible = False
       Text = ("Performance")
     }
     { mnusaved WebMenu
@@ -109,6 +123,7 @@
     }
   }
   { mnucustreport WebMenu
+    Tag = "Query Report"
     Text = ("CustQuery")
     { mnucust1 WebMenu
       Visible = False
@@ -156,6 +171,7 @@
       Image = "icon:/small/user"
     }
     { mnupersonal WebMenu
+      Tag = "Personal Page"
       Text = ("Personal Page")
     }
     { mnuseract WebMenu

@@ -321,7 +321,7 @@ Private Sub GetNutritionCalculation()
       xvitc = xvitc + modFixPatho.GetNutritionValue($rData2["fldcategory"], $rData2["flditem"], $rData2["flddose"], "fldvitaminc")
     Next
   Else If rbunit.Value = True Then
-    If GridView2.Rows.Selection.Count Then
+    If GridView2.Selection.Count Then
       $rData2.MoveTo(GridView2.Row)
       xcalori = xcalori + modFixPatho.GetNutritionValue($rData2["fldcategory"], $rData2["flditem"], $rData2["flddose"], "fldenergy")
       xfluid = xfluid + modFixPatho.GetNutritionValue($rData2["fldcategory"], $rData2["flditem"], $rData2["flddose"], "fldfluid")

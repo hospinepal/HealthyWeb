@@ -26,6 +26,10 @@ End
 
 Public Sub WebForm_Open()
 
+  If MMain.$WebEntry = True Then
+    modDataRepo.$RepositoryMode = MMain.$AppLogCategory
+    modBasic.$HospCode = MMain.$AppLogString
+  Endif
   modHelpVariable.SetApplicationGUI()
   MMain.GetApplVersionType()
 
@@ -42,21 +46,35 @@ Public Sub WebForm_Open()
 
   modLinkDB.LoadExtraDBSettings()
   modBasic.$ClinDietApprove = modGlobalSetting.ShowSettingFromDB("ClinicForms/User_DietApproval")
-  modAMISRep.$AyurvedicDiagnosis = modHelpVariable.$docsDirectory &/ "ayurvedicdisease.csv"
+  modAyurv.$AyurvedicDiagnosis = modHelpVariable.$docsDirectory &/ "ayurvedicdisease.csv"
   SetFormAccess()
 
 End
 
 Private Sub SetFormAccess()
 
+  modGeneralMain.ShowSelectedFormMenu(mnuposting)
+  modGeneralMain.ShowSelectedFormMenu(mnuessen)
+  modGeneralMain.ShowSelectedFormMenu(mnudeptexam)
+  modGeneralMain.ShowSelectedFormMenu(mnutriage)
+  modGeneralMain.ShowSelectedFormMenu(mnudemograph)
+  modGeneralMain.ShowSelectedFormMenu(mnuclinaccess)
+  modGeneralMain.ShowSelectedFormMenu(mnuresearch)
+
+  modGeneralMain.ShowSelectedFormMenu(mnudiet)
+  modGeneralMain.ShowSelectedFormMenu(mnutelemedicine)
+
   modGeneralMain.ShowSelectedFormMenu(mnubedocc)
   modGeneralMain.ShowSelectedFormMenu(mnuipdates)
   modGeneralMain.ShowSelectedFormMenu(mnutrans)
-
   modGeneralMain.ShowSelectedFormMenu(mnusaved)
   modGeneralMain.ShowSelectedFormMenu(mnuperformance)
+
   modGeneralMain.ShowSelectedFormMenu(mnugenreport)
   modGeneralMain.ShowSelectedFormMenu(mnuaptname)
+
+  modGeneralMain.ShowSelectedFormMenu(mnucustreport)
+  modGeneralMain.ShowSelectedFormMenu(mnupersonal)
 
 End
 
@@ -170,8 +188,10 @@ Public Sub mnucust1_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust1.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust1.Tag, Workspace1)
 
 End
 
@@ -179,8 +199,10 @@ Public Sub mnucust2_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust2.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust2.Tag, Workspace1)
 
 End
 
@@ -188,8 +210,10 @@ Public Sub mnucust3_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust3.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust3.Tag, Workspace1)
 
 End
 
@@ -197,8 +221,10 @@ Public Sub mnucust4_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust4.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust4.Tag, Workspace1)
 
 End
 
@@ -206,8 +232,10 @@ Public Sub mnucust5_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust5.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust5.Tag, Workspace1)
 
 End
 
@@ -415,6 +443,17 @@ Public Sub mnudiet_Click()
     Workspace1.DeleteChildren()
   Endif
   hForm = New FmDietApprove(Workspace1)
+
+End
+
+Public Sub mnutelemedicine_Click()
+
+  Dim hForm As FmTeleMedList
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmTeleMedList(Workspace1)
 
 End
 

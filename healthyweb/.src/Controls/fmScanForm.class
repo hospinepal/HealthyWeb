@@ -1,12 +1,20 @@
 ' Gambas class file
 
 Private $sType As String
+Private $sExtra As String
 Private $ImgList As String[]
 
-Public Sub _new(encid As String, sType As String)
+Public Sub _new(encid As String, sType As String, sExtra As String)
 
   txtencid.Text = encid
   $sType = sType
+  If sExtra Then
+    $sExtra = sExtra
+    btnupload.Visible = True
+  Else
+    $sExtra = ""
+    btnupload.Visible = False
+  Endif
 
   If txtencid.Text Then
     btnshow_Click()
@@ -96,23 +104,6 @@ End
 ' '
 ' ' End
 
-Public Sub btnupload_Click()
-
-  Dim hForm As FmFTPUpload
-  Dim xPath As String
-
-  If chkmultiple.Value = True Then
-    xPath = modDevAll.ComvertMultiImagesToPDF($ImgList)
-  Else
-    xPath = txtpath.Text
-  Endif
-  If Exist(xPath) Then
-    hForm = New FmFTPUpload(xPath)
-    hForm.ShowModal
-  Endif
-
-End
-
 Public Sub btnsaveimg_Click()
 
   Dim sPath As String
@@ -124,10 +115,51 @@ Public Sub btnsaveimg_Click()
     sPath = txtpath.Text
   Endif
   If Exist(sPath) Then
-    sLongID = modImage.SavePatientFileGeneral(Trim(txtencid.Text), $sType, txtdetail.Text, sPath, False)    ''
-    Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
+    sLongID = modImage.SavePatientFileGeneral(Trim(txtencid.Text), $sType, txtdetail.Text, sPath)    ''
+    If sLongID Then
+      Me.Exec("Toastify({text: 'File saved', duration: 3000}).showToast()")
+    Endif
   Else
     Message.Warning("Unable to upload", ("OK"))
+  Endif
+
+End
+
+Public Sub btnupload_Click()
+
+  Dim xPath As String
+  Dim sLongID As Long
+
+  Dim asx As String[]
+  Dim aOutPath As String
+  Dim res As Result
+
+  If chkmultiple.Value = True Then
+    xPath = modDevAll.ComvertMultiImagesToPDF($ImgList)
+  Else
+    xPath = txtpath.Text
+  Endif
+  If Exist(xPath) Then
+    asx = Split($sExtra, "|")
+    If asx[1] Then
+      If asx[0] = modBasic.$HIPackage Or If asx[0] = modBasic.$HIPackageER Then
+        aOutPath = modClaimAPI.UploadImagesFilesClaimServerHI(asx[1], xPath)
+      Else If asx[0] = modBasic.$SSFAccident Or If asx[0] = modBasic.$SSFMedical Or If asx[0] = modBasic.$SSFCritical Then
+
+      Endif
+    Endif
+    sLongID = modImage.SavePatientFileGeneral(Trim(txtencid.Text), $sType, txtdetail.Text, xPath)    ''  ''
+    If aOutPath Then
+      LCDLabel1.Text = "UPLOADED"
+      If sLongID Then
+        res = modDatabase.$myConn.Edit("tblpatreport", "fldid=&1", sLongID)
+        res["fldflag"] = True
+        res.Update
+      Endif
+    Endif
+    If sLongID Then
+      Me.Exec("Toastify({text: 'File saved', duration: 3000}).showToast()")
+    Endif
   Endif
 
 End

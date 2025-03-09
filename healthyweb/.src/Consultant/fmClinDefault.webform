@@ -25,11 +25,17 @@
       #MoveScaled(32,1,5,3)
       Expand = True
     }
-    { btnaddoption2 WebButton
-      #MoveScaled(37,1,13,3)
-      Width = "8em"
+    { btndefaultlist WebButton
+      #MoveScaled(37,1,11,3)
+      Width = "6em"
       Height = "2em"
-      Text = ("Def Formats")
+      Text = ("Default")
+    }
+    { btnclaim WebButton
+      #MoveScaled(48,1,11,3)
+      Width = "6em"
+      Height = "2em"
+      Text = ("HI Claim")
     }
   }
   { WebContainer4 WebContainer

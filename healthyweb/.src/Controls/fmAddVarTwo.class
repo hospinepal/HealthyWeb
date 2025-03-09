@@ -54,6 +54,10 @@ Public Sub _new(colvar1 As String, colvar2 As String, tbl As String, grpList As 
     Me.Title = "Scheme Category"
     Label1.Text = ("Category")
     Label2.Text = ("Package")
+  Else If $tbl = "tblipdservice" Then
+    Me.Title = "Service Categories"
+    Label1.Text = ("Service")
+    Label2.Text = ("Diagnosis")
   Endif
 
   FilVarList()
@@ -80,7 +84,11 @@ End
 
 Public Sub btnrefresh_Click()
 
-  SHowSelectGrid()
+  If txtcategory.Text Then
+    SHowSelectGrid()
+  Else
+    FilVarList()
+  Endif
 
 End
 
@@ -133,12 +141,12 @@ Public Sub btnCancel_Click()
 
   If GridView1.Selection.Count Then
     $rData.MoveTo(GridView1.Selection[0])
-    modDatabase.$myConn.Delete($tbl, $colvar1 & "=&1 and " & $colvar2 & "=&2", $rData[$colvar1], $rData[$colvar2])       ''
-    If txtcategory.Text Then
-      SHowSelectGrid()
+    If $rData[$colvar2] Then
+      modDatabase.$myConn.Delete($tbl, $colvar1 & "=&1 and " & $colvar2 & "=&2", $rData[$colvar1], $rData[$colvar2])       ''
     Else
-      FilVarList()
+      modDatabase.$myConn.Delete($tbl, $colvar1 & "=&1 and " & $colvar2 & " IS &2", $rData[$colvar1], Null)       ''
     Endif
+    FilVarList()
     Me.Exec("Toastify({text: 'Variable deleted', duration: 3000}).showToast()")
     ' Balloon.Delete(("Variable deleted"), btnCancel)
     ' Balloon.Delay = modBasic.$BalloonDelay
