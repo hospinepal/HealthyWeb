@@ -1,4 +1,5 @@
 var $AutoTextComoleteList = [];
+var drawPad;
 
 function richtextformat(command, value) {
   document.execCommand(command, false, value);
@@ -142,7 +143,7 @@ function canvasDownload (target, type) {
  *  Use of this source code is governed by a BSD-style license
  *  that can be found in the LICENSE file in the root of the source
  *  tree.
- */
+*/
 
 function StartVideoCapture() {
   var constraints = { audio: false, video:true };
@@ -171,3 +172,39 @@ function changeScreenMode() {
     $( "body" ).addClass( "dark" );
   }
 }
+
+//upload blob
+function sendImageData(key, sData) {
+
+  var xhr = new XMLHttpRequest();
+  var form = new FormData();
+
+  form.append('data', sData);
+  
+  xhr.upload.onload = function() {
+  alert('Upload finished successfully.');
+	};
+
+  xhr.open('POST', $root + '/upload:' + key, true);
+  xhr.send(form);
+
+}
+
+//skecthpad
+function clearSketchPad() {
+  drawPad.clear();
+}
+
+function downloadSketchPadAsImage() {
+  var adata = drawPad.canvas.toDataURL("image/png");
+  download(adata, "PenDrawing.png", "image/png");
+}
+
+function uploadSketchPadAsImage() {
+  var xdata = drawPad.canvas.toDataURL("image/png");
+  var r = (Math.random() + 1).toString(36).substring(2);
+  sendImageData(r, xdata);
+
+  return r
+}
+
