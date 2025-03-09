@@ -147,7 +147,6 @@
       }
       { txtmode WebTextBox
         #MoveScaled(52,1,12,3)
-        Width = "30%"
         Height = "2em"
         Enabled = False
       }
@@ -165,13 +164,15 @@
         #MoveScaled(8,1,12,2)
         Height = "2em"
         Expand = True
+        ReadOnly = False
       }
       { WebContainer20 WebContainer
         #MoveScaled(20,1,7,2)
-        Expand = True
+        Width = "4em"
       }
       { chkbill WebRadioButton
-        #MoveScaled(27,1,7,2)
+        #MoveScaled(27,1,9,2)
+        Width = "4em"
         Height = "2em"
         Text = ("Billing")
       }
@@ -189,6 +190,7 @@
         #MoveScaled(8,1,12,2)
         Width = "8em"
         Height = "2em"
+        ReadOnly = False
       }
       { WebContainer16 WebContainer
         #MoveScaled(20,1,7,2)

@@ -86,6 +86,7 @@
         #MoveScaled(13,1,26,3)
         Height = "2em"
         Expand = True
+        ReadOnly = False
       }
       { txtqty WebValueBox
         #MoveScaled(39,1,7,3)

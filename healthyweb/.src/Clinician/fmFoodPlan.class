@@ -124,6 +124,7 @@ Public Sub btnadd_Click()
   Dim i As Integer
   Dim dosetime As Date
   Dim res1 As Result
+  Dim xIntVal As String
 
   If cmbtype.Text And If cmbitem.Text And If txtdose.Value And If txtfreq.Value Then
     xdate = dttoday.Value
@@ -151,6 +152,14 @@ Public Sub btnadd_Click()
               res["fldcomp"] = modBasic.$compID
               res["fldsave"] = False
               res["xyz"] = True
+              If MMain.$WebEntry = True Then
+                xIntVal = modString.GetDateString(Now())
+                res["fldid"] = CLong(xIntVal)
+                res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+                res["fldrepodate"] = Now()
+                res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+                res["fldhospcode"] = modBasic.$HospCode
+              Endif
               res.Update
             Endif
           Next
@@ -177,6 +186,14 @@ Public Sub btnadd_Click()
           res["fldcomp"] = modBasic.$compID
           res["fldsave"] = False
           res["xyz"] = True
+          If MMain.$WebEntry = True Then
+            xIntVal = modString.GetDateString(Now())
+            res["fldid"] = CLong(xIntVal)
+            res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+            res["fldrepodate"] = Now()
+            res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+            res["fldhospcode"] = modBasic.$HospCode
+          Endif
           res.Update
         Endif
       Next

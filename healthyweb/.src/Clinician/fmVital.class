@@ -150,10 +150,15 @@ Public Sub btnsave_Click()
 
   Dim sType As String
   Dim xsys As String
+  Dim OptionType As String
+  Dim hForm As CGetExamParam
 
   If ListBox1.Text Then
-    sType = modFixClinic.GetExaminationType(ListBox1.Text)
-    xsys = modFixClinic.SysConstFromGetExamID(ListBox1.Text)
+    hForm = New CGetExamParam(ListBox1.Text, "Exam")
+    sType = hForm.GetExamDataType()
+    xsys = hForm.GetExamConstant()
+    OptionType = hForm.GetExamOption()
+
     If sType = "Quantitative" Then
       If txtmin.Value = 0 And If txtmax.Value = 0 Then
         chkabnormal.Value = False
@@ -164,12 +169,12 @@ Public Sub btnsave_Click()
           chkabnormal.Value = False
         Endif
       Endif
-      modClinSub.AddQuantiData($encid, "", ListBox1.Text, txtexamval.Value, chkabnormal.Value, "Essential Examinations", xsys)
+      modClinSub.AddQuantiData($encid, "", ListBox1.Text, OptionType, txtexamval.Value, chkabnormal.Value, "Essential Examinations", xsys)
       ' FillVitalExamChart(PictureBox1, $encid, lblexamname.Text)
 
     Else If sType = "Qualitative" Then
       If txtquali Then
-        modClinSub.AddClinicExam($encid, "", ListBox1.Text, txtquali.Text, txtexamval.Value, chkabnormal.Value, "Essential Examinations", xsys, "Regular")
+        modClinSub.AddClinicExam($encid, "", ListBox1.Text, OptionType, txtquali.Text, txtexamval.Value, chkabnormal.Value, "Essential Examinations", xsys, "Regular")
       Endif
     Endif
     ShowExamGrid(ListBox1.Text)

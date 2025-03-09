@@ -101,18 +101,17 @@
     Index = 0
     Text = ("Current")
     { WebContainer18 WebContainer
-      #MoveScaled(1,1,81,50.5)
+      #MoveScaled(1,1,89,50.5)
       Expand = True
       Arrangement = Arrange.Vertical
       { WebContainer28 WebContainer
-        #MoveScaled(1,1,79,6)
+        #MoveScaled(1,1,87,6)
         Class = "less-container-margin"
         Arrangement = Arrange.Horizontal
         { Panel1 WebContainer
           #MoveScaled(1,1,35,4)
           Arrangement = Arrange.Horizontal
           Spacing = True
-          Border = True
           { rbcurrent WebRadioButton
             #MoveScaled(1,1,10,2)
             Height = "2em"
@@ -155,9 +154,19 @@
           Height = "2em"
           Image = "icon:/small/apply"
         }
+        { WebContainer39 WebContainer
+          #MoveScaled(64,1,3,4)
+          Width = "1em"
+        }
+        { btnaiadvice WebButton
+          #MoveScaled(67,1,4,4)
+          Width = "2em"
+          Height = "2em"
+          Image = "icon:/medium/book"
+        }
       }
       { grdmedicine WebTable
-        #MoveScaled(1,7,79,34)
+        #MoveScaled(1,7,87,34)
         Expand = True
         Mode = Select.Single
         ShowCheck = False
@@ -167,7 +176,7 @@
     Index = 1
     Text = ("Request")
     { WebContainer8 WebContainer
-      #MoveScaled(1,1,110,50.5)
+      #MoveScaled(1,1,110,50.375)
       Expand = True
       Arrangement = Arrange.Vertical
       { WebContainer5 WebContainer
@@ -247,8 +256,16 @@
             Tooltip = ("Show Drug Review Report")
             Image = "icon:/small/important"
           }
-          { btnshow WebButton
+          { btnaireview WebButton
             #MoveScaled(44,1,4,2)
+            Class = "toolButton"
+            Width = "2em"
+            Height = "2em"
+            Tooltip = ("Show Cloud AI Response")
+            Image = "icon:/medium/book"
+          }
+          { btnshow WebButton
+            #MoveScaled(48,1,4,2)
             Class = "toolButton"
             Width = "2em"
             Height = "2em"
@@ -318,6 +335,7 @@
             #MoveScaled(1,1,9,3)
             Width = "6em"
             Height = "2em"
+            Tooltip = ("Dosage Form")
             ReadOnly = False
             PlaceHolder = ("Route")
           }
@@ -325,6 +343,7 @@
             #MoveScaled(10,1,20,3)
             Height = "2em"
             Expand = True
+            Tooltip = ("Particulars Name")
             PlaceHolder = ("Particular")
             ShowClear = True
           }
@@ -344,24 +363,29 @@
             #MoveScaled(1,1,7,3)
             Width = "6em"
             Height = "2em"
+            Tooltip = ("Unit Dose")
             PlaceHolder = ("Dose")
           }
           { cmbfreq WebComboBox
             #MoveScaled(8,1,9,3)
             Width = "7em"
             Height = "2em"
+            Tooltip = ("Frequency")
+            ReadOnly = False
             PlaceHolder = ("Freq")
           }
           { txtday WebValueBox
             #MoveScaled(17,1,7,3)
             Width = "5em"
             Height = "2em"
+            Tooltip = ("Duration")
             PlaceHolder = ("Day")
           }
           { txtqty WebValueBox
             #MoveScaled(24,1,7,3)
             Width = "5em"
             Height = "2em"
+            Tooltip = ("Quantity to Dispense")
             PlaceHolder = ("QTY")
           }
         }
@@ -377,6 +401,7 @@
             #MoveScaled(1,1,9,2)
             Height = "2em"
             Expand = True
+            Tooltip = ("Direction")
             ReadOnly = False
             PlaceHolder = ("Direction")
           }
@@ -634,7 +659,7 @@
     Index = 3
     Text = ("Dosing")
     { GridView2 WebTree
-      #MoveScaled(1,1,60,50.875)
+      #MoveScaled(1,1,60,50.5)
       Expand = True
       Mode = Select.None
       ShowHeader = True

@@ -11,9 +11,11 @@
   { mnustatus WebMenu
     Text = ("Views")
     { mnuopdlist WebMenu
+      Tag = "Consultation List"
       Text = ("Consultations")
     }
     { mnuopvisits WebMenu
+      Tag = "OPD Visit List"
       Text = ("OP Services")
     }
     { mnubedocc WebMenu
@@ -21,6 +23,7 @@
       Text = ("Bed Occupancy")
     }
     { mnuhospinfect WebMenu
+      Tag = "HAI Surveillance"
       Text = ("HAI Surveillance")
     }
   }
@@ -46,12 +49,9 @@
       Tag = "Examinations"
       Text = ("Examinations")
     }
-    { mnuextraproc WebMenu
-      Tag = "Extra Procedure"
-      Text = ("Extra Procedure")
-    }
   }
   { mnuinpat WebMenu
+    Tag = "Input Forms"
     Text = ("Inputs")
     { mnuaddcons WebMenu
       Text = ("Diagnosis")
@@ -74,22 +74,14 @@
     { mnumaternal WebMenu
       Text = ("Maternity")
     }
-    { WebMenu1 WebMenu
-    }
-    { mnuaddimage WebMenu
-      Text = ("Add Images")
-    }
-    { mnuadddicom WebMenu
-      Text = ("Add Dicom")
-    }
-    { mnuaddvideo WebMenu
-      Text = ("Add Video")
-    }
-    { mnuscanfile WebMenu
-      Text = ("Scan File")
-    }
+  }
+  { mnuspecialized WebMenu
+    Visible = False
+    Tag = "Specialized Form"
+    Text = ("Specialized")
   }
   { mnuexamsel WebMenu
+    Tag = "Rec Examinations"
     Text = ("Structured")
     { mnurec1 WebMenu
       Visible = False
@@ -132,7 +124,24 @@
       Text = ("Exam10")
     }
   }
+  { mnuaddfiles WebMenu
+    Tag = "Add Documents"
+    Text = ("Docs")
+    { mnuaddimage WebMenu
+      Text = ("Add Images")
+    }
+    { mnuadddicom WebMenu
+      Text = ("Add Dicom")
+    }
+    { mnuaddvideo WebMenu
+      Text = ("Add Video")
+    }
+    { mnuscanfile WebMenu
+      Text = ("Scan File")
+    }
+  }
   { mnusharing WebMenu
+    Tag = "Group Sharing"
     Text = ("Share")
     { mnuprocshare WebMenu
       Tag = "Group Sharing"
@@ -175,6 +184,7 @@
       Text = ("IP Events")
     }
     { mnutransition WebMenu
+      Tag = "Patient Transition"
       Text = ("Transitions")
     }
   }
@@ -197,6 +207,7 @@
     }
   }
   { mnurepo WebMenu
+    Tag = "Query Report"
     Text = ("Query")
     { mnucust1 WebMenu
       Visible = False
@@ -258,15 +269,19 @@
   { mnustock WebMenu
     Text = ("Stock")
     { mnutransfer WebMenu
+      Tag = "Stock Transfer"
       Text = ("Stock Transfer")
     }
     { mnustoconsume WebMenu
+      Tag = "Stock Consume"
       Text = ("Stock Consume")
     }
     { mnutransreport WebMenu
+      Tag = "Transfer Report"
       Text = ("Transfer Report")
     }
     { mnuinvdb WebMenu
+      Tag = "Inventory Database"
       Text = ("Inventory DB")
     }
   }
@@ -285,14 +300,24 @@
       Text = ("App Settings")
     }
   }
+  { mnuextra WebMenu
+    Text = ("Extras")
+    { mnupersonal WebMenu
+      Tag = "Personal Page"
+      Text = ("Personal")
+    }
+    { mnumachineAI WebMenu
+      Text = ("Cloud AI")
+    }
+    { mnutranslate WebMenu
+      Text = ("Translate")
+    }
+  }
   { mnuhelp WebMenu
     Text = ("Help")
     { mnucuruserid WebMenu
       Text = ("User ID")
       Image = "icon:/small/user"
-    }
-    { mnupersonal WebMenu
-      Text = ("Personal Page")
     }
     { mnuclearcache WebMenu
       Text = ("Clear Cache")

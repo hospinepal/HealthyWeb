@@ -166,14 +166,24 @@
           Class = "less-container-margin"
           Visible = False
           Arrangement = Arrange.Horizontal
-          { WebLabel1 WebLabel
-            #MoveScaled(1,1,6,2)
+          { btngroup WebButton
+            #MoveScaled(1,1,4,2)
+            Width = "2em"
+            Height = "2em"
+            Image = "icon:/32/view-icon"
+          }
+          { btncashpack WebButton
+            #MoveScaled(5,1,4,2)
+            Width = "2em"
+            Height = "2em"
+            Image = "icon:/32/text-list"
+          }
+          { WebContainer16 WebContainer
+            #MoveScaled(9,1,3,2)
             Width = "4em"
-            Text = ("Section")
-            Border = True
           }
           { cmbsection WebComboBox
-            #MoveScaled(7,1,17,2)
+            #MoveScaled(12,1,17,2)
             Height = "2em"
             Expand = True
             ReadOnly = False
@@ -190,27 +200,22 @@
           }
           { txtsearch WebTextBox
             #MoveScaled(6,1,8,3)
-            Width = "6em"
+            Width = "12em"
             Height = "2em"
-            Expand = True
             ShowClear = True
           }
           { WebContainer12 WebContainer
             #MoveScaled(14,1,3,3)
             Expand = True
           }
-          { WebContainer15 WebContainer
-            #MoveScaled(17,1,3,3)
-            Width = "1em"
-          }
           { btnaddsingle WebButton
-            #MoveScaled(20,1,5,3)
+            #MoveScaled(17,1,5,3)
             Width = "3em"
             Height = "2em"
             Text = ("+1")
           }
           { btnadd WebButton
-            #MoveScaled(25,1,5,3)
+            #MoveScaled(22,1,5,3)
             Width = "3em"
             Height = "2em"
             Image = "icon:/small/right"

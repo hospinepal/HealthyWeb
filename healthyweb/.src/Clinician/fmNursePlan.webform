@@ -67,7 +67,7 @@
   }
   { WebContainer5 WebContainer
     #MoveScaled(1,12,109,50)
-    Class = "height-tablet-low"
+    Class = "height-tablet-medium"
     Arrangement = Arrange.Row
     { WebContainer55 WebContainer
       #MoveScaled(1,1,33,48)

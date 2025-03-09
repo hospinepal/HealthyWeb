@@ -45,11 +45,13 @@
       #MoveScaled(1,1,12,3)
       Width = "15%"
       Height = "2em"
+      ReadOnly = False
     }
     { cmbexam WebComboBox
       #MoveScaled(13,1,26,3)
       Height = "2em"
       Expand = True
+      ReadOnly = False
     }
     { txtfreq WebValueBox
       #MoveScaled(39,1,7,3)

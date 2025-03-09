@@ -28,8 +28,8 @@ Private Sub ShowMedFluids()
 
   Dim sql As String
 
-  sql = "select fldid,fldid,flditem,flddose,fldfreq,flddays,fldcurval,fldstarttime,fldstarttime,fldstatus from tblpatdosing where fldencounterval=&1 and fldsave_order=&2 and fldroute=&3 ORDER BY fldid DESC"
-  $rFludRes = modDatabase.$myConn.Exec(sql, $encid, True, "fluid")
+  sql = "select fldid,fldid,flditem,flddose,fldfreq,flddays,fldcurval,fldstarttime,fldstarttime,fldstatus from tblpatdosing where fldencounterval=&1 and fldsave_order=&2 and fldroute=&3 and fldstarttime<=&4 and fldendtime>=&5 ORDER BY fldid DESC"
+  $rFludRes = modDatabase.$myConn.Exec(sql, $encid, True, "fluid", modDate.EndSqlDate(Now()), modDate.StartSqlDate(Now()))
   $aFludFields = New String[]
   modGridView.ReadSmallData(grdfluid, $rFludRes, $aFludFields)
 
@@ -61,34 +61,10 @@ Public Sub grdfluid_Data(Row As Integer, Column As Integer, Data As WebTableData
   If Column = 7 Then
     Data.Text = modReportVar.GetDateTimeReport($rFludRes[$aFludFields[Column]], gb.GeneralDate)
   Else If Column = 1 Then
-    Data.Html = modString.GetImageForHTMLGrid(modGeneralMain.GetSystemIcon(GetFluidAdminStatusCode($rFludRes[$aFludFields[Column]])), "75%", "75%")
+    Data.Html = modString.GetImageForHTMLGrid(modGeneralMain.GetSystemIcon(GetFluidAdminStatusCode($rFludRes[$aFludFields[Column]])), "50%", "50%")
     Data.Text = ""
   Else
     Data.Text = $rFludRes[$aFludFields[Column]]
-  Endif
-
-End
-
-Public Sub btnflagfluid_Click()
-
-  Dim yval As Integer
-
-  If grdfluid.Selection.Count Then
-    $rFludRes.MoveTo(grdfluid.Selection[0])
-    btnflagrate.Visible = True
-    txtfluidname.Text = $rFludRes["flditem"]
-
-    If $rFludRes["fldcurval"] = "Continue" Then
-      If GetFluidAdminStatusCode($rFludRes["fldid"]) = "icon:/small/next" Then
-        yval = InputValue(("Enter Rate of Administration in mL/Hour"), $rFludRes["flditem"], 0)
-        If yval Then
-          modPharmSub.InsertNurDosing($rFludRes["fldid"], $encid, yval, "mL/Hour", Now())
-          ShowMedFluids()
-        Endif
-      Endif
-    Endif
-
-    FillFluidGridView($rFludRes["fldid"])
   Endif
 
 End
@@ -113,9 +89,40 @@ Public Sub btnfluidstatus_Click()
 
 End
 
+Public Sub grdfluid_Select()
+
+  If grdfluid.Selection.Count Then
+    $rFludRes.MoveTo(grdfluid.Selection[0])
+    btnivclose.Visible = True
+    txtfluidname.Text = $rFludRes["flditem"]
+    FillFluidGridView($rFludRes["fldid"])
+  Endif
+
+End
+
+Public Sub btnivstart_Click()
+
+  If grdfluid.Selection.Count Then
+    $rFludRes.MoveTo(grdfluid.Selection[0])
+
+    If $rFludRes["fldcurval"] = "Continue" Then
+      If GetFluidAdminStatusCode($rFludRes["fldid"]) = "icon:/small/next" Then
+        If txtrate.Value Then
+          modPharmSub.InsertNurDosing($rFludRes["fldid"], $encid, txtrate.Value, "mL/Hour", Now())
+          FillFluidGridView($rFludRes["fldid"])
+          ShowMedFluids()
+          txtrate.Value = 0
+        Endif
+      Endif
+    Endif
+
+  Endif
+
+End
+
 Private Sub FillFluidGridView(dosno As Long)
 
-  $rRateRes = modDatabase.$syConn.Exec("select fldid,fldid,fldvalue,fldunit,fldfromtime,fldtotime,fldid,flddoseno from tblnurdosing where fldencounterval=&1 and flddoseno=&2 ORDER BY fldid DESC", $encid, dosno)
+  $rRateRes = modDatabase.$syConn.Exec("select fldid,fldid,fldvalue,fldunit,fldfromtime,fldtotime,fldid,flddoseno from tblnurdosing where fldencounterval=&1 and flddoseno=&2 and fldfromtime IS NOT NULL ORDER BY fldid DESC", $encid, dosno)
   $aRateFields = New String[]
   modGridView.ReadSmallData(grdfluiddata, $rRateRes, $aRateFields)
 
@@ -142,7 +149,10 @@ Public Sub grdfluiddata_Data(Row As Integer, Column As Integer, Data As WebTable
 
   $rRateRes.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
-  If Column = 1 Then
+  If Column = 0 Then
+    Data.Html = modString.GetImageForHTMLGrid(modGeneralMain.GetSystemIcon(GetPictureDosing($rRateRes[$aRateFields[Column]])), "95%", "95%")
+    Data.Text = ""
+  Else If Column = 1 Then
     Data.Text = txtfluidname.Text
   Else If Column = 2 Then
     Data.Text = $rRateRes[$aRateFields[Column]]
@@ -150,15 +160,13 @@ Public Sub grdfluiddata_Data(Row As Integer, Column As Integer, Data As WebTable
     Data.Text = modReportVar.GetDateTimeReport($rRateRes[$aRateFields[Column]], gb.GeneralDate)
   Else If Column = 5 Then
     Data.Text = modReportVar.GetDateTimeReport($rRateRes[$aRateFields[Column]], gb.GeneralDate)
-  Else If Column = 0 Then
-    Data.Html = modString.GetImageForHTMLGrid(modGeneralMain.GetSystemIcon(GetPictureDosing($rRateRes[$aRateFields[Column]])), "75%", "75%")
   Else
     Data.Text = $rRateRes[$aRateFields[Column]]
   Endif
 
 End
 
-Public Sub btnflagrate_Click()
+Public Sub btnivclose_Click()
 
   Dim res As Result
 
@@ -183,9 +191,9 @@ Private Function GetPictureDosing(dosid As Long) As String
 
   res = modDatabase.$myConn.Exec("select flddoseno,fldfromtime,fldtotime from tblnurdosing where fldid=&1", dosid)
   If res.Available Then
-    If res!fldfromtime And If Not res!fldtotime Then
+    If res["fldfromtime"] And If Not res["fldtotime"] Then
       xx = "icon:/small/stop"
-    Else If res!fldfromtime And If res!fldtotime Then
+    Else If res["fldfromtime"] And If res["fldtotime"] Then
       xx = "icon:/small/lock"
     Endif
   Endif
@@ -200,9 +208,9 @@ Private Function GetFluidAdminStatusCode(dosno As Long) As String
 
   res = modDatabase.$syConn.Exec("select fldid,fldfromtime,fldtotime from tblnurdosing where fldencounterval=&1 and flddoseno=&2 ORDER BY fldid DESC", $encid, dosno)
   If res.Available Then
-    If res!fldfromtime And If Not res!fldtotime Then
+    If res["fldfromtime"] And If Not res["fldtotime"] Then
       xx = "icon:/small/stop"
-    Else If res!fldfromtime And If res!fldtotime Then
+    Else
       xx = "icon:/small/next"
     Endif
   Else

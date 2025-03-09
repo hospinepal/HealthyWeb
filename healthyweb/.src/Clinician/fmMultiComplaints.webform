@@ -14,6 +14,7 @@
       #MoveScaled(1,1,13,2)
       Width = "15em"
       Height = "2em"
+      ReadOnly = False
     }
     { btnshowall WebButton
       #MoveScaled(14,1,4,2)

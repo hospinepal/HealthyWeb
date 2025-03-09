@@ -26,6 +26,7 @@ End
 Private Sub AddFoodIntakeData(encid As String, strItem As String, strReport As String, strValue As Float)
 
   Dim res As Result
+  Dim xIntVal As String
 
   res = modDatabase.$myConn.Create("tblexamgeneral")
   res["fldencounterval"] = encid
@@ -41,6 +42,14 @@ Private Sub AddFoodIntakeData(encid As String, strItem As String, strReport As S
   res["fldsave"] = False
   res["flduptime"] = ""
   res["xyz"] = False
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update()
   'don't catch error
 

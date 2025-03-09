@@ -10,10 +10,9 @@ Private $ProcItem As String
 Private $UserRestrict As String[]
 ' Private $rData As Result
 ' Private $aMyFields As String[]
-Private $Status As String
+Private $sTatus As String
 
 Private $AlphaList As String[]
-Private $DiscPackage As String
 Private $LedgerAC As String
 Private $PatientNum As String
 Private $xBillType As String
@@ -25,6 +24,14 @@ Private $aMyFieldsA1 As String[]
 Private $rDataAp As Result
 Private $aMyFieldsAp As String[]
 Private $PositionList As String[]
+
+Private $billModeTest As String
+Private $billModeRadio As String
+Private $billModePharmacy As String
+Private $billModeProcedure As String
+Private $billModeEquipment As String
+Private $billModeService As String
+Private $billModeOthers As String
 
 Public Sub _new()
 
@@ -170,13 +177,16 @@ Private Sub GetEncounterValue()
       Else
         txtpatientname.Text = modPatient.GetPatientNameByEnc(Trim(txtencid.Text))
         If txtpatientname.Text Then
+          TabPanel1.Enabled = True
           txtgender.Text = modPatient.GetPatientSex(Trim(txtencid.Text))
           txtpatientaddress.Text = modPatient.GetPatientAddressByEnc(Trim(txtencid.Text))
           dtdob.Tag = modPatient.GetPatientBirthDay(Trim(txtencid.Text))
           modDateSub.GetAgeControlFromDate(dtdob.Tag, txtpatage, cmbpatageunit)
 
-          txtnow.Text = modPatient.CurrentAdmissionStatus(Trim(txtencid.Text))
-          txtbedno.Text = modPatient.GetLocationSetting(Trim(txtencid.Text), txtnow.Text)
+          $PatientNum = modPatient.GetPatientNoByEnc(Trim(txtencid.Text))
+          $sTatus = modPatient.CurrentAdmissionStatus(Trim(txtencid.Text))
+          txtnow.Text = $sTatus
+          txtbedno.Text = modPatient.GetLocationSetting(Trim(txtencid.Text), $sTatus)
           txtpatdoa.Text = modReportVar.GetDateTimeReport(modPatient.GetRecordDate(Trim(txtencid.Text)), gb.GeneralDate)
           txtpatweight.Value = modClinic.GetBodyWeight(Trim(txtencid.Text))
           btnconsult.Tag = modPatient.GetAttendingConsultant(Trim(txtencid.Text))
@@ -306,6 +316,9 @@ Public Sub btnselectuser_Click()
     If xMedUser And If xMedUser.Count Then
       btnconsult.Tag = xMedUser[0]
       btnconsult.Text = xMedUser[1]
+    Else
+      btnconsult.Tag = ""
+      btnconsult.Text = ""
     Endif
     If btnconsult.Tag Then
       modPatientSub.UpdateAttendingConsultant(Trim(txtencid.Text), btnconsult.Tag)
@@ -371,34 +384,56 @@ End
 ''============================== MAIN FORM ================================
 Private Sub BasicInfoPatient()
 
-  Dim resx As Result
-
   If txtencid.Text Then
     modAppSupport.RecordPatientActivity("Patient Data", Me.Name, "EncounterID", Trim(txtencid.Text))
-    $Status = modPatient.CurrentAdmissionStatus(Trim(txtencid.Text))
-    $PatientNum = modPatient.GetPatientNoByEnc(Trim(txtencid.Text))
-
-    $DiscPackage = modNonMedical.DefaultBillingScheme(Trim(txtencid.Text), modBasic.$compID)
-    resx = modDatabase.$myConn.Exec("select fldmode,fldbillingmode,fldacledger,fldbilltype,fldreference,fldlimit from tbldiscount where fldtype=&1", $DiscPackage)
-    If resx.Available Then
-      ''billingmode
-      If resx["fldbillingmode"] Then
-        $PharmMode = resx["fldbillingmode"]
-      Else
-        $PharmMode = modPatient.GetPatBillingMode(Trim(txtencid.Text))
-      Endif
-      ''ledger A/C
-      $LedgerAC = resx["fldacledger"]
-      ''BillType
-      $xBillType = resx["fldbilltype"]
-      If Not $xBillType Then
-        $xBillType = "Cash"
-      Endif
-    Endif
-
+    GetDefaultBillingmodes()
     ' ButtonControl()
     ShowAddedProctable()
     modPatientSub.PopUpPatientForm(Trim(txtencid.Text), Me.Tag)
+  Endif
+
+End
+
+Private Sub GetDefaultBillingmodes()
+
+  Dim xpackage As String
+  Dim resx As Result
+
+  Select $sTatus
+    Case "Admitted", "Discharged", "LAMA", "Death", "Refer", "Absconder"
+      $billModeTest = modNonMedical.GetAutoIPBillingPack("Test", Trim(txtencid.Text))
+      $billModeRadio = modNonMedical.GetAutoIPBillingPack("Radio", Trim(txtencid.Text))
+      $billModePharmacy = modNonMedical.GetAutoIPBillingPack("Pharmacy", Trim(txtencid.Text))
+      $billModeEquipment = modNonMedical.GetAutoIPBillingPack("Equipment", Trim(txtencid.Text))
+      $billModeProcedure = modNonMedical.GetAutoIPBillingPack("Procedure", Trim(txtencid.Text))
+      $billModeService = modNonMedical.GetAutoIPBillingPack("Service", Trim(txtencid.Text))
+      $billModeOthers = modNonMedical.GetAutoIPBillingPack("Others", Trim(txtencid.Text))
+    Case Else
+      xpackage = modNonMedical.DefaultBillingScheme(Trim(txtencid.Text), modBasic.$compID)
+      $billModeTest = xpackage
+      $billModeRadio = xpackage
+      $billModePharmacy = xpackage
+      $billModeEquipment = xpackage
+      $billModeProcedure = xpackage
+      $billModeService = xpackage
+      $billModeOthers = xpackage
+  End Select
+
+  resx = modDatabase.$myConn.Exec("select fldmode,fldbillingmode,fldacledger,fldbilltype,fldreference,fldlimit from tbldiscount where fldtype=&1", $billModePharmacy)
+  If resx.Available Then
+    ''billingmode
+    If resx["fldbillingmode"] Then
+      $PharmMode = resx["fldbillingmode"]
+    Else
+      $PharmMode = modPatient.GetPatBillingMode(Trim(txtencid.Text))
+    Endif
+    ''ledger A/C
+    $LedgerAC = resx["fldacledger"]
+    ''BillType
+    $xBillType = resx["fldbilltype"]
+    If Not $xBillType Then
+      $xBillType = "Cash"
+    Endif
   Endif
 
 End
@@ -606,7 +641,7 @@ Public Sub mnunewproc_Click()
 
   If txtencid.Text Then
     If modNonMedical.AllowEntryWithDeposit(Trim(txtencid.Text), "Procedure") = True Then
-      hForm = New FmMajorProced(Trim(txtencid.Text), $DiscPackage)
+      hForm = New FmMajorProced(Trim(txtencid.Text), $billModeProcedure)
       hForm.ShowModal
       ShowAddedProctable()
     Endif
@@ -705,6 +740,9 @@ Public Sub btnselectpayto_Click()
   If xMedUser And If xMedUser.Count Then
     btnpayto.Tag = xMedUser[0]
     btnpayto.Text = xMedUser[1]
+  Else
+    btnpayto.Tag = ""
+    btnpayto.Text = ""
   Endif
 
 End
@@ -725,6 +763,9 @@ Public Sub btnselectrefer_Click()
   If xMedUser And If xMedUser.Count Then
     btnrefer.Tag = xMedUser[0]
     btnrefer.Text = xMedUser[1]
+  Else
+    btnrefer.Tag = ""
+    btnrefer.Text = ""
   Endif
 
 End
@@ -922,9 +963,9 @@ Private Sub SaveProcedureBilling(procIndex As Long)
   If res.Available = True Then
     xauto = modBasic.$AutoBillProcedure
     If xauto = "Yes" Or If xauto = "Full" Then
-      modBillings.GetAutoBillingEntry(res["fldencounterval"], $DiscPackage, "Procedure", res["flditem"], 1, "Done", procIndex, True, False, btnpayto.Tag, btnrefer.Tag)                         ''
+      modBillings.GetAutoBillingEntry(res["fldencounterval"], $billModeProcedure, "Procedure", res["flditem"], 1, "Done", procIndex, True, False, btnpayto.Tag, btnrefer.Tag)                         ''
     Else If xauto = "Partial" Then
-      modBillings.GetAutoBillingEntry(res["fldencounterval"], $DiscPackage, "Procedure", res["flditem"], 1, "Punched", procIndex, False, False, btnpayto.Tag, btnrefer.Tag)
+      modBillings.GetAutoBillingEntry(res["fldencounterval"], $billModeProcedure, "Procedure", res["flditem"], 1, "Punched", procIndex, False, False, btnpayto.Tag, btnrefer.Tag)
     Endif
     res1 = modDatabase.$myConn.Edit("tblpatgeneral", "fldid=&1", procIndex)
     res1["fldstatus"] = "Cleared"
@@ -956,10 +997,17 @@ Public Sub btnselectadd_Click()
 
   Dim xMedUser As String[]
 
-  xMedUser = MedicalSelectedValue(("Select Sharing User"), modGeneral.CategoricalUserList("fldpayable"))
+  If modBasic.$PayableUserFormat = "Restricted" Then
+    xMedUser = MedicalSelectedValue(("Select Sharing User"), modGeneral.CategoricalUserList("fldpayable", cmbpertype.Text))
+  Else
+    xMedUser = MedicalSelectedValue(("Select Sharing User"), modGeneral.CategoricalUserList("fldpayable"))
+  Endif
   If xMedUser And If xMedUser.Count Then
     btnaddconsult.Tag = xMedUser[0]
     btnaddconsult.Text = xMedUser[1]
+  Else
+    btnaddconsult.Tag = ""
+    btnaddconsult.Text = ""
   Endif
 
 End
@@ -1124,13 +1172,24 @@ Public Sub mnuhistory_Click()
 
 End
 
-Public Sub btntxtsummry_Click()
-
-  txtcomment.RichText = txtcomment.RichText & Space(1) & modFillContainer.GetExtraTextArea("Procedure Summary", "")
+''-------- summary icons
+Public Sub btndatasumm_Click()
 
 End
 
-Public Sub btntemplnewsummary_Click()
+Public Sub btnpansumm_Click()
+
+  txtcomment.RichText = txtcomment.RichText & Space(1) & modFillContainer.GetExtraTextArea("Procedure Summary", txtcomment.Text)
+
+End
+
+Public Sub btnexecsumm_Click()
+
+  txtcomment.RichText = txtcomment.RichText & modString.TextToHTML(modCloudAI.GetPatCloudAIResponse(Trim(txtencid.Text)))
+
+End
+
+Public Sub btnattsumm_Click()
 
   txtcomment.RichText = txtcomment.RichText & DictionaryVIew(modBasic.$dictadvPath)
 

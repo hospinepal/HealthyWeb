@@ -88,6 +88,7 @@
           #MoveScaled(8,1,12,2)
           Height = "2em"
           Expand = True
+          ReadOnly = False
         }
         { WebContainer5 WebContainer
           #MoveScaled(20,1,5,2)

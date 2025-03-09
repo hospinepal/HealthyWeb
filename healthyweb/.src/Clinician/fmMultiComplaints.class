@@ -20,21 +20,21 @@ Private bComboBox As New Object[100]
 Private aWebLine As New Object[100]
 
 Public Sub _new(encid As String)
-
+  
   $encid = encid
   modGeneralMain.GetOpenModalForm(Me)
-
+  
   $ItemList = modBasic.$ClinComplaintCompGrouped
   $ItemListFlag = modBasic.$ClinComplaintCompFlag
   GetItemListData()
   ListBox1.List = $sCategoryList
-
+  
 End
 
 Private Sub LoadControls()
-
+  
   Dim i As Integer
-
+  
   For i = 0 To $sValueList.Count - 1
     If i < 99 Then
       aWebPanel[i] = New WebContainer(Frame1)
@@ -42,26 +42,26 @@ Private Sub LoadControls()
       aNameLabel[i] = New WebHtml(aWebPanel[i])
       aWebFrame[i] = New WebContainer(Frame1)
       aValueBox[i] = New WebValueBox(aWebFrame[i])
-
+      
       aComboBox[i] = New WebContainer(aWebFrame[i])
       aHourRadio[i] = New WebRadioButton(aComboBox[i])
       aDayRadio[i] = New WebRadioButton(aComboBox[i])
       aMonRadio[i] = New WebRadioButton(aComboBox[i])
       aYearRadio[i] = New WebRadioButton(aComboBox[i])
-
+      
       bComboBox[i] = New WebComboBox(aWebFrame[i])
       aWebLine[i] = New WebContainer(Frame1)
     Endif
   Next
-
+  
   For i = 0 To $sValueList.Count - 1
     If i < 99 Then
-
+      
       With aWebPanel[i]
         .Class = "less-container-margin"
         .Arrangement = Arrange.Horizontal
       End With
-
+      
       With aMarkCheck[i]
         .Width = "2em"
         .Height = "2em"
@@ -69,29 +69,29 @@ Private Sub LoadControls()
       End With
       With aNameLabel[i]
         .Font = "bold"
-        .Text = $sValueList[i]
+        .Text = "<p>" & $sValueList[i] & "</p>"
         ' .Height = "2em"
         .Tag = i
       End With
-
+      
       With aWebFrame[i]
         .Class = "less-container-margin"
         .Arrangement = Arrange.Horizontal
         .Visible = False
       End With
-
+      
       With aValueBox[i]
         .Width = "3em"
         .Height = "2em"
         .Tag = i
       End With
-
+      
       With aComboBox[i]
         .Class = "less-container-margin"
         .Arrangement = Arrange.Horizontal
         .Spacing = True
       End With
-
+      
       With aHourRadio[i]
         .Height = "2em"
         .Text = "Hour"
@@ -112,7 +112,7 @@ Private Sub LoadControls()
         .Text = "Year"
         .Tag = i
       End With
-
+      
       With bComboBox[i]
         .Expand = True
         .Height = "2em"
@@ -120,20 +120,20 @@ Private Sub LoadControls()
         .List = ["Episodes", "Both Side", "Left Side", "Right Side", "On/Off"]
         .Tag = i
       End With
-
+      
       With aWebLine[i]
         .Height = "2em"
       End With
-
+      
     Endif
   Next
-
+  
 End
 
 Public Sub IndexCheck_Click()
-
+  
   Dim i As Integer
-
+  
   i = Last.Tag
   If aMarkCheck[i].Value = True Then
     aWebFrame[i].Visible = True
@@ -144,22 +144,22 @@ Public Sub IndexCheck_Click()
   Else If aMarkCheck[i].Value = False Then
     aWebFrame[i].Visible = False
   Endif
-
+  
 End
 
 Private Sub GetItemListData()
-
+  
   Dim xx As String
   Dim asx As String[]
   Dim xval As String[]
-
+  
   $sCategoryList = New String[]
   $sCategoryList.Add("Flagged")
   xval = New String[]
   For Each xx In $ItemList
     If xx Then
       asx = Split(xx, "@")
-
+      
       If asx[0] Then
         If $sCategoryList.Count = 0 Then
           $sCategoryList.Add(asx[0])
@@ -169,22 +169,22 @@ Private Sub GetItemListData()
           Endif
         Endif
       Endif
-
+      
     Endif
   Next
   ListBox1.List = $sCategoryList
-
+  
 End
 
 Private Sub SHowComplaints()
-
+  
   Dim xval As String[]
   Dim xx As String
   Dim asx As String[]
-
+  
   Try $sValueList.Clear()
   Try Frame1.DeleteChildren()
-
+  
   xval = New String[]
   If ListBox1.Text = "Flagged" Then
     For Each xx In $ItemListFlag
@@ -199,7 +199,7 @@ Private Sub SHowComplaints()
         Endif
       Endif
     Next
-
+    
   Else
     For Each xx In $ItemList
       If xx Then
@@ -215,26 +215,26 @@ Private Sub SHowComplaints()
         Endif
       Endif
     Next
-
+    
   Endif
-
+  
   $sValueList = xval
   LoadControls()
-
+  
 End
 
 Public Sub btnshowall_Click()
-
+  
   SHowComplaints()
-
+  
 End
 
 Public Sub btnBrOK_Click()
-
+  
   Dim i As Integer
   Dim xhour As Float
   Dim xdiff As String
-
+  
   For i = 0 To $sValueList.Count - 1
     If i < 99 Then
       If aMarkCheck[i].Value = True Then
@@ -248,31 +248,31 @@ Public Sub btnBrOK_Click()
         Else If aYearRadio[i].Value = True Then
           xdiff = "Years"
         Endif
-
+        
         If xdiff Then
           xhour = aValueBox[i].Value * modDate.GetHoursValue(xdiff)
           modPatientGeneral.AddExamGeneralQualiQuantiData($encid, "Presenting Symptoms", $sValueList[i], bComboBox[i].Text, xhour, "")
         Else
           modPatientGeneral.AddExamGeneralQualiQuantiData($encid, "Presenting Symptoms", $sValueList[i], bComboBox[i].Text, 0, "")
         Endif
-
+        
         'modPatientGeneral.AddExamGeneralQualiQuantiData($encid, "Presenting Symptoms", aNameLabel[i].Text, bComboBox[i].Text, xhour, "")
       Endif
     Endif
   Next
   Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
   ' Balloon.Delay = modBasic.$BalloonDelay
-
+  
 End
 
 Public Sub btnBrChange_Click()
-
+  
   Me.Close()
-
+  
 End
 
-Public Sub ListBox1_Render()
-
-  modJavaScript.SetSelect2Combo(ListBox1)
-
-End
+' Public Sub ListBox1_Render()
+'   
+'   modJavaScript.SetSelect2Combo(ListBox1)
+'   
+' End

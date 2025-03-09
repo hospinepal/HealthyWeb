@@ -67,7 +67,7 @@
   }
   { WebContainer5 WebContainer
     #MoveScaled(1,12,110,50)
-    Class = "height-tablet-low"
+    Class = "height-tablet-medium"
     Arrangement = Arrange.Row
     { WebContainer6 WebContainer
       #MoveScaled(1,1,27,48)
@@ -157,31 +157,38 @@
               Expand = True
               Arrangement = Arrange.Vertical
             }
-            { btntxtsubject WebButton
+            { btnpansubj WebButton
               #MoveScaled(17,1,4,2)
               Class = "toolButton"
               Width = "2em"
               Height = "2em"
               Image = "icon:/32/pen"
             }
-            { btntemplplansubj WebButton
+            { btnexecsubj WebButton
               #MoveScaled(21,1,4,2)
+              Class = "toolButton"
+              Width = "2em"
+              Height = "2em"
+              Image = "icon:/32/exec"
+            }
+            { btnattsubj WebButton
+              #MoveScaled(25,1,4,2)
               Class = "toolButton"
               Width = "2em"
               Height = "2em"
               Image = "icon:/small/attach"
             }
             { WebContainer14 WebContainer
-              #MoveScaled(25,1,4,2)
+              #MoveScaled(29,1,4,2)
               Expand = True
               Arrangement = Arrange.Vertical
             }
             { txtplanid WebValueBox
-              #MoveScaled(29,1,6,2)
+              #MoveScaled(33,1,6,2)
               Visible = False
             }
             { btnaddsubject WebButton
-              #MoveScaled(35,1,3,2)
+              #MoveScaled(39,1,3,2)
               Width = "2em"
               Height = "2em"
               Tooltip = ("Alter Description of Symptom")
@@ -211,27 +218,34 @@
               Expand = True
               Arrangement = Arrange.Vertical
             }
-            { btntxtobject WebButton
+            { btnpanobject WebButton
               #MoveScaled(17,1,4,2)
               Class = "toolButton"
               Width = "2em"
               Height = "2em"
               Image = "icon:/32/pen"
             }
-            { btntemplplanobj WebButton
+            { btnexecobject WebButton
               #MoveScaled(21,1,4,2)
+              Class = "toolButton"
+              Width = "2em"
+              Height = "2em"
+              Image = "icon:/32/exec"
+            }
+            { btnattobject WebButton
+              #MoveScaled(25,1,4,2)
               Class = "toolButton"
               Width = "2em"
               Height = "2em"
               Image = "icon:/small/attach"
             }
             { WebContainer13 WebContainer
-              #MoveScaled(25,1,4,2)
+              #MoveScaled(29,1,4,2)
               Expand = True
               Arrangement = Arrange.Vertical
             }
             { btnaddobject WebButton
-              #MoveScaled(29,1,3,2)
+              #MoveScaled(33,1,3,2)
               Width = "2em"
               Height = "2em"
               Tooltip = ("Alter Description of Symptom")
@@ -261,27 +275,34 @@
               Expand = True
               Arrangement = Arrange.Vertical
             }
-            { btntxtassess WebButton
+            { btnpanassess WebButton
               #MoveScaled(17,1,4,2)
               Class = "toolButton"
               Width = "2em"
               Height = "2em"
               Image = "icon:/32/pen"
             }
-            { btntemplplanasses WebButton
+            { btnexecassess WebButton
               #MoveScaled(21,1,4,2)
+              Class = "toolButton"
+              Width = "2em"
+              Height = "2em"
+              Image = "icon:/32/exec"
+            }
+            { btnattassess WebButton
+              #MoveScaled(25,1,4,2)
               Class = "toolButton"
               Width = "2em"
               Height = "2em"
               Image = "icon:/small/attach"
             }
             { WebContainer12 WebContainer
-              #MoveScaled(25,1,4,2)
+              #MoveScaled(29,1,4,2)
               Expand = True
               Arrangement = Arrange.Vertical
             }
             { btnaddassess WebButton
-              #MoveScaled(29,1,3,2)
+              #MoveScaled(33,1,3,2)
               Width = "2em"
               Height = "2em"
               Tooltip = ("Alter Description of Symptom")
@@ -311,27 +332,34 @@
               Expand = True
               Arrangement = Arrange.Vertical
             }
-            { btntxtplan WebButton
+            { btnpanplan WebButton
               #MoveScaled(17,1,4,2)
               Class = "toolButton"
               Width = "2em"
               Height = "2em"
               Image = "icon:/32/pen"
             }
-            { btntemplplanplan WebButton
+            { btnexecplan WebButton
               #MoveScaled(21,1,4,2)
+              Class = "toolButton"
+              Width = "2em"
+              Height = "2em"
+              Image = "icon:/32/exec"
+            }
+            { btnattplan WebButton
+              #MoveScaled(25,1,4,2)
               Class = "toolButton"
               Width = "2em"
               Height = "2em"
               Image = "icon:/small/attach"
             }
             { WebContainer7 WebContainer
-              #MoveScaled(25,1,4,2)
+              #MoveScaled(29,1,4,2)
               Expand = True
               Arrangement = Arrange.Vertical
             }
             { btnaddplan WebButton
-              #MoveScaled(29,1,3,2)
+              #MoveScaled(33,1,3,2)
               Width = "2em"
               Height = "2em"
               Tooltip = ("Alter Description of Symptom")

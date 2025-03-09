@@ -155,6 +155,7 @@ End
 Public Sub btnplanadd_Click()
 
   Dim res As Result
+  Dim xIntVal As String
 
   If $encid Then
     If txtproblem.Text Then
@@ -172,6 +173,14 @@ Public Sub btnplanadd_Click()
       res["fldsave"] = True
       res["flduptime"] = ""
       res["xyz"] = False
+      If MMain.$WebEntry = True Then
+        xIntVal = modString.GetDateString(Now())
+        res["fldid"] = CLong(xIntVal)
+        res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+        res["fldrepodate"] = Now()
+        res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+        res["fldhospcode"] = modBasic.$HospCode
+      Endif
       res.Update()
       ShowProblemList()
       Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")
@@ -291,50 +300,77 @@ Public Sub btnclose_Click()
 
 End
 
-Public Sub btntxtsubject_Click()
+''----------------- pen
+Public Sub btnpansubj_Click()
 
-  txtsubject.RichText = txtsubject.RichText & Space(1) & modFillContainer.GetExtraTextArea("Subjective", "")
-
-End
-
-Public Sub btntxtobject_Click()
-
-  txtobject.RichText = txtobject.RichText & Space(1) & modFillContainer.GetExtraTextArea("Objective", "")
+  txtsubject.RichText = txtsubject.RichText & Space(1) & modFillContainer.GetExtraTextArea("Subjective", txtsubject.Text)
 
 End
 
-Public Sub btntxtassess_Click()
+Public Sub btnpanobject_Click()
 
-  txtmanage.RichText = txtmanage.RichText & Space(1) & modFillContainer.GetExtraTextArea("Assessment", "")
-
-End
-
-Public Sub btntxtplan_Click()
-
-  txtplan.RichText = txtplan.RichText & Space(1) & modFillContainer.GetExtraTextArea("Planning", "")
+  txtobject.RichText = txtobject.RichText & Space(1) & modFillContainer.GetExtraTextArea("Objective", txtobject.Text)
 
 End
 
-Public Sub btntemplplansubj_Click()
+Public Sub btnpanassess_Click()
+
+  txtmanage.RichText = txtmanage.RichText & Space(1) & modFillContainer.GetExtraTextArea("Assessment", txtmanage.Text)
+
+End
+
+Public Sub btnpanplan_Click()
+
+  txtplan.RichText = txtplan.RichText & Space(1) & modFillContainer.GetExtraTextArea("Planning", txtplan.Text)
+
+End
+
+''------------- attach
+Public Sub btnattsubj_Click()
 
   txtsubject.RichText = txtsubject.RichText & DictionaryVIew(modBasic.$dictadvPath)
 
 End
 
-Public Sub btntemplplanobj_Click()
+Public Sub btnattobject_Click()
 
   txtobject.RichText = txtobject.RichText & DictionaryVIew(modBasic.$dictadvPath)
 
 End
 
-Public Sub btntemplplanasses_Click()
+Public Sub btnattassess_Click()
 
   txtmanage.RichText = txtmanage.RichText & DictionaryVIew(modBasic.$dictadvPath)
 
 End
 
-Public Sub btntemplplanplan_Click()
+Public Sub btnattplan_Click()
 
   txtplan.RichText = txtplan.RichText & DictionaryVIew(modBasic.$dictadvPath)
+
+End
+
+''---------------exec
+Public Sub btnexecsubj_Click()
+
+  txtsubject.RichText = txtsubject.RichText & modString.TextToHTML(modCloudAI.GetPatCloudAIResponse($encid))
+
+End
+
+Public Sub btnexecobject_Click()
+
+  txtobject.RichText = txtobject.RichText & modString.TextToHTML(modCloudAI.GetPatCloudAIResponse($encid))
+
+End
+
+Public Sub btnexecassess_Click()
+
+  txtmanage.RichText = txtmanage.RichText & modString.TextToHTML(modCloudAI.GetPatCloudAIResponse($encid))
+
+End
+
+Public Sub btnexecplan_Click()
+
+  txtplan.RichText = txtplan.RichText & modString.TextToHTML(modCloudAI.GetPatCloudAIResponse($encid))
 
 End

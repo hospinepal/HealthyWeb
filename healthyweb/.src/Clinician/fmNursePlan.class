@@ -41,6 +41,7 @@ End
 Public Sub btnmoniadd_Click()
 
   Dim res As Result
+  Dim xIntVal As String
 
   res = modDatabase.$myConn.Create("tblpatplanning")
   res["fldencounterval"] = $encid
@@ -56,6 +57,14 @@ Public Sub btnmoniadd_Click()
   res["fldsave"] = True
   res["flduptime"] = ""
   res["xyz"] = False
+  If MMain.$WebEntry = True Then
+    xIntVal = modString.GetDateString(Now())
+    res["fldid"] = CLong(xIntVal)
+    res["fldrepoid"] = modMisc.GetWebIndexStr(xIntVal)
+    res["fldrepodate"] = Now()
+    res["fldrepomac"] = CGI["REMOTE_ADDR"] & ":" & CGI["REMOTE_PORT"]
+    res["fldhospcode"] = modBasic.$HospCode
+  Endif
   res.Update()
   ShowMonitoring()
 
@@ -298,7 +307,7 @@ Public Sub btnfindList_Click()
 
   Dim xlist As String[]
 
-  If modSettings.ShowSettingFromFIle("ClinicForms/CategoryGridView") = "Yes" Then
+  If modBasic.$ClinCategoryGrid = "Yes" Then
     xlist = modFixClinic.GetExamWithCategory(modBasic.$ClinNursingComp)
     If xlist.Count Then
       cmbmonexam.Text = GridViewGroup("Select Examination", xlist, modMisc.LockBoolean(modBasic.$LockExamList))
@@ -405,20 +414,25 @@ Public Sub btnmonexam_Click()
   Dim sType As String
   Dim abn As Boolean
   Dim xsys As String
+  Dim OptionType As String
+  Dim hForm As CGetExamParam
 
   If $encid Then
     If cmbmonexam.Text Then
-      sType = modFixClinic.GetExaminationType(cmbmonexam.Text)
-      xsys = modFixClinic.SysConstFromGetExamID(cmbmonexam.Text)
+      hForm = New CGetExamParam(cmbmonexam.Text, "Exam")
+      sType = hForm.GetExamDataType()
+      xsys = hForm.GetExamConstant()
+      OptionType = hForm.GetExamOption()
+
       If sType = "Quantitative" Then
         If txtfindmin.Value > txtmonval.Value Or If txtfindmax.Value < txtmonval.Value Then
           abn = True
         Else
           abn = False
         Endif
-        modClinSub.AddQuantiData($encid, "", cmbmonexam.Text, txtmonval.Value, abn, "IP Monitoring:" & CStr(txtmonvalue.Value), xsys)
+        modClinSub.AddQuantiData($encid, "", cmbmonexam.Text, OptionType, txtmonval.Value, abn, "IP Monitoring:" & CStr(txtmonvalue.Value), xsys)
       Else
-        modClinSub.AddClinicExam($encid, "", cmbmonexam.Text, txtmonexam.Text, txtmonval.Value, False, "IP Monitoring:" & CStr(txtmonvalue.Value), xsys, "Regular")
+        modClinSub.AddClinicExam($encid, "", cmbmonexam.Text, OptionType, txtmonexam.Text, txtmonval.Value, False, "IP Monitoring:" & CStr(txtmonvalue.Value), xsys, "Regular")
       Endif
       FillMoniExamtable(txtmonvalue.Value)
       cmbmonexam.Text = ""
@@ -481,6 +495,7 @@ End
 Public Sub btnMonitcomponent_Click()
 
   Dim hForm2 As FmEnterMultiple
+  Dim hFormTwo As FmEnterMultipleTwo
   Dim res As Result
   Dim xData As Variant[]
   Dim yyy As String[]
@@ -496,8 +511,8 @@ Public Sub btnMonitcomponent_Click()
 
     If $rMexamRes["fldtype"] = "Qualitative" Then
       xType = modFixClinic.GetExamtOptionType($rMexamRes["fldhead"])
-      If modClinic.GetSubExamBool($rMexamRes["fldid"]) = False Then
-        If xType = "Fixed Components" Then
+      If modClinic.GetSubExamBool($rMexamRes["fldid"], $encid) = False Then
+        If xType = "Fixed Components" Or If xType = "Left/Right Components" Then
           yyy = modFixClinic.GetSubExamArray($rMexamRes["fldhead"])
           If yyy.Count Then
             modClinSub.InsertExamSubExam($rMexamRes["fldencounterval"], $rMexamRes["fldid"], $rMexamRes["fldhead"], yyy)
@@ -550,8 +565,13 @@ Public Sub btnMonitcomponent_Click()
           xData.Add([res["fldsubtexam"], res["fldreport"], res["fldid"], res["fldtanswertype"], res["fldabnormal"], res["fldindex"]])
         Next
         xData.Add(["Final Impression", $rMexamRes["fldrepquali"], 0, "RichText Area", False, ""])
-        hForm2 = New FmEnterMultiple($rMexamRes["fldid"], "Exam", $rMexamRes["fldhead"], xData, "", "Current")
-        hForm2.ShowModal
+        If xType = "Left/Right Components" Then
+          hFormTwo = New FmEnterMultipleTwo($rMexamRes["fldid"], "Exam", $rMexamRes["fldhead"], xData, "", "Current")
+          hFormTwo.ShowModal
+        Else
+          hForm2 = New FmEnterMultiple($rMexamRes["fldid"], "Exam", $rMexamRes["fldhead"], xData, "", "Current")
+          hForm2.ShowModal
+        Endif
       Endif
 
     Else If $rMexamRes["fldtype"] = "Quantitative" Then
@@ -616,24 +636,24 @@ End
 
 Public Sub btntxtproblem_Click()
 
-  txtmonproblem.RichText = txtmonproblem.RichText & Space(1) & modFillContainer.GetExtraTextArea("Problem Summary", "")
+  txtmonproblem.RichText = txtmonproblem.RichText & Space(1) & modFillContainer.GetExtraTextArea("Problem Summary", txtmonproblem.Text)
 
 End
 
 Public Sub btntxttreat_Click()
 
-  txtmontreatment.RichText = txtmontreatment.RichText & Space(1) & modFillContainer.GetExtraTextArea("Treatment Summary", "")
+  txtmontreatment.RichText = txtmontreatment.RichText & Space(1) & modFillContainer.GetExtraTextArea("Treatment Summary", txtmontreatment.Text)
 
 End
 
 Public Sub btntxtinput_Click()
 
-  txtmoninout.RichText = txtmoninout.RichText & Space(1) & modFillContainer.GetExtraTextArea("Intake/Output Summary", "")
+  txtmoninout.RichText = txtmoninout.RichText & Space(1) & modFillContainer.GetExtraTextArea("Intake/Output Summary", txtmoninout.Text)
 
 End
 
 Public Sub btntxtplan_Click()
 
-  txtmonplan.RichText = txtmonplan.RichText & Space(1) & modFillContainer.GetExtraTextArea("Planning", "")
+  txtmonplan.RichText = txtmonplan.RichText & Space(1) & modFillContainer.GetExtraTextArea("Planning", txtmonplan.Text)
 
 End

@@ -9,7 +9,6 @@ Public Sub _new()
 
   Me.AddHeader("<meta name='viewport' content='width=device-width, initial-scale=1'>")
   Me.AddHeader("<link rel=\"stylesheet\" href=\"" & modHelpVariable.$AppCssPath & "\">")
-  Me.AddJavascriptFile("js/webcontrols.js")
   Me.AddJavascriptFile("js/jquery.min.js")
   Me.AddJavascriptFile("js/print.min.js")
   Me.AddJavascriptFile("js/toastify.js")
@@ -21,6 +20,7 @@ Public Sub _new()
   Me.AddJavascriptFile("js/sketchpad.js")
   Me.AddJavascriptFile("js/qrcodelib.js")
   Me.AddJavascriptFile("js/webcodecamjs.js")
+  Me.AddJavascriptFile("js/webcontrols.js")
   ''slow js
   Me.AddJavascriptFile("js/html2pdf.bundle.min.js")
   Me.AddJavascriptFile("js/xlsx.full.min.js")
@@ -33,6 +33,10 @@ End
 
 Public Sub WebForm_Open()
 
+  If MMain.$WebEntry = True Then
+    modDataRepo.$RepositoryMode = MMain.$AppLogCategory
+    modBasic.$HospCode = MMain.$AppLogString
+  Endif
   modHelpVariable.SetApplicationGUI()
   MMain.GetApplVersionType()
 
@@ -60,11 +64,12 @@ Public Sub WebForm_Open()
   modBasic.ChartSettingsAll()
   modBasic.DispLabelSettings()
   modBasic.LoadLargeLists()
+  modBasic.CloudAISettings()
 
   $UserRestrict = modBasic.$ClinicDisableCompo
   modBasic.$IPDDepartmentsAll = modGeneral.GetDepartmentWithBedList()
   $ExamLst = modMedicine.FillClinicalSubClass("Departmental")
-  modAMISRep.$AyurvedicDiagnosis = modHelpVariable.$docsDirectory &/ "ayurvedicdisease.csv"
+  modAyurv.$AyurvedicDiagnosis = modHelpVariable.$docsDirectory &/ "ayurvedicdisease.csv"
   FillExamMenu()
   DiaplayCustMenu()
 
@@ -80,19 +85,36 @@ End
 
 Private Sub SetFormAccess()
 
-  modGeneralMain.ShowSelectedFormMenu(mnuopdform)
-  modGeneralMain.ShowSelectedFormMenu(mnuprocedure)
-  modGeneralMain.ShowSelectedFormMenu(mnuextraproc)
-  modGeneralMain.ShowSelectedFormMenu(mnuprocshare)
-
+  modGeneralMain.ShowSelectedFormMenu(mnuopdlist)
+  modGeneralMain.ShowSelectedFormMenu(mnuopvisits)
   modGeneralMain.ShowSelectedFormMenu(mnubedocc)
+  modGeneralMain.ShowSelectedFormMenu(mnuhospinfect)
+
+  modGeneralMain.ShowSelectedFormMenu(mnuopdform)
   modGeneralMain.ShowSelectedFormMenu(mnupatclin)
   modGeneralMain.ShowSelectedFormMenu(mnudelivery)
+  modGeneralMain.ShowSelectedFormMenu(mnuprocedure)
   modGeneralMain.ShowSelectedFormMenu(mnuexamii)
 
+  modGeneralMain.ShowSelectedFormMenu(mnuinpat)
+  modGeneralMain.ShowSelectedFormMenu(mnuaddfiles)
+  modGeneralMain.ShowSelectedFormMenu(mnuexamsel)
+  modGeneralMain.ShowSelectedFormMenu(mnuspecialized)
+
+  modGeneralMain.ShowSelectedFormMenu(mnusavereport)
   modGeneralMain.ShowSelectedFormMenu(mnupatprofile)
   modGeneralMain.ShowSelectedFormMenu(mnusummary)
-  modGeneralMain.ShowSelectedFormMenu(mnusavereport)
+  modGeneralMain.ShowSelectedFormMenu(mnutransition)
+
+  modGeneralMain.ShowSelectedFormMenu(mnusharing)
+  modGeneralMain.ShowSelectedFormMenu(mnurepo)
+
+  modGeneralMain.ShowSelectedFormMenu(mnutransfer)
+  modGeneralMain.ShowSelectedFormMenu(mnustoconsume)
+  modGeneralMain.ShowSelectedFormMenu(mnutransreport)
+  modGeneralMain.ShowSelectedFormMenu(mnuinvdb)
+
+  modGeneralMain.ShowSelectedFormMenu(mnupersonal)
 
 End
 
@@ -231,8 +253,10 @@ Public Sub mnucust1_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust1.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust1.Tag, Workspace1)
 
 End
 
@@ -240,8 +264,10 @@ Public Sub mnucust2_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust2.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust2.Tag, Workspace1)
 
 End
 
@@ -249,8 +275,10 @@ Public Sub mnucust3_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust3.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust3.Tag, Workspace1)
 
 End
 
@@ -258,8 +286,10 @@ Public Sub mnucust4_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust4.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust4.Tag, Workspace1)
 
 End
 
@@ -267,8 +297,10 @@ Public Sub mnucust5_Click()
 
   Dim hForm As FmCustQueryTable
 
-  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust5.Tag)
-  hForm.ShowModal
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmCustQueryTable(modDatabase.$syConn, mnucust5.Tag, Workspace1)
 
 End
 
@@ -535,10 +567,6 @@ Public Sub mnuprocedure_Click()
 
 End
 
-Public Sub mnuextraproc_Click()
-
-End
-
 Public Sub mnuexamii_Click()
 
 End
@@ -689,6 +717,25 @@ Public Sub mnupersonal_Click()
 
 End
 
+Public Sub mnutranslate_Click()
+
+  Dim hForm As FmTranslate
+
+  hForm = New FmTranslate("Translate", "")
+  hForm.ShowModal
+
+End
+
+Public Sub mnumachineAI_Click()
+
+  Dim hForm As FmTranslate
+
+  hForm = New FmTranslate("CloudAI", "")
+  hForm.ShowModal
+  ' Exec [modHelpVariable.$scriptDirectory &/ "groq.sh"] Wait
+
+End
+
 Public Sub mnusetregimen_Click()
 
   fmMedRegimen.ShowModal
@@ -736,9 +783,9 @@ Public Sub mnuaddcons_Click()
   Dim hForm As FmAddDiagno
 
   If modBasic.$FixedDepartment Then
-    hForm = New FmAddDiagno("Consult", "", modBasic.$FixedDepartment)
+    hForm = New FmAddDiagno("Consult", "", modBasic.$FixedDepartment, modBasic.$DefaultDiagnoGroup)
   Else
-    hForm = New FmAddDiagno("Consult", "", "")
+    hForm = New FmAddDiagno("Consult", "", "", modBasic.$DefaultDiagnoGroup)
   Endif
   hForm.ShowModal
 
@@ -829,8 +876,19 @@ Public Sub mnuscanfile_Click()
 
   Dim hForm As FmScanForm
 
-  hForm = New FmScanForm("", "Scanned Images")
+  hForm = New FmScanForm("", "Scanned Images", "")
   hForm.ShowModal
+
+End
+
+Public Sub mnutransfer_Click()
+
+  Dim hForm As FmTransfer
+
+  If Workspace1.Children.Count Then
+    Workspace1.DeleteChildren()
+  Endif
+  hForm = New FmTransfer(Workspace1)
 
 End
 

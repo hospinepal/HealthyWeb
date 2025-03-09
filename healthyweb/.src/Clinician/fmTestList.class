@@ -27,12 +27,18 @@ Private $tblpatlabtest As String
 Private $tblpatlabsubtest As String
 
 Public Sub _new(encid As String, DiscType As String)
-
+  
+  Dim accLst As String[]
+  
   $encid = encid
   $sPackage = DiscType
   modGeneralMain.GetOpenModalForm(Me)
-
-  cmbdisctype.List = modBasic.$BillDiscountCash
+  
+  accLst = modBasic.$BillDiscountCash
+  If accLst.Count = 0 Then
+    accLst.Add($sPackage)
+  Endif
+  cmbdisctype.List = accLst
   cmbdisctype.Text = $sPackage
   txtpatientname.Text = modPatient.GetPatientNameByEnc($encid)
   txtgender.Text = modPatient.GetPatientAgeString($encid, Now()) & "/" & modPatient.GetPatientSex($encid)
@@ -42,7 +48,7 @@ Public Sub _new(encid As String, DiscType As String)
   If Not $BillMode Then
     $BillMode = modpatient.GetPatBillingMode($encid)
   Endif
-
+  
   $doa = modPatient.GetRecordDate($encid)
   $bedLocation = modPatient.GetPatientLocation($encid)
   $xFinClear = modNonMedical.GetFinanceClearance($encid)
@@ -55,7 +61,7 @@ Public Sub _new(encid As String, DiscType As String)
   If cmbtestgroup.List.Count Then
     pnlgroup.Visible = True
   Endif
-
+  
   btnrefer.Tag = modBillings.GetReferralUserSetting("Test", $encid)
   If btnrefer.Tag Then
     btnrefer.Text = modGeneral.GetUserFullName(btnrefer.Tag)
@@ -66,26 +72,26 @@ Public Sub _new(encid As String, DiscType As String)
   $TestList = New String[]
   modAccount.PasInvoiceSetting(cmbfiscal, True)
   LoadTableNames()
-
+  
   SHowSavedGrid()
   ShowSampled()
   If $xFinClear = True Then
     btnselect.Visible = False
     btnselecttree.Visible = False
   Endif
-
+  
 End
 
 Public Sub btnclose_Click()
-
+  
   Me.Close()
-
+  
 End
 
 Private Sub LoadTableNames()
-
+  
   Dim res As Result
-
+  
   If cmbfiscal.Text = "Current" Then
     $tblpatlabtest = "tblpatlabtest"
     $tblpatlabsubtest = "tblpatlabsubtest"
@@ -107,24 +113,24 @@ Private Sub LoadTableNames()
       $tblpatlabsubtest = "tblpatlabsubtest"
     Endif
   Endif
-
+  
 End
 
 Public Sub cmbfiscal_Click()
-
+  
   LoadTableNames()
-
+  
 End
 
 Public Sub btnfiscal_Click()
-
+  
   LoadTableNames()
   FillLabtable()
-
+  
 End
 
 Public Sub TabPanel1_Click()
-
+  
   If TabPanel1.Index = 0 Then
     SHowSavedGrid()
     ShowSampled()
@@ -152,31 +158,34 @@ Public Sub TabPanel1_Click()
   Else If TabPanel1.Index = 3 Then
     FillLabtable()
   Endif
-
+  
 End
 
 Public Sub btnselectuser_Click()
-
+  
   Dim xMedUser As String[]
-
+  
   xMedUser = MedicalSelectedValue(("Select Referral User"), modBasic.$ReferUserList)
   If xMedUser And If xMedUser.Count Then
     btnrefer.Tag = xMedUser[0]
     btnrefer.Text = xMedUser[1]
+  Else
+    btnrefer.Tag = ""
+    btnrefer.Text = ""
   Endif
-
+  
 End
 
 Public Sub btnrefer_Change()
-
+  
   If btnrefer.Text = "" Then
     btnrefer.Tag = ""
   Endif
-
+  
 End
 
 Public Sub btnscheme_Click()
-
+  
   If cmbdisctype.Text Then
     $BillMode = modNonMedical.GetDiscBindBillMode(cmbdisctype.Text)
     If Not $BillMode Then
@@ -187,43 +196,43 @@ Public Sub btnscheme_Click()
     Endif
     TabPanel1.Index = 0
   Endif
-
+  
 End
 
 ''------------------------------------- Listview -----------------------------------
 Public Sub txtsearch_Change()
-
+  
   ListView1.List = modString.SelectStringArrayToText(txtsearch.Text, $TestList, chkleftmain.Value)
-
+  
 End
 
 Public Sub lstletter_Select()
-
+  
   txtsearch.Text = lstletter.Text
-
+  
 End
 
 Private Sub FillLabCOlumnView()
-
+  
   Dim sstr1 As String
   Dim res As Result
   Dim xxx As String[]
-
+  
   If Not $TestList.Count Then
     sstr1 = "select distinct(fldgroupname) as col from tblgrouptest where fldgroupname in(select flditemname from tblservicecost where (fldgroup=&1 or fldgroup=&2) and fldstatus=&3)"                                                ''
     res = modDatabase.$myConn.Exec(sstr1, $BillMode, "%", "Active")
     xxx = modControlSub.GetDirectFillresult(res)
     $TestList = xxx
   Endif
-
+  
 End
 
 Private Sub FillSelLabCOlumnView(sItem As String)
-
+  
   Dim sstr1 As String
   Dim res As Result
   Dim xxx As String[]
-
+  
   If Not $TestList.Count Then
     If modBasic.$ClinTestGrouping = "Section" Then
       sstr1 = "select flditemname from tblservicecost where (fldgroup=&1 or fldgroup=&2) and fldstatus=&3 and fldreport=&4 and flditemtype=&5"
@@ -235,11 +244,11 @@ Private Sub FillSelLabCOlumnView(sItem As String)
     xxx = modControlSub.GetDirectFillresult(res)
     $TestList = xxx
   Endif
-
+  
 End
 
 Private Sub DisplayTestList()
-
+  
   If btnshowsel.Value = True Then
     FillSelLabCOlumnView(modBasic.$DefaultTestList)
   Else
@@ -251,28 +260,28 @@ Private Sub DisplayTestList()
   ListView1.List = $TestList
   ' modFillContainer.FillListViewFromArray(ListView1, $TestList)
   lstletter.List = modString.GetFirstLetterArray($TestList)
-
+  
 End
 
 Public Sub btnshowsel_Click()
-
+  
   ListView1.Clear()
   $TestList.Clear()
   DisplayTestList()
-
+  
 End
 
 Public Sub btnclear_Click()
-
+  
   ListView1.Clear()
   $TestList.Clear()
   cmbtestgroup.Text = ""
   DisplayTestList()
-
+  
 End
 
 Public Sub cmbtestgroup_Click()
-
+  
   If cmbtestgroup.Text Then
     ListView1.Clear()
     If $TestList And If $TestList.Count Then
@@ -283,23 +292,23 @@ Public Sub cmbtestgroup_Click()
     ' modFillContainer.FillCheckListViewFromArray(ListView1, $TestList)
     lstletter.List = modString.GetFirstLetterArray($TestList)
   Endif
-
+  
 End
 
 Public Sub chkall_Click()
-
+  
   If chkall.Value = True Then
     ListView1.SelectAll()
   Else If chkall.Value = False Then
     ListView1.UnselectAll()
   Endif
-
+  
 End
 
 Public Sub ListView1_Select()
-
+  
   Dim xdate As Date
-
+  
   If ListView1.Selection.Count = 1 Then
     xdate = modBillings.CheckLastSalesItemDate(ListView1.List[ListView1.Index], $PatientNum, $xNHISCode, cmbdisctype.Text)
     If xdate Then
@@ -314,20 +323,20 @@ Public Sub ListView1_Select()
       txtlastsaledate.Foreground = Color.Default
     Endif
   Endif
-
+  
 End
 
 Public Sub btnselect_Click()
-
+  
   Dim i As Integer
   Dim xauto As String
-
+  
   Dim xrefer As String
   Dim xpayble As String
-
+  
   Dim xList As String[]
   Dim acount As Integer
-
+  
   acount = 0
   If btnrefer.Tag Then
     xrefer = btnrefer.Tag
@@ -335,7 +344,7 @@ Public Sub btnselect_Click()
     xrefer = modBillings.GetReferralUserSetting("Test", $encid)
   Endif
   xpayble = ""
-
+  
   xauto = modBasic.$AutoBillTest
   Select xauto
     Case "Partial"
@@ -346,12 +355,12 @@ Public Sub btnselect_Click()
       xList.Insert($rData3.All("flditemname"))
       xList.Insert($rData1.All("flditemname"))
   End Select
-
+  
   If modMisc.AllowDiagnoBilling($encid) = True Then
-
+    
     For i = 0 To ListView1.List.Count - 1
       If ListView1.IsSelected(i) = True Then
-
+        
         If xauto = "Yes" Or If xauto = "Full" Or If xauto = "Partial" Then
           If modMisc.GetDuplicationAllow(xList, ListView1.List[i]) = True Then
             modBillings.GetAutoBillingClinic($encid, cmbdisctype.Text, "Test", ListView1.List[i], 1, "Punched", 0, False, False, xpayble, xrefer)
@@ -359,15 +368,15 @@ Public Sub btnselect_Click()
           Endif
           ListView1.Unselect(i)
         Endif
-
+        
       Endif
     Next
     ShowGrid()
-
+    
   Else
     Message.Warning("Diagnosis not provided", ("OK"))
   Endif
-
+  
   If acount Then
     txtsearch.Text = ""
     Me.Exec("Toastify({text: 'Request added', duration: 3000}).showToast()")
@@ -376,25 +385,25 @@ Public Sub btnselect_Click()
       txtsearch.SetFocus
     Endif
   Endif
-
+  
 End
 
 ''--------------------------------------------------- Gridview -------------------------------------------
 Private Sub ShowGrid()
-
+  
   Dim sql As String
-
+  
   sql = "select fldid,flditemname,fldordtime,fldstatus,fldreason,fldtarget from tblpatbilling where fldencounterval=&1 and flditemtype=&2 and fldsave=&3"
   $rData3 = modDatabase.$myConn.Exec(sql, $encid, "Diagnostic Tests", False)
   ShowInitialGridView()
-
+  
 End
 
 Private Sub ShowInitialGridView()
-
+  
   $aMyFields3 = New String[]
   modGridView.ReadSmallData(GridView1, $rData3, $aMyFields3)
-
+  
   With GridView1
     .Columns[0].Hidden = True
     .Columns[1].Width = CStr(250 * modBasic.$AppWidthRatio) & "px"
@@ -407,11 +416,11 @@ Private Sub ShowInitialGridView()
     .Columns[3].Text = "Status"
     .Columns[5].Text = "Target"
   End With
-
+  
 End
 
 Public Sub GridView1_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rData3.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   If Column = 2 Then
@@ -419,11 +428,11 @@ Public Sub GridView1_Data(Row As Integer, Column As Integer, Data As WebTableDat
   Else
     Data.Text = $rData3[$aMyFields3[Column]]
   Endif
-
+  
 End
 
 Private Sub SavePartialEntry(res As Result)
-
+  
   res["fldstatus"] = "Done"
   res["fldsave"] = True
   res["flduserid"] = modBasic.$lbluser
@@ -431,18 +440,18 @@ Private Sub SavePartialEntry(res As Result)
   res["fldcomp"] = modBasic.$compID
   res["xyz"] = False
   res.Update()
-
+  
 End
 
 Public Sub btnsave_Click()
-
+  
   Dim res As Result
   Dim xauto As String
-
+  
   xauto = modBasic.$AutoBillTest
   res = modDatabase.$myConn.Edit("tblpatbilling", "fldencounterval= &1 and flditemtype=&2 and fldsave=&3 and fldstatus=&4", $encid, "Diagnostic Tests", False, "Punched")                 ''
   For Each res
-
+    
     If xauto = "Yes" Or If xauto = "Full" Then
       If modNonMedical.AllowPreEntryWithDeposit($encid, "Test", res["fldditemamt"]) = True Then
         SavePartialEntry(res)
@@ -456,10 +465,10 @@ Public Sub btnsave_Click()
         SavePartialEntry(res)
       Endif
     Endif
-
+    
   Next
   ShowGrid()
-
+  
 End
 
 ' Public Sub GridView1_Menu()
@@ -488,10 +497,10 @@ End
 ' End
 
 Public Sub mnucomment_Click()
-
+  
   Dim xx As String
   Dim res As Result
-
+  
   If GridView1.Selection.Count Then
     $rData3.MoveTo(GridView1.Selection[0])
     xx = GetTextArea($rData3["flditemname"], $rData3["fldreason"])
@@ -503,31 +512,31 @@ Public Sub mnucomment_Click()
       ShowGrid()
     Endif
   Endif
-
+  
 End
 
 Public Sub mnudel_Click()
-
+  
   If GridView1.Selection.Count Then
     If Message.Question("Are you sure ?", ("No"), ("Yes")) = 2 Then
       $rData3.MoveTo(GridView1.Selection[0])
-      modDatabase.$myConn.Delete("tblpatbilling", "fldid=&1", $rData3["fldid"])
+      modDatabase.$myConn.Delete("tblpatbilling", "fldid=&1 and fldsave=&2", $rData3["fldid"], False)
       ShowGrid()
     Endif
   Endif
-
+  
 End
 
 ''----------------------------------- Billed but not sampled ------------------------------------
 Private Sub SHowSavedGrid()
-
+  
   Dim sql As String
   Dim res As Result
   Dim rex As Result
   Dim xList As String[]
   Dim i As Integer
   Dim FldLst As String[]
-
+  
   $rData1 = New MyResult
   xList = ["fldid", "fldtime", "flditemname", "fldrefer", "fldordcomp"]
   rex = modDatabase.$myConn.Exec("select fldpatbilling from tblfisclosing where (fldstate=&1 or fldstate IS NULL)", "Active")
@@ -545,7 +554,7 @@ Private Sub SHowSavedGrid()
       Endif
     Next
   Endif
-
+  
   FldLst = xList.Copy()
   For i = 0 To xList.Count - 1
     FldLst[i] = "t1." & FldLst[i]
@@ -553,10 +562,10 @@ Private Sub SHowSavedGrid()
   sql = "select " & FldLst.Join(",") & " from tblpatbilling as t1 where t1.fldencounterval=&1 and t1.flditemtype=&2 and t1.fldsave=&3 and (t1.fldstatus=&4 or t1.fldstatus=&5) and t1.fldsample=&6 and (t1.flditemqty-t1.fldretqty)>&7"
   res = modDatabase.$myConn.Exec(sql, $encid, "Diagnostic Tests", True, "Done", "Cleared", "Waiting", 0)
   $rData1.AddResult(res)
-
+  
   $aMyFields1 = New String[]
   modGridView.ReadSmallMyData(GridView2, $rData1, $aMyFields1)
-
+  
   With GridView2
     .Columns[0].Hidden = True
     .Columns[1].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
@@ -568,11 +577,11 @@ Private Sub SHowSavedGrid()
     .Columns[3].Text = "ReferBy"
     .Columns[4].Text = "From"
   End With
-
+  
 End
 
 Public Sub GridView2_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rData1.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   If Column = 1 Then
@@ -582,19 +591,19 @@ Public Sub GridView2_Data(Row As Integer, Column As Integer, Data As WebTableDat
   Else
     Data.Text = $rData1[$aMyFields1[Column]]
   Endif
-
+  
 End
 
 ''----------------------------- Accepted but not Reported -----------------------------
 Private Sub ShowSampled()
-
+  
   Dim sql As String
   Dim res As Result
   Dim rex As Result
   Dim xList As String[]
   Dim i As Integer
   Dim FldLst As String[]
-
+  
   $rData2 = New MyResult
   xList = ["fldid", "fldsampletype", "fldtestid", "fldabnormal", "fldsampleid", "fldstatus", "fldtime_sample"]
   rex = modDatabase.$myConn.Exec("select fldpatlabtest from tblfisclosing where (fldstate=&1 or fldstate IS NULL)", "Active")
@@ -612,7 +621,7 @@ Private Sub ShowSampled()
       Endif
     Next
   Endif
-
+  
   FldLst = xList.Copy()
   For i = 0 To xList.Count - 1
     FldLst[i] = "t1." & FldLst[i]
@@ -620,7 +629,7 @@ Private Sub ShowSampled()
   sql = "select " & FldLst.Join(",") & " from tblpatlabtest as t1 where t1.fldencounterval=&1 and (t1.fldstatus=&2 or t1.fldstatus=&3)"
   res = modDatabase.$myConn.Exec(sql, $encid, "Ordered", "Sampled")
   $rData2.AddResult(res)
-
+  
   $aMyFields2 = New String[]
   modGridView.ReadSmallMyData(GridView3, $rData2, $aMyFields2)
   With GridView3
@@ -631,18 +640,18 @@ Private Sub ShowSampled()
     .Columns[4].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
     .Columns[5].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
     .Columns[6].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
-
+    
     .Columns[1].Text = "Specimen"
     .Columns[2].Text = "Test Name"
     .Columns[4].Text = "Sample"
     .Columns[5].Text = "Status"
     .Columns[6].Text = "SampleDate"
   End With
-
+  
 End
 
 Public Sub GridView3_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rData2.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   If Column = 3 Then
@@ -653,7 +662,7 @@ Public Sub GridView3_Data(Row As Integer, Column As Integer, Data As WebTableDat
   Else
     Data.Text = $rData2[$aMyFields2[Column]]
   Endif
-
+  
 End
 
 ' Public Sub txtsearch_KeyPress()
@@ -664,21 +673,21 @@ End
 
 ''------------------------------------------- Reported -----------------------------------
 Public Sub FillLabtable()
-
+  
   Dim xdate As Date
   Dim sql As String
   Dim res As Result
   Dim rsx As Result
-
+  
   Dim xx As String
-  Dim xtable As String[]
+  Dim xtabval As String
   Dim Column As Integer
   Dim xdata As String
   Dim pic2 As String
   Dim pic3 As String
-
+  
   pic2 = "icons/coll2.png"
-
+  
   TableView1.Clear()
   TableView1.Columns.Count = 6
   With TableView1
@@ -688,16 +697,16 @@ Public Sub FillLabtable()
     .Columns[3].Width = CStr(350 * modBasic.$AppWidthRatio) & "px"
     .Columns[4].Width = CStr(150 * modBasic.$AppWidthRatio) & "px"
     .Columns[5].Width = CStr(100 * modBasic.$AppWidthRatio) & "px"
-
+    
     .Columns[0].Text = "Examination"
     .Columns[1].Text = "Time"
     .Columns[2].Text = "Specimen"
     .Columns[3].Text = "Observation"
     .Columns[4].Text = "Reference"
     .Columns[5].Text = "Reported"
-
+    
   End With
-
+  
   $sColl = New Collection
   rsx = modDatabase.$myConn.Exec("select DISTINCT DATE(fldtime_sample) as col from " & $tblpatlabtest & " where fldencounterval=&1 and (fldstatus=&2 or fldstatus=&3) and flvisible=&4 ORDER BY fldtime_sample DESC", $encid, "Reported", "Verified", "Visible")
   For Each rsx
@@ -706,7 +715,7 @@ Public Sub FillLabtable()
     res = modDatabase.$myConn.Exec(sql, $encid, modDate.StartSqlDate(xdate), modDate.EndSqlDate(xdate), "Reported", "Verified", "Visible")
     If res.Available Then
       TableView1.Add(CStr(xdate), modReportVar.GetDateTimeReport(xdate, gb.MediumDate), pic2)
-
+      
       Column = 0
       For Each res
         xdata = ""
@@ -714,9 +723,9 @@ Public Sub FillLabtable()
           xdata = modLabTest.GetLabTestValueString(res["fldid"], modLabSub.GetTestUnitFromButton(rbsi, rbmetric), True, $encid, $tblpatlabtest)
         Else If res["fldtest_type"] = "Qualitative" Then
           xx = modLabTest.GetLabTestValueString(res["fldid"], modLabSub.GetTestUnitFromButton(rbsi, rbmetric), True, $encid, $tblpatlabtest)
-          xtable = modLabTest.GetLabSubTestQuali($encid, res["fldid"], $tblpatlabsubtest)
-          If xtable Then
-            xdata = modString.TextToHTML(xx & "<br>" & modString.GetHTMLListFormat(xtable))
+          xtabval = modLabTest.GetLabSubTestQuali($encid, res["fldtestid"], res["fldid"], $tblpatlabsubtest)
+          If xtabval Then
+            xdata = modString.TextToHTML(xx & xtabval)
           Else
             xdata = modString.TextToHTML(xx)
           Endif
@@ -728,58 +737,58 @@ Public Sub FillLabtable()
         Endif
         $sColl.Add(xdata, CStr(xdate) & ":" & CStr(Column))
         TableView1.Add(CStr(xdate) & ":" & CStr(Column), res["fldtestid"], pic3, CStr(xdate))
-
+        
         TableView1[CStr(xdate) & ":" & CStr(Column)][1] = modReportVar.GetDateTimeReport(res["fldtime_sample"], gb.ShortTime)
         TableView1[CStr(xdate) & ":" & CStr(Column)][2] = res["fldsampletype"] & gb.NewLine & "[" & res["fldstatus"] & "]"
         ' TableView1[CStr(xdate) & ":" & CStr(Column)][3] = xdata
         TableView1[CStr(xdate) & ":" & CStr(Column)][4] = modLabTest.GetTestLimitSrting(res["fldid"], modLabSub.GetTestUnitFromButton(rbsi, rbmetric), $tblpatlabtest) & gb.NewLine & "[" & res["fldmethod"] & "]"
         TableView1[CStr(xdate) & ":" & CStr(Column)][5] = modReportVar.GetDateTimeReport(res["fldtime_report"], gb.GeneralDate)
-
+        
         Column = Column + 1
       Next
     Endif
   Next
-
+  
 End
 
 Public Sub TableView1_Data(Index As String, Column As Integer, Data As WebTreeData)
-
+  
   If Column = 3 Then
     Data.Html = $sColl[Index]
   Endif
-
+  
 End
 
 ''-------------------- Tree View Request -----------------------
 Private Sub LoadActiveTestsList()
-
+  
   Dim res As Result
-
+  
   res = modDatabase.$myConn.Exec("select fldgroupname,fldtestid from tblgrouptest where fldgroupname in(select flditemname from tblservicecost where (fldgroup=&1 or fldgroup=&2) and fldstatus=&3)", $BillMode, "%", "Active")
   If res.Available Then
     $TestListFile = modTextDB.ConvertResultToCSV(res, ";", True)
   Endif
-
+  
 End
 
 Private Sub GetLabTreeView()
-
+  
   Dim pic1 As String
   Dim pic2 As String
-
+  
   Dim aList As String[]
   Dim bList As String[]
   Dim bstr As String
   Dim i As Integer
-
+  
   Dim xList As String[]
   Dim yList As String[]
   Dim ystr As String
   Dim j As Integer
-
+  
   pic1 = "icons/coll1.png"
   pic2 = "icons/coll3.png"
-
+  
   TreeView1.Clear()
   aList = modString.GetSelStringFieldFromCSV($TestListFile, 1, ";")
   If chkleftTree.Value = True Then
@@ -791,7 +800,7 @@ Private Sub GetLabTreeView()
     i = 1
     For Each bstr In bList
       TreeView1.Add(CStr(i) & "@" & bstr, bstr, pic1)
-
+      
       xList = modString.GetMatchingArrayFromCSV(bstr, $TestListFile, 1, 0, ";")
       yList = modString.GetDistinctStringArray(xList)
       If yList.Count Then
@@ -801,28 +810,28 @@ Private Sub GetLabTreeView()
           j = j + 1
         Next
       Endif
-
+      
       i = i + 1
     Next
   Endif
-
+  
 End
 
 Public Sub txtsearchtree_Change()
-
+  
   GetLabTreeView()
-
+  
 End
 
 Private Sub ShowGridTree()
-
+  
   Dim sql As String
-
+  
   sql = "select tblpatbilling.fldid,tblgrouptest.fldtestid,tblpatbilling.fldordtime,tblpatbilling.fldstatus,tblpatbilling.fldreason,tblpatbilling.fldtarget,tblpatbilling.flditemname as flditemname from tblpatbilling inner join tblgrouptest on tblpatbilling.flditemname=tblgrouptest.fldgroupname where tblpatbilling.fldencounterval=&1 and tblpatbilling.flditemtype=&2 and tblpatbilling.fldsave=&3"
   $rData4 = modDatabase.$myConn.Exec(sql, $encid, "Diagnostic Tests", False)
   $aMyFields4 = New String[]
   modGridView.ReadSmallData(GridView4, $rData4, $aMyFields4)
-
+  
   With GridView4
     .Columns[0].Hidden = True
     .Columns[1].Width = CStr(250 * modBasic.$AppWidthRatio) & "px"
@@ -836,11 +845,11 @@ Private Sub ShowGridTree()
     .Columns[3].Text = "Status"
     .Columns[5].Text = "Target"
   End With
-
+  
 End
 
 Public Sub GridView4_Data(Row As Integer, Column As Integer, Data As WebTableData)
-
+  
   $rData4.MoveTo(Row)
   modGridView.GridViewDecoration(Data, Row)
   If Column = 2 Then
@@ -848,13 +857,13 @@ Public Sub GridView4_Data(Row As Integer, Column As Integer, Data As WebTableDat
   Else
     Data.Text = $rData4[$aMyFields4[Column]]
   Endif
-
+  
 End
 
 Public Sub TreeView1_Select()
-
+  
   Dim xdate As Date
-
+  
   If TreeView1.Current.Image = "icons/coll3.png" Then
     xdate = modBillings.CheckLastSalesItemDate(TreeView1.Current.Text, $PatientNum, $xNHISCode, cmbdisctype.Text)
     If xdate Then
@@ -868,21 +877,21 @@ Public Sub TreeView1_Select()
       txtlastsaledate2.Text = ""
       txtlastsaledate2.Foreground = Color.Default
     Endif
-
+    
   Endif
-
+  
 End
 
 Public Sub btnselecttree_Click()
-
+  
   Dim xauto As String
-
+  
   Dim xrefer As String
   Dim xpayble As String
-
+  
   Dim xList As String[]
   Dim acount As Integer
-
+  
   acount = 0
   If btnrefer.Tag Then
     xrefer = btnrefer.Tag
@@ -890,7 +899,7 @@ Public Sub btnselecttree_Click()
     xrefer = modBillings.GetReferralUserSetting("Test", $encid)
   Endif
   xpayble = ""
-
+  
   xauto = modBasic.$AutoBillTest
   Select xauto
     Case "Partial"
@@ -901,9 +910,9 @@ Public Sub btnselecttree_Click()
       xList.Insert($rData4.All("flditemname"))
       xList.Insert($rData1.All("flditemname"))
   End Select
-
+  
   If modMisc.AllowDiagnoBilling($encid) = True Then
-
+    
     If TreeView1.Current.Image = "icons/coll3.png" Then
       If xauto = "Yes" Or If xauto = "Full" Or If xauto = "Partial" Then
         If modMisc.GetDuplicationAllow(xList, TreeView1.Current.Text) = True Then
@@ -914,11 +923,11 @@ Public Sub btnselecttree_Click()
       Endif
     Endif
     ShowGridTree()
-
+    
   Else
     Message.Warning("Diagnosis not provided", ("OK"))
   Endif
-
+  
   If acount Then
     txtsearchtree.Text = ""
     Me.Exec("Toastify({text: 'Request added', duration: 3000}).showToast()")
@@ -927,18 +936,18 @@ Public Sub btnselecttree_Click()
       txtsearchtree.SetFocus
     Endif
   Endif
-
+  
 End
 
 Public Sub btnsavetree_Click()
-
+  
   Dim res As Result
   Dim xauto As String
-
+  
   xauto = modBasic.$AutoBillTest
   res = modDatabase.$myConn.Edit("tblpatbilling", "fldencounterval= &1 and flditemtype=&2 and fldsave=&3 and fldstatus=&4", $encid, "Diagnostic Tests", False, "Punched")                 ''
   For Each res
-
+    
     If xauto = "Yes" Or If xauto = "Full" Then
       If modNonMedical.AllowPreEntryWithDeposit($encid, "Test", res["fldditemamt"]) = True Then
         SavePartialEntry(res)
@@ -952,17 +961,17 @@ Public Sub btnsavetree_Click()
         SavePartialEntry(res)
       Endif
     Endif
-
+    
   Next
   ShowGridTree()
-
+  
 End
 
 Public Sub mnucomtree_Click()
-
+  
   Dim xx As String
   Dim res As Result
-
+  
   If GridView4.Selection.Count Then
     $rData4.MoveTo(GridView4.Selection[0])
     xx = GetTextArea($rData4["flditemname"], $rData4["fldreason"])
@@ -974,17 +983,17 @@ Public Sub mnucomtree_Click()
       ShowGridTree()
     Endif
   Endif
-
+  
 End
 
 Public Sub mnudeltree_Click()
-
+  
   If GridView4.Selection.Count Then
     If Message.Question("Are you sure ?", ("No"), ("Yes")) = 2 Then
       $rData4.MoveTo(GridView4.Selection[0])
-      modDatabase.$myConn.Delete("tblpatbilling", "fldid=&1", $rData4["fldid"])
+      modDatabase.$myConn.Delete("tblpatbilling", "fldid=&1 and fldsave=&2", $rData4["fldid"], False)
       ShowGridTree()
     Endif
   Endif
-
+  
 End

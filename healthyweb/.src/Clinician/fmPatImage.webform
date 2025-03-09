@@ -32,7 +32,7 @@
     }
     { WebContainer15 WebContainer
       #MoveScaled(25,1,5,3)
-      Expand = True
+      Width = "2em"
     }
     { btnshow WebButton
       #MoveScaled(30,1,13,3)
@@ -40,6 +40,11 @@
       Height = "2em"
       Text = ("Show")
       Image = "icon:/32/play"
+    }
+    { WebContainer21 WebContainer
+      #MoveScaled(43,1,17,3)
+      Expand = True
+      Arrangement = Arrange.Vertical
     }
   }
   { WebContainer1 WebContainer
@@ -65,7 +70,7 @@
     }
     { WebLabel1 WebLabel
       #MoveScaled(36,1,6,3)
-      Width = "4em"
+      Width = "5em"
       Text = ("Gender")
       Border = True
     }
@@ -78,11 +83,11 @@
   }
   { WebContainer13 WebScrollView
     #MoveScaled(1,11,95,54)
-    Height = "55vh"
+    Class = "height-tablet-low"
     Arrangement = Arrange.Vertical
     { WebContainer2 WebContainer
       #MoveScaled(1,1,93,51)
-      Class = "height-tablet-medium"
+      Expand = True
       Arrangement = Arrange.Row
       { WebContainer8 WebContainer
         #MoveScaled(1,1,34.875,49)
@@ -113,10 +118,18 @@
           }
           { WebContainer11 WebContainer
             #MoveScaled(28,1,6,3)
-            Width = "10%"
+            Width = "2em"
+          }
+          { btnview WebButton
+            #MoveScaled(34,1,7,3)
+            Width = "6em"
+            Height = "2em"
+            Text = ("View")
+            Image = "icon:/small/play"
           }
           { btnclose WebButton
-            #MoveScaled(34,1,11,3)
+            #MoveScaled(41,1,11,3)
+            Width = "6em"
             Height = "2em"
             Text = ("Close")
             Image = "icon:/small/close"
@@ -165,9 +178,20 @@
           Expand = True
           PlaceHolder = ("Keywords here")
         }
+        { btnexport WebButton
+          #MoveScaled(19,1,7,2)
+          Class = "toolButton"
+          Width = "2em"
+          Height = "2em"
+          Image = "icon:/small/html"
+        }
+      }
+      { WebProgressBar1 WebProgressBar
+        #MoveScaled(1,5,58,2)
+        Height = "1em"
       }
       { WebContainer9 WebContainer
-        #MoveScaled(1,5,58,13)
+        #MoveScaled(1,7,58,13)
         Height = "20%"
         Arrangement = Arrange.Vertical
         { txtdetail WebTextArea
@@ -180,14 +204,13 @@
     }
     { WebContainer14 WebContainer
       #MoveScaled(61,1,3,21)
-      Width = "2em"
+      Width = "1em"
     }
     { pnlmanual WebContainer
-      #MoveScaled(64,1,24,21)
-      Width = "8em"
+      #MoveScaled(64,1,21,21)
       Arrangement = Arrange.Vertical
       { WebContainer19 WebContainer
-        #MoveScaled(1,1,22,4)
+        #MoveScaled(1,1,19,4)
         Class = "less-container-margin"
         Arrangement = Arrange.Horizontal
         { btnOpen WebFileButton
@@ -213,58 +236,35 @@
           Tooltip = ("Take Screenshot")
           Image = "icon:/small/camera"
         }
-        { btnview WebButton
-          #MoveScaled(13,1,4,2)
-          Class = "toolButton"
-          Width = "2em"
-          Height = "2em"
-          Image = "icon:/small/play"
-        }
       }
-      { WebContainer18 WebContainer
-        #MoveScaled(1,5,22,4)
+      { WebContainer17 WebContainer
+        #MoveScaled(1,5,19,3.875)
         Class = "less-container-margin"
         Arrangement = Arrange.Horizontal
         { btnOK WebButton
-          #MoveScaled(1,1,9,2)
+          #MoveScaled(1,1,17,1.875)
+          Width = "8em"
           Height = "2em"
-          Expand = True
           Text = ("Save")
           Image = "icon:/32/apply"
         }
       }
-      { WebContainer17 WebContainer
-        #MoveScaled(1,9,22,4)
+      { WebContainer18 WebContainer
+        #MoveScaled(1,8.875,19,3.875)
         Class = "less-container-margin"
         Arrangement = Arrange.Horizontal
         { btnChange WebButton
-          #MoveScaled(1,1,8,2)
+          #MoveScaled(1,1,10,1.875)
+          Width = "8em"
           Height = "2em"
-          Expand = True
           Text = ("Edit")
-          Image = "icon:/small/edit"
-        }
-      }
-      { WebContainer20 WebContainer
-        #MoveScaled(1,13,22,4)
-        Class = "less-container-margin"
-        Arrangement = Arrange.Horizontal
-        { btnexport WebButton
-          #MoveScaled(1,1,12,2)
-          Height = "2em"
-          Expand = True
-          Text = ("Export")
-          Image = "icon:/small/html"
+          Image = "icon:/32/edit"
         }
       }
     }
     { WebContainer16 WebContainer
-      #MoveScaled(88,1,3,21)
+      #MoveScaled(85,1,3,21)
       Width = "1em"
     }
-  }
-  { WebProgressBar1 WebProgressBar
-    #MoveScaled(1,88,95,2)
-    Height = "1em"
   }
 }

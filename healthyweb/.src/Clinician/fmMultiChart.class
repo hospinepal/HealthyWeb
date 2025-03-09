@@ -148,7 +148,7 @@ Private Sub FillCHartItems(sHeight As String)
 
         With aObj1[i]
           .Font = "bold"
-          .Text = $examarr[i]
+          .Text = "<p>" & $examarr[i] & "</p>"
           .Expand = True
           .Tag = i
         End With
@@ -223,7 +223,7 @@ Private Sub FillCHartItems(sHeight As String)
 
         With bObj1[j]
           .Font = "bold"
-          .Text = $labarr[j]
+          .Text = "<p>" & $labarr[j] & "</p>"
           .Tag = j
         End With
 
@@ -298,7 +298,7 @@ Public Sub SaveButton_Click()
   i = Last.Tag
 
   If aObVal[i] And If aObVal[i].Value Then
-    modClinSub.AddQuantiData($encid, "", $examarr[i], aObVal[i].Value, False, "Essential Examinations", aObHBox[i].Tag)
+    modClinSub.AddQuantiData($encid, "", $examarr[i], "", aObVal[i].Value, False, "Essential Examinations", aObHBox[i].Tag)
 
     $examColl.Remove($examarr[i])
     sPath = modClinSub.FillQuantiExamChart(aObj[i].Name, $encid, $examarr[i], ChartHourVal())
@@ -310,7 +310,7 @@ Public Sub SaveButton_Click()
     aObVal[i].Value = 0
 
   Else If aObBox[i] And If aObBox[i].Text Then
-    modClinSub.AddQualiData($encid, "", $examarr[i], aObBox[i].Text, False, "Essential Examinations", aObHBox[i].Tag)
+    modClinSub.AddQualiData($encid, "", $examarr[i], "", aObBox[i].Text, False, "Essential Examinations", aObHBox[i].Tag)
 
     aObk[i].List = modClinic.UniExamValueList($encid, $examarr[i])
     Me.Exec("Toastify({text: 'Information saved', duration: 3000}).showToast()")

@@ -120,6 +120,7 @@
           #MoveScaled(12,1,16,3)
           Height = "2em"
           Expand = True
+          ReadOnly = False
         }
       }
       { WebContainer6 WebContainer
@@ -150,6 +151,7 @@
           #MoveScaled(12,1,16,3)
           Height = "2em"
           Expand = True
+          ReadOnly = False
         }
       }
       { WebContainer10 WebContainer
@@ -180,6 +182,7 @@
           #MoveScaled(12,1,16,3)
           Height = "2em"
           Expand = True
+          ReadOnly = False
         }
       }
       { WebContainer13 WebContainer
@@ -210,6 +213,7 @@
           #MoveScaled(12,1,16,3)
           Height = "2em"
           Expand = True
+          ReadOnly = False
         }
       }
       { WebContainer16 WebContainer

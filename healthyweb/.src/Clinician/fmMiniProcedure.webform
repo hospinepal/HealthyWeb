@@ -44,7 +44,7 @@
     { WebLabel3 WebLabel
       #MoveScaled(1,1,7,3)
       Width = "4em"
-      Text = ("Packg")
+      Text = ("Scheme")
     }
     { cmbdisctype WebComboBox
       #MoveScaled(8,1,15,3)
@@ -91,6 +91,7 @@
         #MoveScaled(15,1,12,2)
         Height = "2em"
         Expand = True
+        ReadOnly = False
       }
     }
     { WebContainer11 WebContainer
@@ -101,6 +102,7 @@
         #MoveScaled(1,1,9,2)
         Width = "7em"
         Text = ("Referred")
+        Border = True
       }
       { btnrefer WebTextBox
         #MoveScaled(10,1,13,2)
@@ -139,11 +141,9 @@
         Image = "icon:/small/delete"
       }
     }
-    { txtsummary WebTextArea
+    { txtsummary WebTextHTML
       #MoveScaled(1,9,91.75,6)
       Expand = True
-      Wrap = True
-      PlaceHolder = ("Write Summary here")
     }
     { GridView1 WebTable
       #MoveScaled(1,15,91.75,10)

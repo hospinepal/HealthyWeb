@@ -101,18 +101,18 @@
           ReadOnly = True
         }
         { WebContainer21 WebContainer
-          #MoveScaled(17,1,7,3)
+          #MoveScaled(17,1,5,3)
           Expand = True
         }
         { btnclose WebButton
-          #MoveScaled(24,1,9,3)
+          #MoveScaled(22,1,9,3)
           Width = "5em"
           Height = "2em"
           Text = ("Close")
           Cancel = True
         }
         { WebContainer16 WebContainer
-          #MoveScaled(33,1,3,3)
+          #MoveScaled(31,1,3,3)
           Width = "5%"
         }
       }
@@ -201,12 +201,16 @@
                 }
                 { txtsearch WebTextBox
                   #MoveScaled(5,1,10,2)
+                  Width = "12em"
                   Height = "2em"
-                  Expand = True
                   ShowClear = True
                 }
+                { WebContainer36 WebContainer
+                  #MoveScaled(15,1,5,2)
+                  Expand = True
+                }
                 { btnselect WebButton
-                  #MoveScaled(15,1,4,2)
+                  #MoveScaled(20,1,4,2)
                   Width = "4em"
                   Height = "2em"
                   Image = "icon:/large/right"
@@ -343,12 +347,16 @@
               }
               { txtsearchtree WebTextBox
                 #MoveScaled(5,1,10,2)
+                Width = "12em"
                 Height = "2em"
-                Expand = True
                 ShowClear = True
               }
+              { WebContainer32 WebContainer
+                #MoveScaled(15,1,5,2)
+                Expand = True
+              }
               { btnselecttree WebButton
-                #MoveScaled(15,1,4,2)
+                #MoveScaled(20,1,4,2)
                 Width = "4em"
                 Height = "2em"
                 Image = "icon:/large/right"

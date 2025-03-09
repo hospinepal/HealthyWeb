@@ -49,6 +49,9 @@
     { mnumedproduct WebMenu
       Text = ("Blood & Others")
     }
+    { mnucloudai WebMenu
+      Text = ("AI Advice")
+    }
   }
   { mnuentry WebMenu
     Text = ("Inputs")
@@ -728,6 +731,7 @@
   { WebContainer4 WebContainer
     #MoveScaled(1,27,147,52)
     Class = "height-tablet"
+    Enabled = False
     Arrangement = Arrange.Row
     Spacing = True
     { WebContainer7 WebContainer
@@ -735,8 +739,37 @@
       Class = "size-tablet-spacing  height-innertablet"
       Arrangement = Arrange.Vertical
       Margin = True
+      { pnlvideocall WebContainer
+        #MoveScaled(1,1,66,5)
+        Class = "less-container-margin"
+        Visible = False
+        Arrangement = Arrange.Horizontal
+        { WebLabel35 WebLabel
+          #MoveScaled(1,1,13,3)
+          Width = "6em"
+          Text = ("Video Call")
+          Border = True
+        }
+        { txtcamus WebTextBox
+          #MoveScaled(14,1,13,3)
+          Height = "2em"
+          Expand = True
+          ReadOnly = True
+        }
+        { btncamus WebButton
+          #MoveScaled(27,1,4,3)
+          Width = "2em"
+          Height = "2em"
+          Image = "icon:/32/open-link"
+        }
+        { txtpassword WebTextBox
+          #MoveScaled(31,1,12,3)
+          Width = "6em"
+          Height = "2em"
+        }
+      }
       { WebContainer62 WebContainer
-        #MoveScaled(1,1,66,4)
+        #MoveScaled(1,6,66,4)
         Arrangement = Arrange.Horizontal
         { btnreportsall WebButton
           #MoveScaled(1,1,12,2)
@@ -768,7 +801,7 @@
         }
       }
       { TabPanel2 WebTabPanel
-        #MoveScaled(1,5,66,34)
+        #MoveScaled(1,10,66,34)
         Expand = True
         Arrangement = Arrange.Vertical
         Count = 2
@@ -881,39 +914,51 @@
           #MoveScaled(1,1,63.75,4)
           Class = "less-container-margin"
           Arrangement = Arrange.Horizontal
-          { cmbpackage WebComboBox
-            #MoveScaled(1,1,18,2)
-            Width = "40%"
+          { WebLabel27 WebLabel
+            #MoveScaled(1,1,17,2)
             Height = "2em"
-            Enabled = False
-            ReadOnly = False
+            Text = ("General Complaints")
           }
           { WebContainer19 WebContainer
-            #MoveScaled(19,1,4,2)
+            #MoveScaled(18,1,4,2)
             Expand = True
             Arrangement = Arrange.Vertical
           }
-          { btntxtcomplaints WebButton
-            #MoveScaled(23,1,4,2)
-            Class = "toolButton"
-            Width = "2em"
-            Height = "2em"
-            Image = "icon:/small/pen"
-          }
-          { btncomplaindef WebButton
-            #MoveScaled(27,1,4,2)
+          { btndatacompl WebButton
+            #MoveScaled(22,1,4,2)
             Class = "toolButton"
             Width = "2em"
             Height = "2em"
             Image = "icon:/small/database"
           }
+          { btnpancompl WebButton
+            #MoveScaled(26,1,4,2)
+            Class = "toolButton"
+            Width = "2em"
+            Height = "2em"
+            Image = "icon:/small/pen"
+          }
+          { btnexeccompl WebButton
+            #MoveScaled(30,1,4,2)
+            Class = "toolButton"
+            Width = "2em"
+            Height = "2em"
+            Image = "icon:/32/exec"
+          }
+          { btnattcompl WebButton
+            #MoveScaled(34,1,4,2)
+            Class = "toolButton"
+            Width = "2em"
+            Height = "2em"
+            Image = "icon:/small/attach"
+          }
           { WebContainer15 WebContainer
-            #MoveScaled(31,1,4,2)
+            #MoveScaled(38,1,4,2)
             Expand = True
             Arrangement = Arrange.Vertical
           }
           { btngencompln WebButton
-            #MoveScaled(35,1,4,2)
+            #MoveScaled(42,1,4,2)
             Width = "2em"
             Height = "2em"
             Image = "icon:/small/apply"
@@ -987,34 +1032,41 @@
           Expand = True
           Arrangement = Arrange.Vertical
         }
-        { btntxhistory WebButton
+        { btndatahistory WebButton
           #MoveScaled(23,1,4,3)
-          Class = "toolButton"
-          Width = "2em"
-          Height = "2em"
-          Image = "icon:/small/pen"
-        }
-        { btnhistorydef WebButton
-          #MoveScaled(27,1,4,3)
           Class = "toolButton"
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/database"
         }
-        { btntemplphistory WebButton
+        { btnpanhistory WebButton
+          #MoveScaled(27,1,4,3)
+          Class = "toolButton"
+          Width = "2em"
+          Height = "2em"
+          Image = "icon:/small/pen"
+        }
+        { btnexechistory WebButton
           #MoveScaled(31,1,4,3)
+          Class = "toolButton"
+          Width = "2em"
+          Height = "2em"
+          Image = "icon:/32/exec"
+        }
+        { btnatthistory WebButton
+          #MoveScaled(35,1,4,3)
           Class = "toolButton"
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/attach"
         }
         { WebContainer14 WebContainer
-          #MoveScaled(35,1,4,3)
+          #MoveScaled(39,1,4,3)
           Expand = True
           Arrangement = Arrange.Vertical
         }
         { btnhistory WebButton
-          #MoveScaled(39,1,4,3)
+          #MoveScaled(43,1,4,3)
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/apply"
@@ -1030,6 +1082,7 @@
   { WebContainer5 WebContainer
     #MoveScaled(1,80,147,56)
     Class = "height-tablet"
+    Enabled = False
     Arrangement = Arrange.Row
     Spacing = True
     { WebContainer6 WebContainer
@@ -1077,30 +1130,37 @@
           Image = "icon:/small/bookmark"
         }
         { WebContainer21 WebContainer
-          #MoveScaled(28,1,6,3)
+          #MoveScaled(28,1,5,3)
           Expand = True
           Arrangement = Arrange.Vertical
         }
         { btntriage WebButton
-          #MoveScaled(34,1,4,3)
+          #MoveScaled(33,1,4,3)
           Class = "toolButton"
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/color"
         }
         { mnutriage WebButton
-          #MoveScaled(38,1,7,3)
-          Width = "6em"
+          #MoveScaled(37,1,7,3)
+          Width = "5em"
           Height = "2em"
           Tooltip = ("Add Triage Examinations")
           Text = ("Triage")
         }
         { mnuvital WebButton
-          #MoveScaled(45,1,8,3)
-          Width = "6em"
+          #MoveScaled(44,1,8,3)
+          Width = "5em"
           Height = "2em"
           Tooltip = ("Add Vital Examinations")
           Text = ("Vitals")
+        }
+        { btnnotes WebButton
+          #MoveScaled(52,1,8,3)
+          Width = "5em"
+          Height = "2em"
+          Tooltip = ("Notes")
+          Text = ("Notes")
         }
       }
       { WebContainer63 WebContainer
@@ -1351,7 +1411,6 @@
           #MoveScaled(1,35,23,3)
           Arrangement = Arrange.Horizontal
           Spacing = True
-          Border = True
           { rbmetric WebRadioButton
             #MoveScaled(1,1,8,1)
             Height = "2em"
@@ -1563,6 +1622,7 @@
   { WebContainer65 WebContainer
     #MoveScaled(1,137,147,41)
     Class = "height-tablet"
+    Enabled = False
     Arrangement = Arrange.Row
     Spacing = True
     { WebContainer66 WebContainer
@@ -1584,34 +1644,41 @@
           Expand = True
           Arrangement = Arrange.Vertical
         }
-        { btntxtplan WebButton
+        { btndataopd WebButton
           #MoveScaled(21,1,4,3)
-          Class = "toolButton"
-          Width = "2em"
-          Height = "2em"
-          Image = "icon:/small/pen"
-        }
-        { btnplandef WebButton
-          #MoveScaled(25,1,4,3)
           Class = "toolButton"
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/database"
         }
-        { btntemplpplan WebButton
+        { btnpanopd WebButton
+          #MoveScaled(25,1,4,3)
+          Class = "toolButton"
+          Width = "2em"
+          Height = "2em"
+          Image = "icon:/small/pen"
+        }
+        { btnexecopd WebButton
           #MoveScaled(29,1,4,3)
+          Class = "toolButton"
+          Width = "2em"
+          Height = "2em"
+          Image = "icon:/32/exec"
+        }
+        { btnattopd WebButton
+          #MoveScaled(33,1,4,3)
           Class = "toolButton"
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/attach"
         }
         { WebContainer13 WebContainer
-          #MoveScaled(33,1,4,3)
+          #MoveScaled(37,1,4,3)
           Expand = True
           Arrangement = Arrange.Vertical
         }
         { btnplan WebButton
-          #MoveScaled(37,1,4,3)
+          #MoveScaled(41,1,4,3)
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/apply"
@@ -1686,34 +1753,41 @@
           Expand = True
           Arrangement = Arrange.Vertical
         }
-        { btntxtplanfinal WebButton
+        { btndataexpert WebButton
           #MoveScaled(21,1,4,3)
-          Class = "toolButton"
-          Width = "2em"
-          Height = "2em"
-          Image = "icon:/small/pen"
-        }
-        { btnplandefinal WebButton
-          #MoveScaled(25,1,4,3)
           Class = "toolButton"
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/database"
         }
-        { btntemplpplanfinal WebButton
+        { btnpanexpert WebButton
+          #MoveScaled(25,1,4,3)
+          Class = "toolButton"
+          Width = "2em"
+          Height = "2em"
+          Image = "icon:/small/pen"
+        }
+        { btnexecexpert WebButton
           #MoveScaled(29,1,4,3)
+          Class = "toolButton"
+          Width = "2em"
+          Height = "2em"
+          Image = "icon:/32/exec"
+        }
+        { btnattexpert WebButton
+          #MoveScaled(33,1,4,3)
           Class = "toolButton"
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/attach"
         }
         { WebContainer70 WebContainer
-          #MoveScaled(33,1,4,3)
+          #MoveScaled(37,1,4,3)
           Expand = True
           Arrangement = Arrange.Vertical
         }
         { btnplanfinal WebButton
-          #MoveScaled(37,1,4,3)
+          #MoveScaled(41,1,4,3)
           Width = "2em"
           Height = "2em"
           Image = "icon:/small/apply"
@@ -1751,8 +1825,9 @@
         }
         { btnblankform WebButton
           #MoveScaled(28,1,8,2)
-          Width = "6em"
+          Width = "7em"
           Height = "2em"
+          Font = "bold"
           Text = ("Blank")
         }
       }
@@ -1762,6 +1837,7 @@
     #MoveScaled(1,179,147,38)
     Class = "height-tablet"
     Visible = False
+    Enabled = False
     Arrangement = Arrange.Row
     Spacing = True
     { WebContainer75 WebContainer
@@ -1907,13 +1983,13 @@
         }
       }
       { txtfeedback WebTextHTML
-        #MoveScaled(1,6,58,17)
+        #MoveScaled(1,6,58,14)
         Expand = True
         Border = True
         PlaceHolder = ("Write OPD Advice here")
       }
       { WebContainer87 WebContainer
-        #MoveScaled(1,23,58,5)
+        #MoveScaled(1,20,58,5)
         Class = "less-container-margin"
         Arrangement = Arrange.Horizontal
         { lblexpert WebLabel
